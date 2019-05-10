@@ -1,0 +1,60 @@
+Time: lun. abr. 15 01:45:40 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: renti
+File: mainwindow.cpp
+Function name: executeForwardSql
+Line: 48
+Error Description: Es necesario dar de alta una empresa antes de asociarle contactos.
+
+
+Time: jue. abr. 18 19:34:20 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: renti
+File: mainwindow.cpp
+Function name: executeForwardSqlWithReturn
+Line: 94
+Error Description: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'IS NOT NULL' at line 1
+
+
+Time: jue. abr. 18 19:34:20 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: renti
+File: mainwindow.cpp
+Function name: executeForwardSqlWithReturn
+Line: 94
+Error Description: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'IS NOT NULL' at line 1
+
+
+Time: jue. abr. 18 19:34:20 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: renti
+File: mainwindow.cpp
+Function name: executeForwardSqlWithReturn
+Line: 94
+Error Description: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'IS NOT NULL' at line 1
+
+
+Time: jue. abr. 18 19:34:20 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: renti
+File: mainwindow.cpp
+Function name: executeForwardSqlWithReturn
+Line: 94
+Error Description: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'IS NOT NULL' at line 1
+
+
+Time: jue. abr. 18 19:34:21 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: renti
+File: mainwindow.cpp
+Function name: executeForwardSqlWithReturn
+Line: 94
+Error Description: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'IS NOT NULL' at line 1
+
+

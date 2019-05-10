@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>login.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>pruebas.qml</file>
+        <file>TextInputField.qml</file>
+        <file>components/Background.qml</file>
+        <file>components/BackgroundTextField.qml</file>
+        <file>components/qml_components</file>
+    </qresource>
+</RCC>
