@@ -2,28 +2,28 @@
 #define DATABASEMANAGEMENT_H
 
 #include <QWidget>
-class createDatabaseDialog;
+class CreateDatabaseDialog;
 class QSqlTableModel;
 class QTableWidget;
 class QItemSelectionModel;
 class QErrorMessage;
-class sqliteModel;
-class sqliteDelegate;
+class SqliteModel;
+class SqliteDelegate;
 class QTableView;
 
 namespace Ui {class databaseManagement;}
 
-class databaseManagement : public QWidget
+class DatabaseManagement : public QWidget
 {
     Q_OBJECT
 
 public:
     //Constructors
-    explicit databaseManagement(QWidget *parent = Q_NULLPTR);
-    ~databaseManagement() override ;
+    explicit DatabaseManagement(QWidget *parent = Q_NULLPTR);
+    ~DatabaseManagement() override ;
     //borra las definiciones automáticas del compilador (también se podrian haber declarado private)
-    databaseManagement(const databaseManagement&) = delete;
-    databaseManagement& operator =(const databaseManagement&) = delete;
+    DatabaseManagement(const DatabaseManagement&) = delete;
+    DatabaseManagement& operator =(const DatabaseManagement&) = delete;
     //Members
     QSqlTableModel *get_model(void) const;
 
@@ -33,8 +33,8 @@ protected:
 private:
     Ui::databaseManagement *ui= Q_NULLPTR;
     QSqlTableModel *model = Q_NULLPTR;
-    sqliteModel *adaptor = Q_NULLPTR;
-    sqliteDelegate *delegate = Q_NULLPTR;
+    SqliteModel *adaptor = Q_NULLPTR;
+    SqliteDelegate *delegate = Q_NULLPTR;
     QItemSelectionModel *selection = Q_NULLPTR;
 
     void setUpSqlTableModel(const QString &tableName);

@@ -5,19 +5,17 @@
 #include <QDialog>
 #include <QErrorMessage>
 
-namespace Ui {
-class createDatabaseDialog;
-}
+namespace Ui {class createDatabaseDialog;}
 
-class createDatabaseDialog : public QDialog
+class CreateDatabaseDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit createDatabaseDialog(QWidget *parent = Q_NULLPTR);
-    ~createDatabaseDialog() override;
-    createDatabaseDialog(const createDatabaseDialog&) = delete;
-    createDatabaseDialog& operator =(const createDatabaseDialog&) = delete;
+    explicit CreateDatabaseDialog(QWidget *parent = Q_NULLPTR);
+    ~CreateDatabaseDialog() override;
+    CreateDatabaseDialog(const CreateDatabaseDialog&) = delete;
+    CreateDatabaseDialog& operator =(const CreateDatabaseDialog&) = delete;
 
 protected:
 

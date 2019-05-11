@@ -8,17 +8,15 @@
 #include <QStandardItemModel>
 
 
-namespace Ui {
-class addSupplier;
-}
+namespace Ui {class addSupplier;}
 
-class addSupplier : public QDialog
+class AddSupplier : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit addSupplier(QWidget *parent = Q_NULLPTR);
-    ~addSupplier();
+    explicit AddSupplier(QWidget *parent = Q_NULLPTR);
+    ~AddSupplier();
 
 protected:
     void closeEvent(QCloseEvent *event);

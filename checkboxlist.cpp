@@ -3,10 +3,10 @@
 #include <QBrush>
 
 //CONSTRUCTOR
-checkBoxList::checkBoxList(QStringList *itemList, QObject *parent) : QAbstractListModel(parent), m_itemList(*itemList)  {}
+CheckBoxList::CheckBoxList(QStringList *itemList, QObject *parent) : QAbstractListModel(parent), m_itemList(*itemList)  {}
 
 //PUBLIC MEMBERS
-int checkBoxList::rowCount(const QModelIndex &parent) const
+int CheckBoxList::rowCount(const QModelIndex &parent) const
 {
     // For list models only the root node (an invalid parent) should return the list's size. For all
     // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
@@ -14,7 +14,7 @@ int checkBoxList::rowCount(const QModelIndex &parent) const
         return 0;
     return m_itemList.count();
 }
-QVariant checkBoxList::data(const QModelIndex &index, int role) const
+QVariant CheckBoxList::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -32,7 +32,7 @@ QVariant checkBoxList::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 }
-bool checkBoxList::setData(const QModelIndex &index, const QVariant &value, int role)
+bool CheckBoxList::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     //PENDING -está tal como se crea en la template de Qt-
     if (data(index, role) != value)
@@ -43,7 +43,7 @@ bool checkBoxList::setData(const QModelIndex &index, const QVariant &value, int 
     }
     return false;
 }
-Qt::ItemFlags checkBoxList::flags(const QModelIndex &index) const
+Qt::ItemFlags CheckBoxList::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::NoItemFlags;

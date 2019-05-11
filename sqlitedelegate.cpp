@@ -4,10 +4,10 @@
 #include "databasemanagement.h"
 
 //CONSTRUCTORS
-sqliteDelegate::sqliteDelegate(QObject *parent) : QStyledItemDelegate(parent) {}
+SqliteDelegate::SqliteDelegate(QObject *parent) : QStyledItemDelegate(parent) {}
 
 //MEMBERS
-void sqliteDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void SqliteDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (index.column() == 0)
     {
@@ -36,11 +36,11 @@ void sqliteDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         QStyledItemDelegate::paint(painter, option, index);
     }
 }
-QSize sqliteDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize SqliteDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     return QStyledItemDelegate::sizeHint(option, index) + QSize(1, 1); //using standard implementation
 }
-bool sqliteDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option,
+bool SqliteDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option,
                                                        const QModelIndex &index)
 {
     //Esto es simplemente para eliminar el warning x no usar option
@@ -66,14 +66,14 @@ bool sqliteDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
          if (event->type() == QEvent::MouseButtonDblClick)
          {
              int selectedRow = index.row();
-             auto mapper = new mapperDbManagement(selectedRow, static_cast<databaseManagement*>(this->parent()));
+             auto mapper = new MapperDbManagement(selectedRow, static_cast<DatabaseManagement*>(this->parent()));
              mapper->show();
              return true;
          }
          else return false;
      }
 }
-QWidget *sqliteDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *SqliteDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     return QStyledItemDelegate::createEditor(parent, option, index); //using standard implementation
 }

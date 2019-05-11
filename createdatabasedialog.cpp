@@ -7,7 +7,7 @@
 #include <QSqlError>
 
 //CONSTRUCTORS
-createDatabaseDialog::createDatabaseDialog(QWidget *parent) : QDialog(parent), ui(new Ui::createDatabaseDialog)
+CreateDatabaseDialog::CreateDatabaseDialog(QWidget *parent) : QDialog(parent), ui(new Ui::createDatabaseDialog)
 {
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
@@ -16,35 +16,35 @@ createDatabaseDialog::createDatabaseDialog(QWidget *parent) : QDialog(parent), u
     //Hide errorMsg
     ui->errorLabel->hide();
 }
-createDatabaseDialog::~createDatabaseDialog()
+CreateDatabaseDialog::~CreateDatabaseDialog()
 {
     delete ui;
 }
 
 //PRIVATE MEMBERS
-QString createDatabaseDialog::get_nameField(void) const
+QString CreateDatabaseDialog::get_nameField(void) const
 {
     return ui->nameLineEdit->text();
 }
-QString createDatabaseDialog::get_databaseField(void) const
+QString CreateDatabaseDialog::get_databaseField(void) const
 {
     return ui->databaseLineEdit->text();
 }
-QString createDatabaseDialog::get_typeField(void) const
+QString CreateDatabaseDialog::get_typeField(void) const
 {
     return ui->typeComboBox->currentText();
 }
-QString createDatabaseDialog::get_serverField(void) const
+QString CreateDatabaseDialog::get_serverField(void) const
 {
     return ui->serverLineEdit->text();
 }
-bool createDatabaseDialog::sanitationCheck(void)
+bool CreateDatabaseDialog::sanitationCheck(void)
 {
     if(this->get_nameField().isEmpty() | this->get_databaseField().isEmpty() | this->get_serverField().isEmpty())
         return  EXIT_FAILURE;
     return EXIT_SUCCESS;
 }
-bool createDatabaseDialog::saveToDb(const QString& connectionName)
+bool CreateDatabaseDialog::saveToDb(const QString& connectionName)
 {
     try
     {
@@ -78,11 +78,11 @@ bool createDatabaseDialog::saveToDb(const QString& connectionName)
 }
 
 //PRIVATE SLOTS
-void createDatabaseDialog::on_CancelButton_clicked(void)
+void CreateDatabaseDialog::on_CancelButton_clicked(void)
 {
     emit this->close();
 }
-void createDatabaseDialog::on_okButton_clicked(void)
+void CreateDatabaseDialog::on_okButton_clicked(void)
 {
     //Check fields are not empty before
     if(this->sanitationCheck() == EXIT_FAILURE)

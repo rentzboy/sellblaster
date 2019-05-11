@@ -6,7 +6,7 @@
 #include "mapperdbmanagement.h"
 
 //CONSTRUCTORS
-databaseManagement::databaseManagement(QWidget *parent) : QWidget(parent), ui(new Ui::databaseManagement)
+DatabaseManagement::DatabaseManagement(QWidget *parent) : QWidget(parent), ui(new Ui::databaseManagement)
 {
     ui->setupUi(this);
 
@@ -19,26 +19,26 @@ databaseManagement::databaseManagement(QWidget *parent) : QWidget(parent), ui(ne
     //this->setUpSqliteModel();
 
     //CASO #3: Añadir delegate propio (para dibujar los checkbox en el TableView)
-    delegate = new sqliteDelegate(this);
+    delegate = new SqliteDelegate(this);
     ui->tableView->setItemDelegate(delegate);
 }
-databaseManagement::~databaseManagement()
+DatabaseManagement::~DatabaseManagement()
 {
     delete ui;
 }
 
 //PROTECTED MEBERS
-void databaseManagement::contextMenuEvent(QContextMenuEvent *event)
+void DatabaseManagement::contextMenuEvent(QContextMenuEvent *event)
 {
     //Hay que configurar el widget mediante QWidget->setContextMenuPolicy(Qt::DefaultContextMenu);
     event->accept();
     QMenu menu(this);
-    menu.addAction(QObject::tr("Delete row"), this, &databaseManagement::deleteRow);
+    menu.addAction(QObject::tr("Delete row"), this, &DatabaseManagement::deleteRow);
     menu.exec(event->globalPos());
 }
 
 //PRIVATE MEMBERS
-void databaseManagement::setUpSqlTableModel(const QString &tableName)
+void DatabaseManagement::setUpSqlTableModel(const QString &tableName)
 {
     try
     {
@@ -64,7 +64,7 @@ void databaseManagement::setUpSqlTableModel(const QString &tableName)
         EXCEPTION_HANDLER
     }
 }
-void databaseManagement::setUpSqlTableView(void)
+void DatabaseManagement::setUpSqlTableView(void)
 {
     //Asign a model to the View
     ui->tableView->setModel(model);
@@ -85,7 +85,7 @@ void databaseManagement::setUpSqlTableView(void)
     //Selection type (by item, row, column)
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
-void databaseManagement::refreshTableView(const QString &tableName)
+void DatabaseManagement::refreshTableView(const QString &tableName)
 {
     try
     {
@@ -111,7 +111,7 @@ void databaseManagement::refreshTableView(const QString &tableName)
         EXCEPTION_HANDLER
     }
 }
-void databaseManagement::setUpSqliteModel(void) //DEPRECATED
+void DatabaseManagement::setUpSqliteModel(void) //DEPRECATED
 {
     //PROBLEMAS: No permite editar los checboxs, no muestra los headers bien,....
     //No veo lo de reimplementar un modelo a partir de QAbstractTableModel
@@ -142,13 +142,13 @@ void databaseManagement::setUpSqliteModel(void) //DEPRECATED
 }
 
 //PUBLIC MEMBERS
-QSqlTableModel* databaseManagement::get_model(void) const
+QSqlTableModel* DatabaseManagement::get_model(void) const
 {
     return this->model;
 }
 
 //PRIVATE SLOTS
-void databaseManagement::deleteRow(void)
+void DatabaseManagement::deleteRow(void)
 {
     int row = selection->currentIndex().row();
     int column = 1; //id column
@@ -161,27 +161,27 @@ void databaseManagement::deleteRow(void)
     text.append(";");
 
     //Execute & Refresh view
-    mainWindow::executeForwardSql(text, DB_QSQLITE_CONNECTION_NAME);
+    MainWindow::executeForwardSql(text, DB_QSQLITE_CONNECTION_NAME);
     this->refreshTableView("connection");
 }
-void databaseManagement::on_addButton_clicked(void)
+void DatabaseManagement::on_addButton_clicked(void)
 {
-    auto createDatabaseDialogWidget = new createDatabaseDialog(this);
+    auto createDatabaseDialogWidget = new CreateDatabaseDialog(this);
     createDatabaseDialogWidget->setAttribute(Qt::WA_DeleteOnClose);
     createDatabaseDialogWidget->exec();
     this->refreshTableView("connection");
 }
-void databaseManagement::on_editButton_clicked(void)
+void DatabaseManagement::on_editButton_clicked(void)
 {
     int row = selection->currentIndex().row();
-    auto mapper = new mapperDbManagement(row, this);
+    auto mapper = new MapperDbManagement(row, this);
     mapper->show();
 }
-void databaseManagement::on_deleteButton_clicked(void)
+void DatabaseManagement::on_deleteButton_clicked(void)
 {
     //Retrieve all selected rows, delete them and refrew view
     QString text = "DELETE FROM connection WHERE selection=1";
-    mainWindow::executeForwardSql(text, DB_QSQLITE_CONNECTION_NAME);
+    MainWindow::executeForwardSql(text, DB_QSQLITE_CONNECTION_NAME);
     this->refreshTableView("connection");
 }
 

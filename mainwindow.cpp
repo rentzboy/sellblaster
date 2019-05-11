@@ -7,7 +7,7 @@
 
 
 //CONSTRUCTORS
-mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainWindow)
 {
     ui->setupUi(this);
 
@@ -20,13 +20,13 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainWi
     statusBar()->showMessage(QObject::tr("Ready"), 1500);
 
 }
-mainWindow::~mainWindow()
+MainWindow::~MainWindow()
 {
     delete ui;
 }
 
 //PUBLIC MEMBERS
-bool mainWindow::executeForwardSql(const QString &sqlQuery, const QString &connectionName)
+bool MainWindow::executeForwardSql(const QString &sqlQuery, const QString &connectionName)
 {
     //Execute SQL query without retrieving any values
     try
@@ -54,7 +54,7 @@ bool mainWindow::executeForwardSql(const QString &sqlQuery, const QString &conne
         return EXIT_FAILURE;
     }
 }
-bool mainWindow::executeForwardSqlException(const QString &sqlQuery, const QString &connectionName)
+bool MainWindow::executeForwardSqlException(const QString &sqlQuery, const QString &connectionName)
 {
     //Es idéntica pero sin el handler block -try/catch- pues se utiliza desde exceptions y sino podria entrar en un bucle infinito
 
@@ -70,7 +70,7 @@ bool mainWindow::executeForwardSqlException(const QString &sqlQuery, const QStri
         return EXIT_FAILURE;
     return EXIT_SUCCESS;
 }
-bool mainWindow::executeForwardSqlWithReturn(const QString &sqlQuery, const QString &connectionName, QSqlQuery &query)
+bool MainWindow::executeForwardSqlWithReturn(const QString &sqlQuery, const QString &connectionName, QSqlQuery &query)
 {
     //Execute SQL query and returns result by reference
     try
@@ -100,7 +100,7 @@ bool mainWindow::executeForwardSqlWithReturn(const QString &sqlQuery, const QStr
         return EXIT_FAILURE;
     }
 }
-bool mainWindow::createExternDbConnection(const QMap<QString, QString> connectionDetails)
+bool MainWindow::createExternDbConnection(const QMap<QString, QString> connectionDetails)
 {
     //Only for PSQL and MYSQL -SQLite has createInnerDbConnection() instead
     try
@@ -137,7 +137,7 @@ bool mainWindow::createExternDbConnection(const QMap<QString, QString> connectio
         return EXIT_FAILURE;
     }
 }
-void mainWindow::sanitationUserInput(QMap<QString, QString>&userFields)
+void MainWindow::sanitationUserInput(QMap<QString, QString>&userFields)
 {
     for (auto &itr : userFields ) //pasar x referencia si vamos a modificar los valores del rango
     {
@@ -154,14 +154,14 @@ void mainWindow::sanitationUserInput(QMap<QString, QString>&userFields)
 }
 
 //PROTECTED MEMBERS
-void mainWindow::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent *event)
 {
     event->accept();
     this->writeUserSettings();
 }
 
 //PRIVATE MEMBERS
-void mainWindow::createInterDbConnection(void)
+void MainWindow::createInterDbConnection(void)
 {
     try
     {
@@ -201,13 +201,13 @@ void mainWindow::createInterDbConnection(void)
         EXCEPTION_HANDLER
     }
 }
-void mainWindow::createLoginDialog(void)
+void MainWindow::createLoginDialog(void)
 {
-    auto login = new loginDialog(this);
+    auto login = new LoginDialog(this);
     if(login->exec() == QDialog::Accepted)
         this->show();
 }
-QSize mainWindow::get_screenResolution(void)
+QSize MainWindow::get_screenResolution(void)
 {
     //Retrieve parameters from user's screen configuration
     QList <QScreen *> screenList = QGuiApplication::screens();
@@ -217,7 +217,7 @@ QSize mainWindow::get_screenResolution(void)
     }
     else return QSize(0,0);
 }
-QSettings::Status mainWindow::readUserSettings(void)
+QSettings::Status MainWindow::readUserSettings(void)
 {
     //Retrieve configuration from the last user's session
     QSettings userSettings(QObject::tr("Fx Team®"), QObject::tr("Sellblaster"));
@@ -228,7 +228,7 @@ QSettings::Status mainWindow::readUserSettings(void)
     userSettings.endGroup();
     return userSettings.status();
 }
-QSettings::Status mainWindow::writeUserSettings(void)
+QSettings::Status MainWindow::writeUserSettings(void)
 {
     //Store configuration before closing the application
     QSettings userSettings(QObject::tr("Fx Team®"), QObject::tr("Sellblaster"));
@@ -240,7 +240,7 @@ QSettings::Status mainWindow::writeUserSettings(void)
     userSettings.endGroup();
     return userSettings.status();
 }
-QString mainWindow::get_usernameFromDb(void) //MAIN_DB_TYPE
+QString MainWindow::get_usernameFromDb(void) //MAIN_DB_TYPE
 {
     auto tmp = QSqlDatabase::database(MAIN_DB_CONNECTION_NAME); //returns connectionName
     QString user = tmp.userName();
@@ -248,7 +248,7 @@ QString mainWindow::get_usernameFromDb(void) //MAIN_DB_TYPE
         user = "empty";
     return user;
 }
-QString mainWindow::get_usernameFromQsettings(void) //static
+QString MainWindow::get_usernameFromQsettings(void) //static
 {
     //Retrieve configuration from the last user's session
     QSettings userSettings(QObject::tr("Fx Team®"), QObject::tr("Sellblaster"));
@@ -259,20 +259,20 @@ QString mainWindow::get_usernameFromQsettings(void) //static
 }
 
 //PRIVATE SLOTS
-void mainWindow::on_actionDatabases_triggered(void)
+void MainWindow::on_actionDatabases_triggered(void)
 {
     if(dbManagementWidget.isNull())
-        dbManagementWidget = new databaseManagement(this);
+        dbManagementWidget = new DatabaseManagement(this);
     dbManagementWidget->show();
 }
-void mainWindow::on_actionSalir_triggered(void)
+void MainWindow::on_actionSalir_triggered(void)
 {
     emit this->close();
 }
 
-void mainWindow::on_actionA_adir_empresa_triggered()
+void MainWindow::on_actionA_adir_empresa_triggered()
 {
-    auto *addSupplierWidget = new addSupplier(this);
+    auto *addSupplierWidget = new AddSupplier(this);
     addSupplierWidget->show();
     addSupplierWidget->setAttribute(Qt::WA_DeleteOnClose);
 }

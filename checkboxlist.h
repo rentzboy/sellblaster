@@ -3,7 +3,7 @@
 
 #include <QAbstractListModel>
 
-class checkBoxList : public QAbstractListModel
+class CheckBoxList : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -12,8 +12,8 @@ class checkBoxList : public QAbstractListModel
     //https://bugreports.qt.io/browse/QTBUG-60310
 public:
     //constructor
-    explicit checkBoxList(QStringList *itemList, QObject *parent = Q_NULLPTR);
-    ~checkBoxList() override = default;
+    explicit CheckBoxList(QStringList *itemList, QObject *parent = Q_NULLPTR);
+    ~CheckBoxList() override = default;
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

@@ -9,11 +9,11 @@
 #include <sstream>   //ostringstream
 
 //Static variables initialization
-QPointer<QErrorMessage> excepciones::exceptionMessageBox = Q_NULLPTR;
-QString excepciones::exceptionMsg;
+QPointer<QErrorMessage> Excepciones::exceptionMessageBox = Q_NULLPTR;
+QString Excepciones::exceptionMsg;
 
 /* CONSTRUCTORS */
-excepciones::excepciones(const std::exception &e, const QString& _fileName, //std::exception
+Excepciones::Excepciones(const std::exception &e, const QString& _fileName, //std::exception
                                            const QString& _functionName, int _lineNumber)
                                             try : hostName(QSysInfo::machineHostName()),
                                                     operativeSystem(QSysInfo::productVersion()),
@@ -54,7 +54,7 @@ excepciones::excepciones(const std::exception &e, const QString& _fileName, //st
     exit(EXIT_FAILURE); //termina el programa.
 }
 
-excepciones::excepciones(const QSqlError &e, const QString& _fileName, //QSqlError
+Excepciones::Excepciones(const QSqlError &e, const QString& _fileName, //QSqlError
                                            const QString& _functionName, int _lineNumber)
                                            try : hostName(QSysInfo::machineHostName()),
                                                    operativeSystem(QSysInfo::productVersion()),
@@ -94,7 +94,7 @@ excepciones::excepciones(const QSqlError &e, const QString& _fileName, //QSqlErr
     exit(EXIT_FAILURE); //termina el programa.
 }
 
-excepciones::excepciones(const QString& errorMsg, const QString& _fileName, //QString
+Excepciones::Excepciones(const QString& errorMsg, const QString& _fileName, //QString
                                           const QString& _functionName, int _lineNumber)
                                            try : hostName(QSysInfo::machineHostName()),
                                                    operativeSystem(QSysInfo::productVersion()),
@@ -135,7 +135,7 @@ excepciones::excepciones(const QString& errorMsg, const QString& _fileName, //QS
 }
 
 /* PRIVATE MEMBERS */
-QString excepciones::databaseUsername(void)
+QString Excepciones::databaseUsername(void)
 {
     auto tmp = QSqlDatabase::database(MAIN_DB_CONNECTION_NAME); //returns connectionName
     QString user = tmp.userName();
@@ -149,7 +149,7 @@ QString excepciones::databaseUsername(void)
     }
     return user;
 }
-void excepciones::saveExceptionInterface(void)
+void Excepciones::saveExceptionInterface(void)
 {
     /* Al generarse una exception se intenta guardar en la Db, pero si se genera
      * una exception en saveToLogTable(), este caso se intenta guardar
@@ -172,7 +172,7 @@ void excepciones::saveExceptionInterface(void)
     this->saveToLogFile("STL");
 #endif
 }
-bool excepciones::saveToDb(const QString& dbConnectionName)
+bool Excepciones::saveToDb(const QString& dbConnectionName)
 {
     try
     {
@@ -186,7 +186,7 @@ bool excepciones::saveToDb(const QString& dbConnectionName)
         exceptionFields.insert("function", this->functionName);
         exceptionFields.insert("time", this->systemTime.toString());
         exceptionFields.insert("description", this->errorDescription);
-        mainWindow::sanitationUserInput(exceptionFields);
+        MainWindow::sanitationUserInput(exceptionFields);
 
         if(dbConnectionName == MAIN_DB_CONNECTION_NAME)
         {
@@ -200,7 +200,7 @@ bool excepciones::saveToDb(const QString& dbConnectionName)
             .append(exceptionFields.value("time")).append("', '")
             .append(exceptionFields.value("description")).append("');");
             qDebug() << "Stored procedure: " << sqlQuery;
-            return mainWindow::executeForwardSqlException(sqlQuery, MAIN_DB_CONNECTION_NAME);
+            return MainWindow::executeForwardSqlException(sqlQuery, MAIN_DB_CONNECTION_NAME);
         }
         else //DB_QSQLITE_CONNECTION_NAME
         {
@@ -254,7 +254,7 @@ bool excepciones::saveToDb(const QString& dbConnectionName)
         return EXIT_FAILURE; //no exit() !!
     }
 }
-void excepciones::saveToLogFile(QString method)
+void Excepciones::saveToLogFile(QString method)
 {
     try
     {

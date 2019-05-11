@@ -5,7 +5,7 @@
 #include <QMap>
 
 //CONSTRUCTORS
-addSupplier::addSupplier(QWidget *parent) : QDialog(parent), ui(new Ui::addSupplier)
+AddSupplier::AddSupplier(QWidget *parent) : QDialog(parent), ui(new Ui::addSupplier)
 {
     ui->setupUi(this);
     this->fillComboBoxesFromDb();
@@ -14,24 +14,24 @@ addSupplier::addSupplier(QWidget *parent) : QDialog(parent), ui(new Ui::addSuppl
     //PENDING
 
 }
-addSupplier::~addSupplier()
+AddSupplier::~AddSupplier()
 {
     delete ui;
 }
 
 //PROTECTED MEMBERS
-void addSupplier::closeEvent(QCloseEvent *event)
+void AddSupplier::closeEvent(QCloseEvent *event)
 {
     event->accept();
 }
 
 //PRIVATE MEMBERS
-void addSupplier::fillComboBoxWithCheckBoxFromDb(void)
+void AddSupplier::fillComboBoxWithCheckBoxFromDb(void)
 {
     QSqlQuery result;
 
     QString sqlQuery = "CALL get_DropDownMenusData('norm', 'aisi')"; //table, column
-    mainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+    MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
     QStringList alloyList;
     while(result.next())
     {
@@ -63,13 +63,13 @@ void addSupplier::fillComboBoxWithCheckBoxFromDb(void)
     iItem2->setData(Qt::Unchecked, Qt::CheckStateRole);
     //ui->alloyComboBox->setView(new QListView);
 }
-void addSupplier::fillComboBoxesFromDb(void)
+void AddSupplier::fillComboBoxesFromDb(void)
 {
     //Fill drop-down menus with database values
     QSqlQuery result; //sirve para todas las consultas
 
     QString sqlQuery = "CALL get_DropDownMenusData('country', 'country')";
-    mainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+    MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
     QStringList paisList; //RAII managed
     while(result.next())
     {
@@ -79,7 +79,7 @@ void addSupplier::fillComboBoxesFromDb(void)
     ui->paisComboBox->setCurrentIndex(-1);
     ////////////////////////////////////////////////////////////////
     sqlQuery = "CALL get_DropDownMenusData('activity', 'activity')";
-    mainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+    MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
     QStringList activityList; //RAII managed
     while(result.next())
     {
@@ -89,7 +89,7 @@ void addSupplier::fillComboBoxesFromDb(void)
     ui->activityComboBox->setCurrentIndex(-1);
     ////////////////////////////////////////////////////////////////
     sqlQuery = "CALL get_DropDownMenusData('department', 'department')";
-    mainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+    MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
     QStringList areaList; //RAII managed
     while(result.next())
     {
@@ -99,7 +99,7 @@ void addSupplier::fillComboBoxesFromDb(void)
     ui->areaComboBox->setCurrentIndex(-1);
     ////////////////////////////////////////////////////////////////
     sqlQuery = "CALL get_DropDownMenusData('position', 'position')";
-    mainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+    MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
     QStringList positionList; //RAII managed
     while(result.next())
     {
@@ -108,7 +108,7 @@ void addSupplier::fillComboBoxesFromDb(void)
     ui->puestoComboBox->addItems(positionList);
     ui->puestoComboBox->setCurrentIndex(-1);
 }
-bool addSupplier::sanitationCheck(QString tag)
+bool AddSupplier::sanitationCheck(QString tag)
 {
     if(tag == "empresa")
     {
@@ -129,7 +129,7 @@ bool addSupplier::sanitationCheck(QString tag)
         userDataFields.insert("city", ui->ciudadLineEdit->text());
         userDataFields.insert("description", ui->descripcionTextEdit->toPlainText());
         userDataFields.insert("comments", ui->notasTextEdit->toPlainText());
-        mainWindow::sanitationUserInput(userDataFields);
+        MainWindow::sanitationUserInput(userDataFields);
         return EXIT_SUCCESS;
     }
     else if (tag == "contacto")
@@ -148,7 +148,7 @@ bool addSupplier::sanitationCheck(QString tag)
         userDataFields.insert("telefono", ui->telefonoLineEdit->text());
         userDataFields.insert("movil", ui->movilLineEdit->text());
         userDataFields.insert("notas", ui->contactoNotasTextEdit->toPlainText());
-        mainWindow::sanitationUserInput(userDataFields);
+        MainWindow::sanitationUserInput(userDataFields);
         return EXIT_SUCCESS;
     }
     else
@@ -159,7 +159,7 @@ bool addSupplier::sanitationCheck(QString tag)
         else return EXIT_SUCCESS;
     }
 }
-void addSupplier::empresaApplyButton(void)
+void AddSupplier::empresaApplyButton(void)
 {
     if (this->sanitationCheck("empresa") == EXIT_FAILURE)
     {
@@ -194,7 +194,7 @@ void addSupplier::empresaApplyButton(void)
         .append(userDataFields.value("comments")).append("', ")
         .append(idPayment).append(");"); //number, sin ' '
         qDebug() << "Stored Procedure: " << sqlQuery;
-        mainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME);
+        MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME);
 
         //OPTION #2: Qt Function
         /*//Database connection
@@ -224,7 +224,7 @@ void addSupplier::empresaApplyButton(void)
         EXCEPTION_HANDLER
     }
 }
-void addSupplier::contactoApplyButton(void)
+void AddSupplier::contactoApplyButton(void)
 {
     if(this->sanitationCheck("contacto") == EXIT_FAILURE)
     {
@@ -254,7 +254,7 @@ void addSupplier::contactoApplyButton(void)
         .append(idPuesto).append(", '")
         .append(userDataFields.value("notas")).append("');");
         qDebug() << "Stored Procedure: " << sqlQuery;
-        mainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME);
+        MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME);
 
         //OPTION #2: Qt Function
         /*//Database connection
@@ -287,7 +287,7 @@ void addSupplier::contactoApplyButton(void)
 }
 
 //PRIVATE SLOTS
-void addSupplier::on_empresaButtonBox_clicked(QAbstractButton *button)
+void AddSupplier::on_empresaButtonBox_clicked(QAbstractButton *button)
 {
     if(ui->empresaButtonBox->standardButton(button) == QDialogButtonBox::Apply)
         this->empresaApplyButton();
@@ -299,7 +299,7 @@ void addSupplier::on_empresaButtonBox_clicked(QAbstractButton *button)
         this->close();
     }
 }
-void addSupplier::on_contactoButtonBox_clicked(QAbstractButton *button)
+void AddSupplier::on_contactoButtonBox_clicked(QAbstractButton *button)
 {
     if(ui->contactoButtonBox->standardButton(button) == QDialogButtonBox::Apply)
         this->contactoApplyButton();

@@ -13,15 +13,15 @@
 /* IMPORTANTE: Diseñamos esta clase pues no se pueden generar members de la clase base exceptions
  * ya que esta clase úncamente tiene el member what() */
 
-class excepciones
+class Excepciones
 {
 public:
-    excepciones(const std::exception&, const QString&, const QString&, int); //ctror #1
-    excepciones(const QSqlError&, const QString&, const QString&, int);  //ctror #2
-    excepciones(const QString&, const QString&, const QString&, int); //ctror #3
-    excepciones(const excepciones& e) = default; //throw expression: copy-initialize the expression !!
-    excepciones& operator =(const excepciones&) = delete;
-    ~excepciones() = default;
+    Excepciones(const std::exception&, const QString&, const QString&, int); //ctror #1
+    Excepciones(const QSqlError&, const QString&, const QString&, int);  //ctror #2
+    Excepciones(const QString&, const QString&, const QString&, int); //ctror #3
+    Excepciones(const Excepciones& e) = default; //throw expression: copy-initialize the expression !!
+    Excepciones& operator =(const Excepciones&) = delete;
+    ~Excepciones() = default;
 
 private:
     //members

@@ -58,3 +58,43 @@ Line: 94
 Error Description: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'IS NOT NULL' at line 1
 
 
+Time: dom. may. 12 01:19:57 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: empty
+File: mainwindow.cpp
+Function name: executeForwardSqlWithReturn
+Line: 94
+Error Description: Driver not loaded
+
+
+Time: dom. may. 12 01:20:18 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: empty
+File: logindialog.cpp
+Function name: onAceptarClicked
+Line: 83
+Error Description: Driver not loaded
+
+
+Time: dom. may. 12 01:51:30 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: empty
+File: mainwindow.cpp
+Function name: executeForwardSqlWithReturn
+Line: 94
+Error Description: Driver not loaded
+
+
+Time: dom. may. 12 01:51:31 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: empty
+File: logindialog.cpp
+Function name: onAceptarClicked
+Line: 83
+Error Description: Driver not loaded
+
+

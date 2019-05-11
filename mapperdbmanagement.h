@@ -10,13 +10,13 @@
 
 namespace Ui {class mapperDbManagement;}
 
-class mapperDbManagement : public QDialog
+class MapperDbManagement : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit mapperDbManagement(int row, QWidget *parent = Q_NULLPTR);
-    ~mapperDbManagement();
+    explicit MapperDbManagement(int row, QWidget *parent = Q_NULLPTR);
+    ~MapperDbManagement();
 
 private:
     Ui::mapperDbManagement *ui;

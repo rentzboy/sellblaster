@@ -5,23 +5,23 @@
 #include "sqlitemodel.h"
 
 //CONSTRUCTORS
-sqliteModel::sqliteModel(QObject *parent, QSqlTableModel *model): QAbstractTableModel(parent), adaptor(model) {}
+SqliteModel::SqliteModel(QObject *parent, QSqlTableModel *model): QAbstractTableModel(parent), adaptor(model) {}
 
 //MEMBER FUNCTIONS
-int sqliteModel::rowCount(const QModelIndex &parent) const
+int SqliteModel::rowCount(const QModelIndex &parent) const
 {
     //Una tabla solo tiene que devolver elementos cuando parent is NOT valid (parent = root)
     if (parent.isValid())
         return 0;
     else return adaptor->rowCount();
 }
-int sqliteModel::columnCount(const QModelIndex &parent) const
+int SqliteModel::columnCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
     else return adaptor->columnCount();
 }
-QVariant sqliteModel::data(const QModelIndex &index, int role) const
+QVariant SqliteModel::data(const QModelIndex &index, int role) const
 {
     //se llama una vez para cada uno de los 15 roles de cada ModelIndex
     //para recuperar los valores de todos los roles de cada celda
@@ -48,7 +48,7 @@ QVariant sqliteModel::data(const QModelIndex &index, int role) const
     }
     return adaptor->data(index, role); //for all the rest not defined (not return) in the switch/case
 }
-bool sqliteModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool SqliteModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     /* Used to modify the item of data associated with a specified model index. To be able to accept user input, provided by user interface elements, this function must handle data associated with Qt::EditRole. The implementation may also accept data associated with many different kinds of roles specified by Qt::ItemDataRole. After changing the item of data, models must emit the dataChanged() signal to inform other components of the change.*/
 
@@ -80,7 +80,7 @@ bool sqliteModel::setData(const QModelIndex &index, const QVariant &value, int r
     this->setData(index, value, role); //default implementation
     return true;
 }
-Qt::ItemFlags sqliteModel::flags(const QModelIndex &index) const
+Qt::ItemFlags SqliteModel::flags(const QModelIndex &index) const
 {
     //Must return an appropriate combination of flags for each item.
      Qt::ItemFlags flags = adaptor->flags(index);

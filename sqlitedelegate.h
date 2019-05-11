@@ -9,11 +9,11 @@
 
 QT_FORWARD_DECLARE_CLASS(QPainter)
 
-class sqliteDelegate : public QStyledItemDelegate
+class SqliteDelegate : public QStyledItemDelegate
 {
 public:
-    explicit sqliteDelegate(QObject *parent);
-    ~sqliteDelegate() override = default;
+    explicit SqliteDelegate(QObject *parent);
+    ~SqliteDelegate() override = default;
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 

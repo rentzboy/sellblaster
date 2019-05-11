@@ -7,8 +7,7 @@
 #include <QSqlError>
 
 //CONSTRUCTORS
-mapperDbManagement::mapperDbManagement(int row, QWidget *parent) :
-    QDialog(parent), ui(new Ui::mapperDbManagement)
+MapperDbManagement::MapperDbManagement(int row, QWidget *parent) : QDialog(parent), ui(new Ui::mapperDbManagement)
 {
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
@@ -17,13 +16,13 @@ mapperDbManagement::mapperDbManagement(int row, QWidget *parent) :
     //this->setUpSqlTableModel("connection");
     this->mapFields(row);
 }
-mapperDbManagement::~mapperDbManagement()
+MapperDbManagement::~MapperDbManagement()
 {
     delete ui;
 }
 
 //PRIVATE MEMBERS
-void mapperDbManagement::setUpSqlTableModel(const QString &tableName)
+void MapperDbManagement::setUpSqlTableModel(const QString &tableName)
 {
     try
     {
@@ -49,9 +48,9 @@ void mapperDbManagement::setUpSqlTableModel(const QString &tableName)
         EXCEPTION_HANDLER
     }
 }
-void mapperDbManagement::mapFields(int selectedRow)
+void MapperDbManagement::mapFields(int selectedRow)
 {
-    QSqlTableModel *model = static_cast<databaseManagement*>(this->parent())->get_model();
+    QSqlTableModel *model = static_cast<DatabaseManagement*>(this->parent())->get_model();
 
     mapper = new QDataWidgetMapper(this);
     mapper->setModel(model);
@@ -66,11 +65,11 @@ void mapperDbManagement::mapFields(int selectedRow)
     mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
 }
 
-void mapperDbManagement::on_PreviousButton_clicked()
+void MapperDbManagement::on_PreviousButton_clicked()
 {
     mapper->toPrevious();
 }
-void mapperDbManagement::on_NextButton_clicked()
+void MapperDbManagement::on_NextButton_clicked()
 {
     mapper->toNext();
 }

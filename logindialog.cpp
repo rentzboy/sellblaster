@@ -1,56 +1,56 @@
 #include "logindialog.h"
-#include "ui_logindialog.h"
 #include "basic_headers.h"
+#include "mainwindow.h"
 #include <QCloseEvent>
 
 //CONSTRUCTORS
-loginDialog::loginDialog(QWidget *parent) : QDialog(parent), ui(new Ui::loginDialog)
+LoginDialog::LoginDialog(QWidget *parent) : QDialog(parent),
+    errorMsg(QObject::tr("No se ha podido establecer la conexión")), errorVisible(false)
 {
-    ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
-    //Hide errorMsg
-    ui->errorLabel->hide();
+
     //Retrieve username from previous sesions -QSettings-
-    ui->userLineEdit->setText(mainWindow::get_usernameFromQsettings());
-}
-loginDialog::~loginDialog()
-{
-    delete ui;
+    this->setUsername(MainWindow::get_usernameFromQsettings());
 }
 
 //PROTECTED MEMBERS
-void loginDialog::closeEvent(QCloseEvent *event)
+void LoginDialog::closeEvent(QCloseEvent *event)
 {
     event->accept();
-    ui->errorLabel->hide();
 
     if(this->result() != QDialog::Accepted)
         QMetaObject::invokeMethod(qApp, "quit", Qt::QueuedConnection);
     //qGuiApp->quit(); No funciona pues la App aun no ha entrado en el main event loop (app.exec())
 }
-void loginDialog::keyPressEvent(QKeyEvent *event)
+void LoginDialog::keyPressEvent(QKeyEvent *event)
 {
     if(event == QKeySequence::Cancel)
         event->ignore();
 }
 
 //PRIVATE MEMBERS
-QString loginDialog::get_username(void) const
+bool LoginDialog::sanitationCheck()
 {
-    return ui->userLineEdit->text();
-}
-QString loginDialog::get_password(void) const
-{
-    return ui->passLineEdit->text();
+    QString name = getUsername();
+    QString pass = getPassword();
+    if(getUsername().isEmpty() || getPassword().isEmpty())
+        return EXIT_FAILURE;
+    else return EXIT_SUCCESS;
 }
 
-//PRIVATE SLOTS
-void loginDialog::on_buttonBox_rejected(void)
+//PUBLIC SLOTS
+void LoginDialog::onCancelarClicked(void)
 {
+    PRINT_FUNCTION_NAME
     emit this->close(); //NO utilizar done(QDialog::Rejected) pues se cerraria directamente sin pasar x CloseEvent()
 }
-void loginDialog::on_buttonBox_accepted(void)
+void LoginDialog::onAceptarClicked(void)
 {
+    PRINT_FUNCTION_NAME
+
+    if(this->sanitationCheck() == EXIT_FAILURE)
+        return;
+
     try
     {
         //Get connection details from SQLite3
@@ -58,7 +58,7 @@ void loginDialog::on_buttonBox_accepted(void)
         QString sqlQuery = "SELECT * FROM connection WHERE type=";
         sqlQuery.append("'").append(MAIN_DB_TYPE).append("'").append(" LIMIT 1;");
 
-        mainWindow::executeForwardSqlWithReturn(sqlQuery, DB_QSQLITE_CONNECTION_NAME, result); //Output arg.
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, DB_QSQLITE_CONNECTION_NAME, result); //Output arg.
         if(!result.next())
             throw result.lastError();
         int fieldName = result.record().indexOf("name");
@@ -69,17 +69,67 @@ void loginDialog::on_buttonBox_accepted(void)
         connectionDetails.insert("name", result.value(fieldName).toString());
         connectionDetails.insert("database", result.value(fieldDb).toString());
         connectionDetails.insert("serverurl", result.value(fieldServer).toString());
-        connectionDetails.insert("username", this->get_username());
-        connectionDetails.insert("password", this->get_password());
+        connectionDetails.insert("username", this->getUsername());
+        connectionDetails.insert("password", this->getPassword());
         connectionDetails.insert("type", MAIN_DB_TYPE);
 
         //Connect to MAIN_DB
-        if (mainWindow::createExternDbConnection(connectionDetails) == EXIT_FAILURE)
-            ui->errorLabel->show();
+        if (MainWindow::createExternDbConnection(connectionDetails) == EXIT_FAILURE)
+            this->setErrorVisible(true);
         else emit this->done(QDialog::Accepted);
     }
     catch (const QSqlError &e)
     {
         EXCEPTION_HANDLER
+    }
+}
+
+//GETTERS & SETTERS
+bool LoginDialog::getErrorVisible() const
+{
+    return errorVisible;
+}
+void LoginDialog::setErrorVisible(bool value)
+{
+    if(errorVisible != value)
+    {
+        errorVisible = value;
+        emit errorVisibleChanged();
+    }
+}
+QString LoginDialog::getErrorMsg() const
+{
+    return errorMsg;
+}
+void LoginDialog::setErrorMsg(const QString &value)
+{
+    if(errorMsg != value)
+    {
+        errorMsg = value;
+        emit errorMsgChanged();
+    }
+}
+QString LoginDialog::getPassword() const
+{
+    return password;
+}
+void LoginDialog::setPassword(const QString &value)
+{
+    if(value != password)
+    {
+        password = value;
+        emit passwordChanged();
+    }
+}
+QString LoginDialog::getUsername() const
+{
+    return username;
+}
+void LoginDialog::setUsername(const QString &value)
+{
+    if(value != username)
+    {
+        username = value;
+        emit usernameChanged();
     }
 }

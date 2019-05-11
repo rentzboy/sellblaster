@@ -11,16 +11,16 @@
 
 namespace Ui {class mainWindow;}
 
-class mainWindow : public QMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
     //constructors
-    explicit mainWindow(QWidget *parent = Q_NULLPTR);
-    ~mainWindow() override;
-    mainWindow(const mainWindow&) = delete;
-    mainWindow& operator =(const mainWindow&) = delete;
+    explicit MainWindow(QWidget *parent = Q_NULLPTR);
+    ~MainWindow() override;
+    MainWindow(const MainWindow&) = delete;
+    MainWindow& operator =(const MainWindow&) = delete;
     //Static members
     static bool executeForwardSql(const QString &sqlQuery, const QString &connectionName);
     static bool executeForwardSqlException(const QString &sqlQuery, const QString &connectionName);
@@ -42,7 +42,7 @@ private:
     QSettings::Status writeUserSettings(void);
     QString get_usernameFromDb();
     //members where Qt::WA_DeleteOnClose == false
-    QPointer<databaseManagement> dbManagementWidget = Q_NULLPTR;
+    QPointer<DatabaseManagement> dbManagementWidget = Q_NULLPTR;
 
 private slots:
     void on_actionDatabases_triggered(void);

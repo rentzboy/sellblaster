@@ -7,13 +7,13 @@
 
 class QSqlTableModel;
 
-class sqliteModel : public QAbstractTableModel
+class SqliteModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
     //constructors
-    explicit sqliteModel(QObject *parent = Q_NULLPTR, QSqlTableModel *model= Q_NULLPTR);
-    ~sqliteModel() override = default;
+    explicit SqliteModel(QObject *parent = Q_NULLPTR, QSqlTableModel *model= Q_NULLPTR);
+    ~SqliteModel() override = default;
     //members to reimplement
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;

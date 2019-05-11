@@ -16,10 +16,10 @@
 
 //#define DIRECTORY_PATH                                      QCoreApplication::applicationDirPath()
 #define DIRECTORY_PATH                                      "/home/renti/Qt5.12.1/Proyectos"
-#define LOG_FILE_RELATIVE_PATH                     "/Sellblaster/logs/exceptions.txt"
-#define SQLITE_RELATIVE_PATH                          "/Sellblaster/logs/innerdb.sqlite3"
+#define LOG_FILE_RELATIVE_PATH                     "/Q_Sellblaster/logs/exceptions.txt"
+#define SQLITE_RELATIVE_PATH                          "/Q_Sellblaster/logs/innerdb.sqlite3"
 
-#define EXCEPTION_HANDLER                              excepciones ex(e, basename(__FILE__), __FUNCTION__,  __LINE__);
+#define EXCEPTION_HANDLER                              Excepciones ex(e, basename(__FILE__), __FUNCTION__,  __LINE__);
 #define PRINT_FUNCTION_NAME                          qDebug() << "Se ha llamado a: " << __FUNCTION__;
 
 
