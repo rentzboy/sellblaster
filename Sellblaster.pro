@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql quick quickcontrols2
+QT  += core gui sql quick quickcontrols2
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,6 +28,7 @@ PRECOMPILED_HEADER  = precompiled_header.h
 #Indicamos la versión del compilador a la que tiene que llamar (si no queremos el predeterminado x Linux)
 #No es suficiente con indicarlo en Options > Kit
 QMAKE_CXX = g++-8
+
 #Indicar la versión de C++
 CONFIG += c++17
 

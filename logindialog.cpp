@@ -4,29 +4,14 @@
 #include <QCloseEvent>
 
 //CONSTRUCTORS
-LoginDialog::LoginDialog(QWidget *parent) : QDialog(parent),
+LoginDialog::LoginDialog(QObject *parent) : QObject(parent),
     errorMsg(QObject::tr("No se ha podido establecer la conexión")), errorVisible(false)
 {
-    this->setAttribute(Qt::WA_DeleteOnClose);
-
     //Retrieve username from previous sesions -QSettings-
     this->setUsername(MainWindow::get_usernameFromQsettings());
 }
 
 //PROTECTED MEMBERS
-void LoginDialog::closeEvent(QCloseEvent *event)
-{
-    event->accept();
-
-    if(this->result() != QDialog::Accepted)
-        QMetaObject::invokeMethod(qApp, "quit", Qt::QueuedConnection);
-    //qGuiApp->quit(); No funciona pues la App aun no ha entrado en el main event loop (app.exec())
-}
-void LoginDialog::keyPressEvent(QKeyEvent *event)
-{
-    if(event == QKeySequence::Cancel)
-        event->ignore();
-}
 
 //PRIVATE MEMBERS
 bool LoginDialog::sanitationCheck()
@@ -42,12 +27,12 @@ bool LoginDialog::sanitationCheck()
 void LoginDialog::onCancelarClicked(void)
 {
     PRINT_FUNCTION_NAME
-    emit this->close(); //NO utilizar done(QDialog::Rejected) pues se cerraria directamente sin pasar x CloseEvent()
+    QMetaObject::invokeMethod(qGuiApp, "quit", Qt::QueuedConnection);
+    //qGuiApp->quit(); No funciona pues la App aun no ha entrado en el main event loop (app.exec())
 }
-void LoginDialog::onAceptarClicked(void)
+void LoginDialog::onAceptarClicked(void) //PENDING ....
 {
     PRINT_FUNCTION_NAME
-
     if(this->sanitationCheck() == EXIT_FAILURE)
         return;
 
@@ -76,7 +61,7 @@ void LoginDialog::onAceptarClicked(void)
         //Connect to MAIN_DB
         if (MainWindow::createExternDbConnection(connectionDetails) == EXIT_FAILURE)
             this->setErrorVisible(true);
-        else emit this->done(QDialog::Accepted);
+        //PENDING ........else emit this->done(QDialog::Accepted);
     }
     catch (const QSqlError &e)
     {

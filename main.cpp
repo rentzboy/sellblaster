@@ -2,22 +2,21 @@
 #include "globals.h"
 #include "logindialog.h"
 #include "excepciones.h"
-#include <QApplication>
 #include <QQmlApplicationEngine>
-//#include <QGuiApplication>
-//#include <QQuickStyle>
+#include <QGuiApplication>
 
 int main(int argc, char *argv[])
 {
     try
     {
-        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-        QApplication a(argc, argv);
-
-        //MainWindow w;
-        //w.hide(); //la mostramos despues del login
+        QApplication app(argc, argv);
+        //QGuiApplication app(argc, argv);
+        app.setAttribute(Qt::AA_EnableHighDpiScaling);
 
         qmlRegisterType<LoginDialog>("LoginClass", 1, 0, "LoginDialog");
+
+        MainWindow w;
+        w.hide(); //la mostramos despues del login
 
 //        QQuickView view;
 //        view.setResizeMode(QQuickView::SizeRootObjectToView);
@@ -28,7 +27,7 @@ int main(int argc, char *argv[])
         engine.load(QUrl(QStringLiteral("qrc:/qml/login.qml")));
         if (engine.rootObjects().isEmpty())
             return -1;
-        return a.exec();
+        return app.exec();
     }
     catch (std::exception &e)
     {

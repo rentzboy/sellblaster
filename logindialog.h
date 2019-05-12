@@ -1,9 +1,9 @@
 #ifndef LOGINDIALOG_H
 #define LOGINDIALOG_H
 
-#include <QDialog>
+#include <QObject>
 
-class LoginDialog : public QDialog
+class LoginDialog : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString username READ getUsername WRITE setUsername NOTIFY usernameChanged)
@@ -12,7 +12,7 @@ class LoginDialog : public QDialog
     Q_PROPERTY(bool errorVisible READ getErrorVisible WRITE setErrorVisible NOTIFY errorVisibleChanged)
 
 public:
-    explicit LoginDialog(QWidget *parent = Q_NULLPTR);
+    explicit LoginDialog(QObject *parent = Q_NULLPTR);
 
     QString getUsername() const;
     void setUsername(const QString &value);
@@ -27,8 +27,6 @@ private:
     bool sanitationCheck(void);
 
 protected:
-    void closeEvent(QCloseEvent *event);
-    void keyPressEvent(QKeyEvent *event);
 
 public slots:
     void onAceptarClicked(void);
