@@ -1,0 +1,5 @@
+
+singleton LoginClass 1.0 Login.qml
+Background Background.qml
+BackgroundTextField BackgroundTextField.qml
+TextInputField TextInputField.qml
