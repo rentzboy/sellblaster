@@ -2,6 +2,7 @@
 #define LOGINDIALOG_H
 
 #include <QObject>
+#include <QtQml>
 
 class LoginDialog : public QObject
 {
@@ -12,7 +13,10 @@ class LoginDialog : public QObject
     Q_PROPERTY(bool errorVisible READ getErrorVisible WRITE setErrorVisible NOTIFY errorVisibleChanged)
 
 public:
-    explicit LoginDialog(QObject *parent = Q_NULLPTR);
+    static LoginDialog* createSingletonLoginDialog(QObject *parent = Q_NULLPTR);
+
+    LoginDialog(const LoginDialog &other) = delete;
+    LoginDialog operator=(const LoginDialog &other) = delete;
 
     QString getUsername() const;
     void setUsername(const QString &value);
@@ -24,6 +28,7 @@ public:
     void setErrorVisible(bool value);
 
 private:
+    explicit LoginDialog(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)
     bool sanitationCheck(void);
 
 protected:
@@ -31,6 +36,8 @@ protected:
 public slots:
     void onAceptarClicked(void);
     void onCancelarClicked(void);
+    void onUsernameUpdated(QString);
+    void onPasswordUpdated(QString);
 
 signals:
     void usernameChanged();
@@ -43,6 +50,7 @@ private:
     QString password;
     QString errorMsg;
     bool errorVisible;
+    static LoginDialog *uniqueInstance;
 };
 
 #endif // LOGINDIALOG_H

@@ -3,7 +3,10 @@
 #include "mainwindow.h"
 #include <QCloseEvent>
 
-//CONSTRUCTORS
+//static initialization
+LoginDialog* LoginDialog::uniqueInstance = Q_NULLPTR;
+
+//PRIVATE CONSTRUCTOR
 LoginDialog::LoginDialog(QObject *parent) : QObject(parent),
     errorMsg(QObject::tr("No se ha podido establecer la conexión")), errorVisible(false)
 {
@@ -23,12 +26,34 @@ bool LoginDialog::sanitationCheck()
     else return EXIT_SUCCESS;
 }
 
+//PUBLIC MEMBERS
+LoginDialog* LoginDialog::createSingletonLoginDialog(QObject *parent)
+{
+    if(uniqueInstance == Q_NULLPTR)
+    {
+        uniqueInstance = new LoginDialog(parent);
+    }
+    return  uniqueInstance;
+}
+
 //PUBLIC SLOTS
 void LoginDialog::onCancelarClicked(void)
 {
     PRINT_FUNCTION_NAME
     QMetaObject::invokeMethod(qGuiApp, "quit", Qt::QueuedConnection);
     //qGuiApp->quit(); No funciona pues la App aun no ha entrado en el main event loop (app.exec())
+}
+void LoginDialog::onUsernameUpdated(QString value)
+{
+    PRINT_FUNCTION_NAME
+    this->setUsername(value);
+}
+
+void LoginDialog::onPasswordUpdated(QString value)
+{
+    PRINT_FUNCTION_NAME
+    this->setPassword(value);
+
 }
 void LoginDialog::onAceptarClicked(void) //PENDING ....
 {
@@ -100,6 +125,7 @@ QString LoginDialog::getPassword() const
 }
 void LoginDialog::setPassword(const QString &value)
 {
+    PRINT_FUNCTION_NAME
     if(value != password)
     {
         password = value;
@@ -112,6 +138,7 @@ QString LoginDialog::getUsername() const
 }
 void LoginDialog::setUsername(const QString &value)
 {
+    PRINT_FUNCTION_NAME
     if(value != username)
     {
         username = value;

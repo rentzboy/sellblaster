@@ -4,6 +4,7 @@
 #include "excepciones.h"
 #include <QQmlApplicationEngine>
 #include <QGuiApplication>
+#include "logindialog.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,7 +14,11 @@ int main(int argc, char *argv[])
         //QGuiApplication app(argc, argv);
         app.setAttribute(Qt::AA_EnableHighDpiScaling);
 
-        qmlRegisterType<LoginDialog>("LoginClass", 1, 0, "LoginDialog");
+        qmlRegisterSingletonType<LoginDialog>("LoginClass", 1, 0, "LoginDialog",
+            [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+                Q_UNUSED(scriptEngine)
+                return LoginDialog::createSingletonLoginDialog(engine);
+        });
 
         MainWindow w;
         w.hide(); //la mostramos despues del login
@@ -24,7 +29,7 @@ int main(int argc, char *argv[])
 //        view.show();
 
         QQmlApplicationEngine engine;
-        engine.load(QUrl(QStringLiteral("qrc:/qml/login.qml")));
+        engine.load(QUrl(QStringLiteral("qrc:/qml/Login.qml")));
         if (engine.rootObjects().isEmpty())
             return -1;
         return app.exec();

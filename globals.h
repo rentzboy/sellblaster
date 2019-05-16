@@ -20,7 +20,7 @@
 #define SQLITE_RELATIVE_PATH                          "/Q_Sellblaster/logs/innerdb.sqlite3"
 
 #define EXCEPTION_HANDLER                              Excepciones ex(e, basename(__FILE__), __FUNCTION__,  __LINE__);
-#define PRINT_FUNCTION_NAME                          qDebug() << "Se ha llamado a: " << __FUNCTION__;
+#define PRINT_FUNCTION_NAME                          qDebug() << "Se ha llamado a la función: " << __FUNCTION__;
 
 
 /*Deprecated

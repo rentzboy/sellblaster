@@ -1,24 +1,21 @@
-import QtQuick 2.12
+﻿import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.3
-//QML type: LoginDialog
-import LoginClass 1.0
 import "components"
 
-Window {
-    id: root
+Item {
+    id: window
     visible: true
-    maximumHeight: 300
-    minimumHeight: 300
-    maximumWidth: 420
-    minimumWidth: 420
-    title: qsTr("Hello World")
+    height: 300
+    width: 420
+    property alias textError: textError
+    property alias textInputPassword: textInputPassword
+    property alias textInputUsename: textInputUsename
+    property alias buttonCancelar: buttonCancelar
+    property alias buttonAceptar: buttonAceptar
 
-    LoginDialog {
-        id: loginclass
-    }
     Background {
 
         GroupBox {
@@ -63,17 +60,13 @@ Window {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     maximumLength: 15
-                    text: loginclass.username
-                    onEditingFinished: loginclass.username = textInputUsename.text
                 }
                 TextInputField {
                     id: textInputPassword
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     maximumLength: 15
-                    text: loginclass.password
                     echoMode: TextInput.Password
-                    onEditingFinished: loginclass.password = textInputPassword.text
                 }
             }
 
@@ -90,14 +83,12 @@ Window {
                     text: qsTr("Aceptar")
                     Material.background: Material.Orange
                     font.capitalization: Font.Capitalize
-                    onClicked: loginclass.onAceptarClicked()
                 }
                 Button {
                     id: buttonCancelar
                     text: qsTr("Cancelar")
                     //Material.background: Material.Teal
                     font.capitalization: Font.Capitalize
-                    onClicked: loginclass.onCancelarClicked()
                 }
             }
 
@@ -105,8 +96,6 @@ Window {
                 id: textError
                 height: 30
                 color: "#ef2929"
-                text: loginclass.errorMsg
-                visible: loginclass.errorVisible
                 horizontalAlignment: Text.AlignHCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: rowButtons.bottom
@@ -115,11 +104,3 @@ Window {
         }
     }
 }
-
-
-
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

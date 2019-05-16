@@ -203,7 +203,7 @@ void MainWindow::createInterDbConnection(void)
 }
 void MainWindow::createLoginDialog(void)
 {
-    auto login = new LoginDialog(this);
+//    auto login = new LoginDialog(this);
 //    if(login->exec() == QDialog::Accepted)
 //        this->show();
 }
