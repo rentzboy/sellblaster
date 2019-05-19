@@ -1,11 +1,13 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/pruebas.qml</file>
-        <file>qml/components/Background.qml</file>
         <file>qml/components/BackgroundTextField.qml</file>
         <file>qml/components/TextInputField.qml</file>
-        <file>qml/LoginForm.ui.qml</file>
         <file>qml/Login.qml</file>
         <file>qml/components/qmldir</file>
+        <file>qml/EmpresaTab.ui.qml</file>
+        <file>qml/LoginForm.ui.qml</file>
+        <file>qml/components/Background.qml</file>
+        <file>qml/pruebas.qml</file>
+        <file>qml/NewEmpresa.qml</file>
     </qresource>
 </RCC>

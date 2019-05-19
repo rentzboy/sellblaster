@@ -4,6 +4,7 @@
 #include "excepciones.h"
 #include <QQmlApplicationEngine>
 #include <QGuiApplication>
+#include <QQuickStyle>
 #include "logindialog.h"
 
 int main(int argc, char *argv[])
