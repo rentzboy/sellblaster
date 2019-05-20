@@ -8,12 +8,9 @@ import QtQuick.Controls.Material 2.0
 //Si no importamos labs.plataform el menubar no es nativo (en MS no esta operativo)
 import Qt.labs.platform 1.1
 
-ApplicationWindow {
+Item {
     id: applicationWindow
     visible: true
-    width: 640
-    height: 480
-    title: qsTr("Hello World")
 
     MenuBar {
         id: menuBar
@@ -56,19 +53,15 @@ ApplicationWindow {
         Row {
             id: rowLayout
             anchors.fill: parent
-            spacing: 30
+            spacing: 10
 
             ToolButton {
                 id: toolButton
-                x: 201
-                y: 0
                 text: qsTr("Tool Button")
             }
 
             ToolButton {
                 id: toolButton1
-                x: 396
-                y: 0
                 text: qsTr("Tool Button")
             }
         }
@@ -76,13 +69,17 @@ ApplicationWindow {
 
     Frame {
         id: pane
-        contentHeight: 300
-        contentWidth: 400
+        contentHeight: 400
+        contentWidth: 800
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-
-        Login {
-            anchors.fill: parent
-        }
     }
 }
+
+
+
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

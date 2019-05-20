@@ -8,8 +8,6 @@ import "components"
 Item {
     id: window
     visible: true
-    height: 300
-    width: 420
     property alias textError: textError
     property alias textInputPassword: textInputPassword
     property alias textInputUsename: textInputUsename
@@ -106,3 +104,11 @@ Item {
         }
     }
 }
+
+
+
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

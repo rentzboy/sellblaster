@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QObject>
 #include <QSettings>
 #include <QSqlQuery>
 #include <QPointer>
@@ -9,42 +9,38 @@
 #include "databasemanagement.h"
 #include "addsupplier.h"
 
-namespace Ui {class mainWindow;}
-
-class MainWindow : public QMainWindow
+class MainWindow : public QObject
 {
     Q_OBJECT
 
 public:
-    //constructors
-    explicit MainWindow(QWidget *parent = Q_NULLPTR);
-    ~MainWindow() override;
     MainWindow(const MainWindow&) = delete;
     MainWindow& operator =(const MainWindow&) = delete;
-    //Static members
+    ~MainWindow() override = default;
+    static QObject* createComponent(void);
+
     static bool executeForwardSql(const QString &sqlQuery, const QString &connectionName);
     static bool executeForwardSqlException(const QString &sqlQuery, const QString &connectionName);
-    static bool createExternDbConnection(const QMap <QString, QString> connectionDetails);
     static bool executeForwardSqlWithReturn(const QString &sqlQuery, const QString &connectionName, QSqlQuery &query);
+    static bool createExternDbConnection(const QMap <QString, QString> connectionDetails);
+    static void createInterDbConnection(void);
     static void sanitationUserInput(QMap<QString, QString>&userFields);
     static QString get_usernameFromQsettings(void);
-    //Non static members
-    void createLoginDialog(void);
+    explicit MainWindow(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)
 
 protected:
-    void closeEvent(QCloseEvent *event) override;
+    void closeEvent(QCloseEvent *event);
 
 private:
-    Ui::mainWindow *ui;
-    static void createInterDbConnection(void);
+    static void registerSingleton(void);
     QSize get_screenResolution(void);
     QSettings::Status readUserSettings(void);
     QSettings::Status writeUserSettings(void);
     QString get_usernameFromDb();
-    //members where Qt::WA_DeleteOnClose == false
     QPointer<DatabaseManagement> dbManagementWidget = Q_NULLPTR;
+    static MainWindow *uniqueInstance;
 
-private slots:
+public slots:
     void on_actionDatabases_triggered(void);
     void on_actionSalir_triggered(void);
     void on_actionA_adir_empresa_triggered();

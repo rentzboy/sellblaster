@@ -4,32 +4,18 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.3
 import "components"
-import LoginClass 1.0
 
-Window {
+//import MainClass 1.0
+ApplicationWindow {
     id: window
     visible: true
-    maximumHeight: 300
-    minimumHeight: 300
-    maximumWidth: 420
-    minimumWidth: 420
-    title: qsTr("Acceso Sellblaster")
+    minimumHeight: 600
+    minimumWidth: 800
+    title: qsTr("Sellblaster - Copia registrada")
 
-    LoginForm {
+    //visibility: 4 //QWindow::Maximized
+    MainWindowForm {
         id: form
-
-        textInputUsename.text: LoginDialog.username
-
-        textInputUsename.onEditingFinished: LoginDialog.onUsernameUpdated(
-                                                textInputUsename.text)
-        textInputPassword.onEditingFinished: LoginDialog.onPasswordUpdated(
-                                                 textInputPassword.text)
-
-        buttonCancelar.onClicked: LoginDialog.onCancelarClicked()
-        buttonAceptar.onClicked: LoginDialog.onAceptarClicked()
-
-        textError.text: LoginDialog.errorMsg
-        textError.visible: LoginDialog.errorVisible
     }
 }
 

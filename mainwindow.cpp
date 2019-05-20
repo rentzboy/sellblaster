@@ -5,27 +5,23 @@
 #include "addsupplier.h"
 #include "logindialog.h"
 
-
-//CONSTRUCTORS
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainWindow)
-{
-    ui->setupUi(this);
-
-    //Retrieve persistent data from last user's sesion
-    if(this->readUserSettings() == QSettings::AccessError)
-        this->resize(this->get_screenResolution()); //resize to full-screen
-
-    this->createInterDbConnection();
-
-    statusBar()->showMessage(QObject::tr("Ready"), 1500);
-
-}
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
+//static initialization
+MainWindow* MainWindow::uniqueInstance = Q_NULLPTR;
 
 //PUBLIC MEMBERS
+QObject* MainWindow::createComponent(void)
+{
+    if(uniqueInstance == Q_NULLPTR)
+    {
+        uniqueInstance = new MainWindow;
+        registerSingleton();
+    }
+
+    auto *engine = new QQmlApplicationEngine;
+    QQmlComponent component(engine, QUrl(QStringLiteral("qrc:/qml/MainWindow.qml")));
+    return component.create();
+}
+
 bool MainWindow::executeForwardSql(const QString &sqlQuery, const QString &connectionName)
 {
     //Execute SQL query without retrieving any values
@@ -161,6 +157,26 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 
 //PRIVATE MEMBERS
+MainWindow::MainWindow(QObject *parent) : QObject(parent) //PENDING
+{
+    PRINT_FUNCTION_NAME
+    //Retrieve persistent data from last user's sesion
+//   if(this->readUserSettings() == QSettings::AccessError)
+//        this->resize(this->get_screenResolution()); //resize to full-screen
+//    createInterDbConnection();
+//    statusBar()->showMessage(QObject::tr("Ready"), 1500);
+
+}
+void MainWindow::registerSingleton(void)
+{
+    qmlRegisterSingletonType<MainWindow>("MainClass", 1, 0, "MainWindow",
+        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+        Q_UNUSED(scriptEngine)
+        Q_UNUSED(engine)
+        return uniqueInstance;
+            });
+}
+
 void MainWindow::createInterDbConnection(void)
 {
     try
@@ -201,12 +217,6 @@ void MainWindow::createInterDbConnection(void)
         EXCEPTION_HANDLER
     }
 }
-void MainWindow::createLoginDialog(void)
-{
-//    auto login = new LoginDialog(this);
-//    if(login->exec() == QDialog::Accepted)
-//        this->show();
-}
 QSize MainWindow::get_screenResolution(void)
 {
     //Retrieve parameters from user's screen configuration
@@ -217,25 +227,25 @@ QSize MainWindow::get_screenResolution(void)
     }
     else return QSize(0,0);
 }
-QSettings::Status MainWindow::readUserSettings(void)
+QSettings::Status MainWindow::readUserSettings(void) //PENDING
 {
     //Retrieve configuration from the last user's session
     QSettings userSettings(QObject::tr("Fx Team®"), QObject::tr("Sellblaster"));
     userSettings.beginGroup(QObject::tr("mainwindow"));
-    this->resize(userSettings.value(QObject::tr("size")).toSize());
-    this->move(userSettings.value(QObject::tr("position")).toPoint());
+//    this->resize(userSettings.value(QObject::tr("size")).toSize());
+//    this->move(userSettings.value(QObject::tr("position")).toPoint());
     userSettings.value(QObject::tr("fullScreen"));
     userSettings.endGroup();
     return userSettings.status();
 }
-QSettings::Status MainWindow::writeUserSettings(void)
+QSettings::Status MainWindow::writeUserSettings(void) //PENDING
 {
     //Store configuration before closing the application
     QSettings userSettings(QObject::tr("Fx Team®"), QObject::tr("Sellblaster"));
     userSettings.beginGroup("mainwindow");
-    userSettings.setValue(QObject::tr("size"), this->size()); //QSize
-    userSettings.setValue(QObject::tr("position"), this->pos()); //QPoint
-    userSettings.setValue(QObject::tr("fullScreen"), this->isFullScreen()); //bool
+//    userSettings.setValue(QObject::tr("size"), this->size()); //QSize
+//    userSettings.setValue(QObject::tr("position"), this->pos()); //QPoint
+//    userSettings.setValue(QObject::tr("fullScreen"), this->isFullScreen()); //bool
     userSettings.setValue(QObject::tr("username"), this->get_usernameFromDb());
     userSettings.endGroup();
     return userSettings.status();
@@ -261,18 +271,17 @@ QString MainWindow::get_usernameFromQsettings(void) //static
 //PRIVATE SLOTS
 void MainWindow::on_actionDatabases_triggered(void)
 {
-    if(dbManagementWidget.isNull())
-        dbManagementWidget = new DatabaseManagement(this);
-    dbManagementWidget->show();
+//    if(dbManagementWidget.isNull())
+//        dbManagementWidget = new DatabaseManagement(this);
+//    dbManagementWidget->show();
 }
 void MainWindow::on_actionSalir_triggered(void)
 {
-    emit this->close();
+//    emit this->close();
 }
-
 void MainWindow::on_actionA_adir_empresa_triggered()
 {
-    auto *addSupplierWidget = new AddSupplier(this);
-    addSupplierWidget->show();
-    addSupplierWidget->setAttribute(Qt::WA_DeleteOnClose);
+//    auto *addSupplierWidget = new AddSupplier(this);
+//    addSupplierWidget->show();
+//    addSupplierWidget->setAttribute(Qt::WA_DeleteOnClose);
 }

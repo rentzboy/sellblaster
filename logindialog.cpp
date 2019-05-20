@@ -1,22 +1,32 @@
 #include "logindialog.h"
 #include "basic_headers.h"
 #include "mainwindow.h"
-#include <QCloseEvent>
+#include <QQuickWindow>
 
 //static initialization
 LoginDialog* LoginDialog::uniqueInstance = Q_NULLPTR;
+int LoginDialog::typeId = 0;
 
 //PRIVATE CONSTRUCTOR
 LoginDialog::LoginDialog(QObject *parent) : QObject(parent),
     errorMsg(QObject::tr("No se ha podido establecer la conexión")), errorVisible(false)
 {
+    PRINT_FUNCTION_NAME
+
     //Retrieve username from previous sesions -QSettings-
     this->setUsername(MainWindow::get_usernameFromQsettings());
 }
 
-//PROTECTED MEMBERS
-
 //PRIVATE MEMBERS
+void LoginDialog::registerSingleton(void)
+{
+    typeId = qmlRegisterSingletonType<LoginDialog>("LoginClass", 1, 0, "LoginDialog",
+        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+            Q_UNUSED(scriptEngine)
+            Q_UNUSED(engine)
+            return uniqueInstance;
+            });
+}
 bool LoginDialog::sanitationCheck()
 {
     QString name = getUsername();
@@ -26,14 +36,32 @@ bool LoginDialog::sanitationCheck()
     else return EXIT_SUCCESS;
 }
 
+//PROTECTED MEMBERS
+
 //PUBLIC MEMBERS
-LoginDialog* LoginDialog::createSingletonLoginDialog(QObject *parent)
+QObject* LoginDialog::createComponent(void)
 {
     if(uniqueInstance == Q_NULLPTR)
     {
-        uniqueInstance = new LoginDialog(parent);
+        uniqueInstance = new LoginDialog;
+        registerSingleton();
     }
-    return  uniqueInstance;
+
+    //Connect C++ to QML Signals / Slots
+    auto *engine = new QQmlApplicationEngine;
+
+//    LoginDialog* QmlInstance = engine->singletonInstance<LoginDialog*>(typeId);
+//    connect(uniqueInstance, SIGNAL(closeQmlInstance()), QmlInstance, SLOT(onCloseQmlInstance()));
+
+    //Create QML component
+    engine->load(QUrl(QStringLiteral("qrc:/qml/Login.qml")));
+//    QQmlComponent component(engine, QUrl(QStringLiteral("qrc:/qml/Login.qml")));
+//    component.create();
+
+    //OJO: SO FUNCIONA CON CARGAMOS EL COMPONENTE, HAY QUE CREARLO CON ENGINE.LOAD
+    QObject *rootEngine = engine->rootObjects().value(0);
+    QQuickWindow *window = qobject_cast<QQuickWindow*>(rootEngine);
+    connect(uniqueInstance, SIGNAL(closeQmlInstance()), window, SLOT(onCloseQmlInstance()));
 }
 
 //PUBLIC SLOTS
@@ -48,7 +76,6 @@ void LoginDialog::onUsernameUpdated(QString value)
     PRINT_FUNCTION_NAME
     this->setUsername(value);
 }
-
 void LoginDialog::onPasswordUpdated(QString value)
 {
     PRINT_FUNCTION_NAME
@@ -86,7 +113,11 @@ void LoginDialog::onAceptarClicked(void) //PENDING ....
         //Connect to MAIN_DB
         if (MainWindow::createExternDbConnection(connectionDetails) == EXIT_FAILURE)
             this->setErrorVisible(true);
-        //PENDING ........else emit this->done(QDialog::Accepted);
+        else
+        {
+            emit this->closeQmlInstance();
+            MainWindow::createComponent();
+        }
     }
     catch (const QSqlError &e)
     {

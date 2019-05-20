@@ -9,5 +9,7 @@
         <file>qml/components/Background.qml</file>
         <file>qml/pruebas.qml</file>
         <file>qml/NewEmpresa.qml</file>
+        <file>qml/MainWindow.qml</file>
+        <file>qml/MainWindowForm.ui.qml</file>
     </qresource>
 </RCC>

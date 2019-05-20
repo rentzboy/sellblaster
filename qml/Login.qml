@@ -15,6 +15,11 @@ Window {
     minimumWidth: 420
     title: qsTr("Acceso Sellblaster")
 
+    function onCloseQmlInstance() {
+        console.log("Se ha ejecutado onCloseQmlInstance()")
+        close()
+    }
+
     LoginForm {
         id: form
 

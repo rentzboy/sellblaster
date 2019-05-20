@@ -13,10 +13,10 @@ class LoginDialog : public QObject
     Q_PROPERTY(bool errorVisible READ getErrorVisible WRITE setErrorVisible NOTIFY errorVisibleChanged)
 
 public:
-    static LoginDialog* createSingletonLoginDialog(QObject *parent = Q_NULLPTR);
-
     LoginDialog(const LoginDialog &other) = delete;
     LoginDialog operator=(const LoginDialog &other) = delete;
+    ~LoginDialog() = default;
+    static QObject* createComponent(void);
 
     QString getUsername() const;
     void setUsername(const QString &value);
@@ -29,6 +29,7 @@ public:
 
 private:
     explicit LoginDialog(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)
+    static void registerSingleton(void);
     bool sanitationCheck(void);
 
 protected:
@@ -44,6 +45,7 @@ signals:
     void passwordChanged();
     void errorMsgChanged();
     void errorVisibleChanged();
+    void closeQmlInstance();
 
 private:
     QString username;
@@ -51,6 +53,7 @@ private:
     QString errorMsg;
     bool errorVisible;
     static LoginDialog *uniqueInstance;
+    static int typeId;
 };
 
 #endif // LOGINDIALOG_H
