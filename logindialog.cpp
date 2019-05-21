@@ -39,7 +39,7 @@ bool LoginDialog::sanitationCheck()
 //PROTECTED MEMBERS
 
 //PUBLIC MEMBERS
-QObject* LoginDialog::createComponent(void)
+void LoginDialog::createComponent(void)
 {
     if(uniqueInstance == Q_NULLPTR)
     {
@@ -47,21 +47,13 @@ QObject* LoginDialog::createComponent(void)
         registerSingleton();
     }
 
-    //Connect C++ to QML Signals / Slots
+    //Load QML component
     auto *engine = new QQmlApplicationEngine;
-
-//    LoginDialog* QmlInstance = engine->singletonInstance<LoginDialog*>(typeId);
-//    connect(uniqueInstance, SIGNAL(closeQmlInstance()), QmlInstance, SLOT(onCloseQmlInstance()));
-
-    //Create QML component
     engine->load(QUrl(QStringLiteral("qrc:/qml/Login.qml")));
-//    QQmlComponent component(engine, QUrl(QStringLiteral("qrc:/qml/Login.qml")));
-//    component.create();
 
-    //OJO: SO FUNCIONA CON CARGAMOS EL COMPONENTE, HAY QUE CREARLO CON ENGINE.LOAD
-    QObject *rootEngine = engine->rootObjects().value(0);
-    QQuickWindow *window = qobject_cast<QQuickWindow*>(rootEngine);
-    connect(uniqueInstance, SIGNAL(closeQmlInstance()), window, SLOT(onCloseQmlInstance()));
+    //Connect C++ to QML Signals / Slots
+    //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
+    connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
 }
 
 //PUBLIC SLOTS

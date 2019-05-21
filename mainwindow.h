@@ -17,7 +17,7 @@ public:
     MainWindow(const MainWindow&) = delete;
     MainWindow& operator =(const MainWindow&) = delete;
     ~MainWindow() override = default;
-    static QObject* createComponent(void);
+    static void createComponent(void);
 
     static bool executeForwardSql(const QString &sqlQuery, const QString &connectionName);
     static bool executeForwardSqlException(const QString &sqlQuery, const QString &connectionName);
@@ -39,6 +39,7 @@ private:
     QString get_usernameFromDb();
     QPointer<DatabaseManagement> dbManagementWidget = Q_NULLPTR;
     static MainWindow *uniqueInstance;
+    static int typeId;
 
 public slots:
     void on_actionDatabases_triggered(void);

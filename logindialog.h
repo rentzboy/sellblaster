@@ -16,7 +16,7 @@ public:
     LoginDialog(const LoginDialog &other) = delete;
     LoginDialog operator=(const LoginDialog &other) = delete;
     ~LoginDialog() = default;
-    static QObject* createComponent(void);
+    static void createComponent(void);
 
     QString getUsername() const;
     void setUsername(const QString &value);

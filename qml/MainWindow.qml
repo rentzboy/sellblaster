@@ -12,8 +12,13 @@ ApplicationWindow {
     minimumHeight: 600
     minimumWidth: 800
     title: qsTr("Sellblaster - Copia registrada")
+    //visibility: 4 //QWindow::Maximized => peta todo !!
 
-    //visibility: 4 //QWindow::Maximized
+    //SLOTS
+    function onCloseQmlInstance() {
+        close()
+    }
+
     MainWindowForm {
         id: form
     }

@@ -2,21 +2,28 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Material 2.12
+import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
 import "components"
 import LoginClass 1.0
 
 Window {
-    id: window
+    id: loginWindow
     visible: true
     maximumHeight: 300
     minimumHeight: 300
-    maximumWidth: 420
-    minimumWidth: 420
+    maximumWidth: 400
+    minimumWidth: 400
     title: qsTr("Acceso Sellblaster")
 
+    Background {
+        anchors.fill: parent
+        border.color: "#ececec"
+        color: "#efefef"
+    }
+
+    //SLOTS
     function onCloseQmlInstance() {
-        console.log("Se ha ejecutado onCloseQmlInstance()")
         close()
     }
 

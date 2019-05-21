@@ -7,9 +7,10 @@
 
 //static initialization
 MainWindow* MainWindow::uniqueInstance = Q_NULLPTR;
+int MainWindow::typeId = 0;
 
 //PUBLIC MEMBERS
-QObject* MainWindow::createComponent(void)
+void MainWindow::createComponent(void)
 {
     if(uniqueInstance == Q_NULLPTR)
     {
@@ -17,9 +18,13 @@ QObject* MainWindow::createComponent(void)
         registerSingleton();
     }
 
+    //Load QML component
     auto *engine = new QQmlApplicationEngine;
-    QQmlComponent component(engine, QUrl(QStringLiteral("qrc:/qml/MainWindow.qml")));
-    return component.create();
+    engine->load(QUrl(QStringLiteral("qrc:/qml/MainWindow.qml")));
+
+    //Connect C++ to QML Signals / Slots
+    //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
+    connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
 }
 
 bool MainWindow::executeForwardSql(const QString &sqlQuery, const QString &connectionName)
