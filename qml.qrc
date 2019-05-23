@@ -4,12 +4,16 @@
         <file>qml/components/TextInputField.qml</file>
         <file>qml/Login.qml</file>
         <file>qml/components/qmldir</file>
-        <file>qml/EmpresaTab.ui.qml</file>
         <file>qml/LoginForm.ui.qml</file>
-        <file>qml/components/Background.qml</file>
         <file>qml/pruebas.qml</file>
         <file>qml/NewEmpresa.qml</file>
         <file>qml/MainWindow.qml</file>
         <file>qml/MainWindowForm.ui.qml</file>
+        <file>qml/NewEmpresaForm.ui.qml</file>
+        <file>qml/components/BackgroundZ1.qml</file>
+        <file>qml/components/BackgroundZ2.qml</file>
+        <file>qml/components/BackgroundZ3.qml</file>
+        <file>qml/EmpresaTab.qml</file>
+        <file>qml/EmpresaTabForm.ui.qml</file>
     </qresource>
 </RCC>

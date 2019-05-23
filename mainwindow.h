@@ -12,6 +12,10 @@
 class MainWindow : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QSize windowSize READ getWindowSize WRITE setWindowSize NOTIFY windowSizeChanged)
+    Q_PROPERTY(QPoint windowPosition READ getWindowPosition WRITE setWindowPosition NOTIFY windowPositionChanged)
+    Q_PROPERTY(bool windowFullScreen READ getWindowFullScreen WRITE setWindowFullScreen NOTIFY windowFullScreenChanged)
+    Q_PROPERTY(QString userName READ getUserName WRITE setUserName NOTIFY userNameChanged)
 
 public:
     MainWindow(const MainWindow&) = delete;
@@ -25,8 +29,16 @@ public:
     static bool createExternDbConnection(const QMap <QString, QString> connectionDetails);
     static void createInterDbConnection(void);
     static void sanitationUserInput(QMap<QString, QString>&userFields);
-    static QString get_usernameFromQsettings(void);
     explicit MainWindow(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)
+
+    QSize getWindowSize(void) const;
+    void setWindowSize(const QSize &value);
+    QPoint getWindowPosition(void) const;
+    void setWindowPosition(const QPoint &value);
+    bool getWindowFullScreen(void) const;
+    void setWindowFullScreen(bool value);
+    QString getUserName(void) const;
+    void setUserName(const QString &value);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -40,6 +52,16 @@ private:
     QPointer<DatabaseManagement> dbManagementWidget = Q_NULLPTR;
     static MainWindow *uniqueInstance;
     static int typeId;
+    QString userName;
+    QSize windowSize;
+    QPoint windowPosition;
+    bool windowFullScreen;
+
+signals:
+    void userNameChanged();
+    void windowSizeChanged();
+    void windowPositionChanged();
+    void windowFullScreenChanged();
 
 public slots:
     void on_actionDatabases_triggered(void);

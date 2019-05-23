@@ -11,62 +11,51 @@ Item {
     id: empresaTab
     visible: true
 
-    Background {
-        anchors.fill: parent
-        color: "#fcfcfc"
-    }
-
     GridLayout {
         columnSpacing: 15
         rowSpacing: 15
         rows: 3
         columns: 1
         anchors.right: parent.right
-        anchors.rightMargin: 20
+        anchors.rightMargin: 15
         anchors.left: parent.left
-        anchors.leftMargin: 20
+        anchors.leftMargin: 15
         anchors.top: parent.top
-        anchors.topMargin: 20
+        anchors.topMargin: 15
 
         RowLayout {
+            //Row1: buttons
             id: row
             spacing: 15
             Button {
                 id: buttonAceptar
                 text: qsTr("Aceptar")
-                Material.background: Material.Orange
-                font.capitalization: Font.Capitalize
             }
             Button {
                 id: buttonCancelar
                 text: qsTr("Cancelar")
-                //Material.background: Material.Teal
-                font.capitalization: Font.Capitalize
             }
             Button {
                 id: buttonGuardar
                 text: qsTr("Guardar")
-                //Material.background: Material.Teal
-                font.capitalization: Font.Capitalize
             }
         }
 
         GroupBox {
+            //Row 2: Datos generales
             id: groupBox1
-            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.fillWidth: true //que se adapte al tamaño de la ventana
+            topPadding: 60 //asi se muetran los bordes Ok
+            bottomPadding: 20 //asi se muetran los bordes Ok
             clip: true
             padding: 15
             title: qsTr("Datos generales")
-            background: Background {
-                anchors.fill: parent
-                border.color: "#ececec"
-                color: "#f9f9f9"
-            }
 
             GridLayout {
                 id: grid
-                columnSpacing: 10
-                rowSpacing: 10
+                columnSpacing: 15
+                rowSpacing: 15
                 anchors.fill: parent
                 rows: 3
                 columns: 9
@@ -75,11 +64,12 @@ Item {
                 Label {
                     id: labelEmpresa
                     text: qsTr("Empresa:")
-                    Layout.minimumWidth: 120
+                    Layout.minimumWidth: 120 //Para alinearlo con Datos financieros
                 }
                 TextField {
                     id: textFieldEmpresa
-                    width: 200
+                    Layout.minimumWidth: 150 //Solo hay que indicarlo en los elementos de la row #1
+                    Layout.fillWidth: true
                 }
                 Item {
                     id: spacer1
@@ -92,7 +82,8 @@ Item {
                 }
                 TextField {
                     id: textFieldHolding
-                    width: 200
+                    Layout.minimumWidth: 150
+                    Layout.fillWidth: true
                 }
                 Item {
                     id: spacer2
@@ -105,7 +96,8 @@ Item {
                 }
                 ComboBox {
                     id: comboBoxActividad
-                    implicitWidth: 200
+                    Layout.minimumWidth: 150
+                    Layout.fillWidth: true
                 }
                 Item {
                     id: spacer3
@@ -119,6 +111,7 @@ Item {
                 }
                 TextField {
                     id: textFieldWeb
+                    Layout.fillWidth: true
                 }
                 Item {
                     id: spacer4
@@ -131,6 +124,8 @@ Item {
                 }
                 TextField {
                     id: textFieldPanjiba
+                    width: 150
+                    Layout.fillWidth: true
                 }
                 Item {
                     id: spacer5
@@ -143,6 +138,7 @@ Item {
                 }
                 TextField {
                     id: textFieldMaps
+                    Layout.fillWidth: true
                 }
                 Item {
                     id: spacer6
@@ -156,7 +152,7 @@ Item {
                 }
                 ComboBox {
                     id: comboBoxPais
-                    implicitWidth: 200
+                    Layout.fillWidth: true
                 }
                 Item {
                     id: spacer7
@@ -169,6 +165,7 @@ Item {
                 }
                 TextField {
                     id: textFieldCiudad
+                    Layout.fillWidth: true
                 }
                 Item {
                     id: spacer8
@@ -181,6 +178,7 @@ Item {
                 }
                 TextField {
                     id: textFieldPostcode
+                    Layout.fillWidth: true
                 }
                 Item {
                     id: spacer9
@@ -193,6 +191,7 @@ Item {
                 }
                 TextField {
                     id: textFieldMoq
+                    Layout.fillWidth: true
                 }
                 Item {
                     id: spacer10
@@ -208,36 +207,31 @@ Item {
                     wrapMode: Text.WordWrap
                     Layout.fillHeight: false
                     Layout.fillWidth: true
-                    Layout.rowSpan: 2
                     Layout.columnSpan: 4
-                    background: Rectangle {
-                    }
                 }
 
                 Item {
                     id: spacer11
                     width: 20
-                    Layout.fillWidth: true
                 }
             }
         }
-
         GroupBox {
+            //Row 3: Datos financieros
             id: groupBox2
-            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.fillWidth: true //que se adapte al tamaño de la ventana
+            topPadding: 60 //asi se muetran los bordes Ok
+            bottomPadding: 20 //asi se muetran los bordes Ok
             clip: true
             padding: 15
             title: qsTr("Datos financieros")
-            background: Background {
-                anchors.fill: parent
-                border.color: "#ececec"
-                color: "#f9f9f9"
-            }
 
             GridLayout {
+                //Datos financieros
                 id: grid2
-                columnSpacing: 10
-                rowSpacing: 10
+                columnSpacing: 15
+                rowSpacing: 15
                 anchors.fill: parent
                 rows: 2
                 columns: 9
@@ -250,7 +244,8 @@ Item {
                 }
                 TextField {
                     id: textFieldPago
-                    width: 200
+                    Layout.minimumWidth: 150
+                    Layout.fillWidth: true
                 }
                 Item {
                     id: spacer20

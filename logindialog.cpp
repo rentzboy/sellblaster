@@ -14,7 +14,7 @@ LoginDialog::LoginDialog(QObject *parent) : QObject(parent),
     PRINT_FUNCTION_NAME
 
     //Retrieve username from previous sesions -QSettings-
-    this->setUsername(MainWindow::get_usernameFromQsettings());
+    this->getUserNameFromQsettings();
 }
 
 //PRIVATE MEMBERS
@@ -29,11 +29,19 @@ void LoginDialog::registerSingleton(void)
 }
 bool LoginDialog::sanitationCheck()
 {
-    QString name = getUsername();
+    QString name = getUserName();
     QString pass = getPassword();
-    if(getUsername().isEmpty() || getPassword().isEmpty())
+    if(getUserName().isEmpty() || getPassword().isEmpty())
         return EXIT_FAILURE;
     else return EXIT_SUCCESS;
+}
+void LoginDialog::getUserNameFromQsettings(void) //static
+{
+    //Retrieve configuration from the last user's session
+    QSettings userSettings(QObject::tr("Fx Team®"), QObject::tr("Sellblaster"));
+    userSettings.beginGroup(QObject::tr("mainwindow"));
+    setUserName(userSettings.value(QObject::tr("username")).toString());
+    userSettings.endGroup();
 }
 
 //PROTECTED MEMBERS
@@ -63,10 +71,10 @@ void LoginDialog::onCancelarClicked(void)
     QMetaObject::invokeMethod(qGuiApp, "quit", Qt::QueuedConnection);
     //qGuiApp->quit(); No funciona pues la App aun no ha entrado en el main event loop (app.exec())
 }
-void LoginDialog::onUsernameUpdated(QString value)
+void LoginDialog::onUserNameUpdated(QString value)
 {
     PRINT_FUNCTION_NAME
-    this->setUsername(value);
+    this->setUserName(value);
 }
 void LoginDialog::onPasswordUpdated(QString value)
 {
@@ -98,7 +106,7 @@ void LoginDialog::onAceptarClicked(void) //PENDING ....
         connectionDetails.insert("name", result.value(fieldName).toString());
         connectionDetails.insert("database", result.value(fieldDb).toString());
         connectionDetails.insert("serverurl", result.value(fieldServer).toString());
-        connectionDetails.insert("username", this->getUsername());
+        connectionDetails.insert("username", this->getUserName());
         connectionDetails.insert("password", this->getPassword());
         connectionDetails.insert("type", MAIN_DB_TYPE);
 
@@ -155,16 +163,16 @@ void LoginDialog::setPassword(const QString &value)
         emit passwordChanged();
     }
 }
-QString LoginDialog::getUsername() const
+QString LoginDialog::getUserName() const
 {
-    return username;
+    return userName;
 }
-void LoginDialog::setUsername(const QString &value)
+void LoginDialog::setUserName(const QString &value)
 {
     PRINT_FUNCTION_NAME
-    if(value != username)
+    if(value != userName)
     {
-        username = value;
-        emit usernameChanged();
+        userName = value;
+        emit userNameChanged();
     }
 }

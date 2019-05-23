@@ -16,10 +16,7 @@ Window {
     minimumWidth: 400
     title: qsTr("Acceso Sellblaster")
 
-    Background {
-        anchors.fill: parent
-        border.color: "#ececec"
-        color: "#efefef"
+    BackgroundZ1 {
     }
 
     //SLOTS
@@ -30,9 +27,9 @@ Window {
     LoginForm {
         id: form
 
-        textInputUsename.text: LoginDialog.username
+        textInputUsename.text: LoginDialog.userName
 
-        textInputUsename.onEditingFinished: LoginDialog.onUsernameUpdated(
+        textInputUsename.onEditingFinished: LoginDialog.onUserNameUpdated(
                                                 textInputUsename.text)
         textInputPassword.onEditingFinished: LoginDialog.onPasswordUpdated(
                                                  textInputPassword.text)

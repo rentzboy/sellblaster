@@ -19,11 +19,12 @@ Item {
 
     GroupBox {
         id: groupBox
-        anchors.rightMargin: 10
+        anchors.rightMargin: 15
         anchors.leftMargin: 15
         anchors.bottomMargin: 15
         anchors.topMargin: 15
         anchors.fill: parent
+        padding: 15
         title: qsTr("Credenciales")
 
         GridLayout {
@@ -31,9 +32,9 @@ Item {
             rows: 3
             columns: 3
             flow: GridLayout.LeftToRight
-            columnSpacing: 10
+            columnSpacing: 15
             rowSpacing: 15
-            anchors.topMargin: 10
+            anchors.topMargin: 15
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
@@ -47,7 +48,6 @@ Item {
             TextField {
                 id: textInputUsename
                 Layout.columnSpan: 2
-                Layout.minimumWidth: 200
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 maximumLength: 15
@@ -80,16 +80,15 @@ Item {
                 text: qsTr("Cancelar")
             }
         }
-
         Text {
             id: textError
             height: 60
             color: "#ef2929"
-            anchors.topMargin: 20
+            anchors.topMargin: 15
             anchors.top: gridLayout.bottom
-            anchors.bottomMargin: 15
+            //anchors.bottomMargin: 15
             horizontalAlignment: Text.AlignHCenter
-            anchors.horizontalCenter: window.horizontalCenter
+            anchors.horizontalCenter: gridLayout.horizontalCenter
         }
     }
 }

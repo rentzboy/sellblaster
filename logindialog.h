@@ -7,7 +7,7 @@
 class LoginDialog : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString username READ getUsername WRITE setUsername NOTIFY usernameChanged)
+    Q_PROPERTY(QString userName READ getUserName WRITE setUserName NOTIFY userNameChanged)
     Q_PROPERTY(QString password READ getPassword WRITE setPassword NOTIFY passwordChanged)
     Q_PROPERTY(QString errorMsg READ getErrorMsg WRITE setErrorMsg NOTIFY errorMsgChanged)
     Q_PROPERTY(bool errorVisible READ getErrorVisible WRITE setErrorVisible NOTIFY errorVisibleChanged)
@@ -18,8 +18,8 @@ public:
     ~LoginDialog() = default;
     static void createComponent(void);
 
-    QString getUsername() const;
-    void setUsername(const QString &value);
+    QString getUserName() const;
+    void setUserName(const QString &value);
     QString getPassword() const;
     void setPassword(const QString &value);
     QString getErrorMsg() const;
@@ -30,6 +30,7 @@ public:
 private:
     explicit LoginDialog(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)
     static void registerSingleton(void);
+    void getUserNameFromQsettings(void);
     bool sanitationCheck(void);
 
 protected:
@@ -37,18 +38,18 @@ protected:
 public slots:
     void onAceptarClicked(void);
     void onCancelarClicked(void);
-    void onUsernameUpdated(QString);
+    void onUserNameUpdated(QString);
     void onPasswordUpdated(QString);
 
 signals:
-    void usernameChanged();
+    void userNameChanged();
     void passwordChanged();
     void errorMsgChanged();
     void errorVisibleChanged();
     void closeQmlInstance();
 
 private:
-    QString username;
+    QString userName;
     QString password;
     QString errorMsg;
     bool errorVisible;
