@@ -288,3 +288,103 @@ Line: 132
 Error Description: Access denied for user 'renti'@'localhost' (using password: YES)
 
 
+Time: jue. may. 23 13:57:59 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: renti
+File: mainwindow.cpp
+Function name: createExternDbConnection
+Line: 132
+Error Description: Access denied for user 'renti'@'localhost' (using password: YES)
+
+
+Time: jue. may. 23 14:05:40 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: empty
+File: logindialog.cpp
+Function name: onAceptarClicked
+Line: 128
+Error Description: 
+
+
+Time: jue. may. 23 14:06:03 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: empty
+File: logindialog.cpp
+Function name: onAceptarClicked
+Line: 128
+Error Description: 
+
+
+Time: jue. may. 23 14:14:15 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: renti
+File: mainwindow.cpp
+Function name: createExternDbConnection
+Line: 132
+Error Description: Access denied for user 'renti'@'localhost' (using password: YES)
+
+
+Time: jue. may. 23 14:46:23 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: renti
+File: mainwindow.cpp
+Function name: createExternDbConnection
+Line: 132
+Error Description: Access denied for user 'renti'@'localhost' (using password: YES)
+
+
+Time: mar. may. 28 20:29:01 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: empty
+File: mainwindow.cpp
+Function name: executeForwardSqlWithReturn
+Line: 98
+Error Description: Driver not loaded
+
+
+Time: mar. may. 28 20:29:01 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: empty
+File: mainwindow.cpp
+Function name: executeForwardSqlWithReturn
+Line: 98
+Error Description: Driver not loaded
+
+
+Time: mar. may. 28 20:29:01 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: empty
+File: mainwindow.cpp
+Function name: executeForwardSqlWithReturn
+Line: 98
+Error Description: Driver not loaded
+
+
+Time: mar. may. 28 20:29:01 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: empty
+File: mainwindow.cpp
+Function name: executeForwardSqlWithReturn
+Line: 98
+Error Description: Driver not loaded
+
+
+Time: mar. may. 28 20:29:01 2019
+System Operative: 16.04
+Hostname: renti-ThinkPad-X300
+User: empty
+File: mainwindow.cpp
+Function name: executeForwardSqlWithReturn
+Line: 98
+Error Description: Driver not loaded
+
+

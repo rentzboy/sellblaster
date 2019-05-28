@@ -7,7 +7,7 @@
 LoginDialog* LoginDialog::uniqueInstance = Q_NULLPTR;
 int LoginDialog::typeId = 0;
 
-//PRIVATE CONSTRUCTOR
+//PRIVATE MEMBERS
 LoginDialog::LoginDialog(QObject *parent) : QObject(parent),
     errorMsg(QObject::tr("No se ha podido establecer la conexión")), errorVisible(false)
 {
@@ -16,8 +16,6 @@ LoginDialog::LoginDialog(QObject *parent) : QObject(parent),
     //Retrieve username from previous sesions -QSettings-
     this->getUserNameFromQsettings();
 }
-
-//PRIVATE MEMBERS
 void LoginDialog::registerSingleton(void)
 {
     typeId = qmlRegisterSingletonType<LoginDialog>("LoginClass", 1, 0, "LoginDialog",
@@ -29,9 +27,7 @@ void LoginDialog::registerSingleton(void)
 }
 bool LoginDialog::sanitationCheck()
 {
-    QString name = getUserName();
-    QString pass = getPassword();
-    if(getUserName().isEmpty() || getPassword().isEmpty())
+    if(userName.isEmpty() || password.isEmpty())
         return EXIT_FAILURE;
     else return EXIT_SUCCESS;
 }
@@ -40,11 +36,9 @@ void LoginDialog::getUserNameFromQsettings(void) //static
     //Retrieve configuration from the last user's session
     QSettings userSettings(QObject::tr("Fx Team®"), QObject::tr("Sellblaster"));
     userSettings.beginGroup(QObject::tr("mainwindow"));
-    setUserName(userSettings.value(QObject::tr("username")).toString());
+    userName = userSettings.value(QObject::tr("username")).toString();
     userSettings.endGroup();
 }
-
-//PROTECTED MEMBERS
 
 //PUBLIC MEMBERS
 void LoginDialog::createComponent(void)
@@ -53,15 +47,18 @@ void LoginDialog::createComponent(void)
     {
         uniqueInstance = new LoginDialog;
         registerSingleton();
+
+        //Hay que crear la conexión con la Db SQLite3 -necesario para Login.qml-
+        MainWindow::createInterDbConnection();
+
+        //Load QML component
+        auto *engine = new QQmlApplicationEngine;
+        engine->load(QUrl(QStringLiteral("qrc:/qml/Login.qml")));
+
+        //Connect Signals(C++) to Slots(QML)
+        //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
+        connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
     }
-
-    //Load QML component
-    auto *engine = new QQmlApplicationEngine;
-    engine->load(QUrl(QStringLiteral("qrc:/qml/Login.qml")));
-
-    //Connect C++ to QML Signals / Slots
-    //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
-    connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
 }
 
 //PUBLIC SLOTS
@@ -71,18 +68,7 @@ void LoginDialog::onCancelarClicked(void)
     QMetaObject::invokeMethod(qGuiApp, "quit", Qt::QueuedConnection);
     //qGuiApp->quit(); No funciona pues la App aun no ha entrado en el main event loop (app.exec())
 }
-void LoginDialog::onUserNameUpdated(QString value)
-{
-    PRINT_FUNCTION_NAME
-    this->setUserName(value);
-}
-void LoginDialog::onPasswordUpdated(QString value)
-{
-    PRINT_FUNCTION_NAME
-    this->setPassword(value);
-
-}
-void LoginDialog::onAceptarClicked(void) //PENDING ....
+void LoginDialog::onAceptarClicked(void)
 {
     PRINT_FUNCTION_NAME
     if(this->sanitationCheck() == EXIT_FAILURE)
@@ -106,13 +92,13 @@ void LoginDialog::onAceptarClicked(void) //PENDING ....
         connectionDetails.insert("name", result.value(fieldName).toString());
         connectionDetails.insert("database", result.value(fieldDb).toString());
         connectionDetails.insert("serverurl", result.value(fieldServer).toString());
-        connectionDetails.insert("username", this->getUserName());
-        connectionDetails.insert("password", this->getPassword());
+        connectionDetails.insert("username", userName);
+        connectionDetails.insert("password", password);
         connectionDetails.insert("type", MAIN_DB_TYPE);
 
         //Connect to MAIN_DB
         if (MainWindow::createExternDbConnection(connectionDetails) == EXIT_FAILURE)
-            this->setErrorVisible(true);
+            errorVisible = true;
         else
         {
             emit this->closeQmlInstance();
@@ -122,57 +108,5 @@ void LoginDialog::onAceptarClicked(void) //PENDING ....
     catch (const QSqlError &e)
     {
         EXCEPTION_HANDLER
-    }
-}
-
-//GETTERS & SETTERS
-bool LoginDialog::getErrorVisible() const
-{
-    return errorVisible;
-}
-void LoginDialog::setErrorVisible(bool value)
-{
-    if(errorVisible != value)
-    {
-        errorVisible = value;
-        emit errorVisibleChanged();
-    }
-}
-QString LoginDialog::getErrorMsg() const
-{
-    return errorMsg;
-}
-void LoginDialog::setErrorMsg(const QString &value)
-{
-    if(errorMsg != value)
-    {
-        errorMsg = value;
-        emit errorMsgChanged();
-    }
-}
-QString LoginDialog::getPassword() const
-{
-    return password;
-}
-void LoginDialog::setPassword(const QString &value)
-{
-    PRINT_FUNCTION_NAME
-    if(value != password)
-    {
-        password = value;
-        emit passwordChanged();
-    }
-}
-QString LoginDialog::getUserName() const
-{
-    return userName;
-}
-void LoginDialog::setUserName(const QString &value)
-{
-    PRINT_FUNCTION_NAME
-    if(value != userName)
-    {
-        userName = value;
-        emit userNameChanged();
     }
 }

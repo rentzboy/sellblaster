@@ -1,44 +1,16 @@
-import QtQuick 2.12
+﻿import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Universal 2.0
 import QtQuick.Dialogs.qml 1.0
 import QtQuick.Controls.Material 2.0
-//Si no importamos labs.plataform el menubar no es nativo (en MS no esta operativo)
-import Qt.labs.platform 1.1
+import "components"
+import MainClass 1.0
 
 Item {
     id: applicationWindow
     visible: true
-
-    MenuBar {
-        id: menuBar
-
-        Menu {
-            id: fileMenu
-            title: qsTr("File")
-            // ...
-        }
-
-        Menu {
-            id: editMenu
-            title: qsTr("&Edit")
-            // ...
-        }
-
-        Menu {
-            id: viewMenu
-            title: qsTr("&View")
-            // ...
-        }
-
-        Menu {
-            id: helpMenu
-            title: qsTr("&Help")
-            // ...
-        }
-    }
 
     ToolBar {
         id: toolBar
@@ -66,7 +38,6 @@ Item {
             }
         }
     }
-
     Frame {
         id: pane
         contentHeight: 400

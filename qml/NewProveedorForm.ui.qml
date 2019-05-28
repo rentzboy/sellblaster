@@ -10,23 +10,18 @@ import Qt.labs.platform 1.1
 import "components"
 
 Item {
-    id: applicationWindow
+    id: newProveedorFormWindow
     visible: true
-    width: loginWindow.width
-    height: loginWindow.height
-    anchors.fill: parent
-    anchors.rightMargin: 15
-    anchors.leftMargin: 15
-    anchors.bottomMargin: 15
-    anchors.topMargin: 15
 
     Pane {
         id: pane
+        clip: true
         anchors.fill: parent
 
         TabBar {
             id: bar
             width: parent.width
+            clip: true
             anchors.top: parent.top
             anchors.topMargin: 0
 
@@ -56,41 +51,40 @@ Item {
         StackLayout {
             //Solo muestra 1 childItem, que corresponde con el currentIndex
             width: parent.width
-            height: parent.height
+            height: parent.height - bar.height
             anchors.top: bar.bottom
             anchors.topMargin: 0
+            anchors.bottomMargin: 0
             currentIndex: bar.currentIndex
 
             EmpresaTab {
                 id: empresa
-                width: parent.width
-                Rectangle {
-                    color: "#00000000"
-                    anchors.fill: parent
-                    border.color: "#bcb1b1"
-                }
+                Layout.fillHeight: parent
+                Layout.fillWidth: parent
             }
-            Item {
+            ContactosTab {
                 id: contactos
-                Rectangle {
-                    anchors.fill: parent
-                    border.color: "#bcb1b1"
-                }
+                Layout.fillHeight: parent
+                Layout.fillWidth: parent
             }
             Item {
                 id: productos
-                Rectangle {
-                    anchors.fill: parent
-                    border.color: "#bcb1b1"
-                }
-                Item {
-                    id: certificaciones
-                    Rectangle {
-                        anchors.fill: parent
-                        border.color: "#bcb1b1"
-                    }
-                }
+                Layout.fillHeight: parent
+                Layout.fillWidth: parent
+            }
+            Item {
+                id: certificaciones
+                Layout.fillHeight: parent
+                Layout.fillWidth: parent
             }
         }
     }
 }
+
+
+
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

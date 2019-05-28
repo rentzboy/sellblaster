@@ -8,19 +8,7 @@ import QtQuick.Controls.Material 2.0
 import "components"
 
 Item {
-    id: empresaTab
-    property alias textFieldEmpresa: textFieldEmpresa
-    property alias textFieldHolding: textFieldHolding
-    property alias comboBoxActividad: comboBoxActividad
-    property alias textFieldWeb: textFieldWeb
-    property alias textFieldPanjiba: textFieldPanjiba
-    property alias textFieldMaps: textFieldMaps
-    property alias comboBoxPais: comboBoxPais
-    property alias textFieldCiudad: textFieldCiudad
-    property alias textFieldPostcode: textFieldPostcode
-    property alias textFieldMoq: textFieldMoq
-    property alias textFieldNotasEmpresa: textFieldNotasEmpresa
-    property alias textFieldPago: textFieldPago
+    id: contactosTab
     visible: true
     Rectangle {
         clip: true
@@ -79,12 +67,12 @@ Item {
                 clip: true
 
                 Label {
-                    id: labelEmpresa
-                    text: qsTr("Empresa:")
+                    id: labelNombre
+                    text: qsTr("Nombre:")
                     Layout.minimumWidth: 120 //Para alinearlo con Datos financieros
                 }
                 TextField {
-                    id: textFieldEmpresa
+                    id: textFieldNombre
                     Layout.minimumWidth: 150 //Solo hay que indicarlo en los elementos de la row #1
                     Layout.fillWidth: true
                 }
@@ -94,11 +82,11 @@ Item {
                 }
 
                 Label {
-                    id: labelHolding
-                    text: qsTr("Holding:")
+                    id: labelApellido
+                    text: qsTr("Apellido:")
                 }
                 TextField {
-                    id: textFieldHolding
+                    id: textFieldApellido
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                 }
@@ -108,14 +96,13 @@ Item {
                 }
 
                 Label {
-                    id: labelActividad
-                    text: qsTr("Actividad:")
+                    id: labelEmail
+                    text: qsTr("Email:")
                 }
-                ComboBox {
-                    id: comboBoxActividad
+                TextField {
+                    id: textFieldEmail
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
-                    Layout.fillHeight: true
                 }
                 Item {
                     id: spacer3
@@ -124,11 +111,11 @@ Item {
                 }
 
                 Label {
-                    id: labelWeb
-                    text: qsTr("Web:")
+                    id: labelTelefono
+                    text: qsTr("Telefono:")
                 }
                 TextField {
-                    id: textFieldWeb
+                    id: textFieldTelefono
                     Layout.fillWidth: true
                 }
                 Item {
@@ -137,11 +124,11 @@ Item {
                 }
 
                 Label {
-                    id: labelPanjiba
-                    text: qsTr("Panjiba:")
+                    id: labelMovil
+                    text: qsTr("Movil:")
                 }
                 TextField {
-                    id: textFieldPanjiba
+                    id: textFieldMovil
                     width: 150
                     Layout.fillWidth: true
                 }
@@ -151,11 +138,13 @@ Item {
                 }
 
                 Label {
-                    id: labelMaps
-                    text: qsTr("G.Maps:")
+                    id: labelNotas
+                    text: qsTr("Notas:")
                 }
-                TextField {
-                    id: textFieldMaps
+                TextArea {
+                    id: textAreaNotas
+                    wrapMode: Text.WordWrap
+                    Layout.fillHeight: false
                     Layout.fillWidth: true
                 }
                 Item {
@@ -165,13 +154,13 @@ Item {
                 }
 
                 Label {
-                    id: labelPais
-                    text: qsTr("Pais:")
+                    id: labelArea
+                    text: qsTr("Area:")
                 }
                 ComboBox {
-                    id: comboBoxPais
+                    id: comboBoxArea
                     Layout.fillWidth: true
-                    Layout.preferredHeight: textFieldEmpresa.height
+                    Layout.preferredHeight: textFieldNombre.height
                 }
                 Item {
                     id: spacer7
@@ -179,62 +168,21 @@ Item {
                 }
 
                 Label {
-                    id: labelCiudad
-                    text: qsTr("Ciudad:")
+                    id: labelPuesto
+                    text: qsTr("Puesto:")
                 }
-                TextField {
-                    id: textFieldCiudad
+                ComboBox {
+                    id: comboBoxPuesto
                     Layout.fillWidth: true
+                    Layout.fillHeight: true
                 }
                 Item {
                     id: spacer8
                     width: 20
                 }
-
-                Label {
-                    id: labelPostcode
-                    text: qsTr("Postcode:")
-                }
-                TextField {
-                    id: textFieldPostcode
-                    Layout.fillWidth: true
-                }
-                Item {
-                    id: spacer9
-                    width: 20
-                    Layout.fillWidth: true
-                }
-                Label {
-                    id: labelMoq
-                    text: qsTr("MOQ:")
-                }
-                TextField {
-                    id: textFieldMoq
-                    Layout.fillWidth: true
-                }
-                Item {
-                    id: spacer10
-                    width: 20
-                }
-
-                Label {
-                    id: labelNotas
-                    text: qsTr("Notas:")
-                }
-                TextArea {
-                    id: textFieldNotasEmpresa
-                    wrapMode: Text.WordWrap
-                    Layout.fillHeight: false
-                    Layout.fillWidth: true
-                    Layout.columnSpan: 4
-                }
-
-                Item {
-                    id: spacer11
-                    width: 20
-                }
             }
         }
+
         GroupBox {
             //Row 3: Datos financieros
             id: groupBox2
@@ -276,8 +224,10 @@ Item {
     }
 }
 
+
+
+
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
-

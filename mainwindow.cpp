@@ -16,17 +16,19 @@ void MainWindow::createComponent(void)
     {
         uniqueInstance = new MainWindow;
         registerSingleton();
+
+        //Load QML component
+        auto *engine = new QQmlApplicationEngine;
+        engine->load(QUrl(QStringLiteral("qrc:/qml/MainWindow.qml")));
+
+        //Connect C++ to QML Signals / Slots
+        //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
+        connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
+        //Connect QML to C++ Signals/Slots
+        //connect(engine->rootObjects().value(typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(closeEvent(QCloseEvent*)));
+        //connect(engine->rootObjects().value(typeId), SIGNAL(closingPrueba()), uniqueInstance, SLOT(onCloseEventCaller()));
     }
-
-    //Load QML component
-    auto *engine = new QQmlApplicationEngine;
-    engine->load(QUrl(QStringLiteral("qrc:/qml/MainWindow.qml")));
-
-    //Connect C++ to QML Signals / Slots
-    //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
-    connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
 }
-
 bool MainWindow::executeForwardSql(const QString &sqlQuery, const QString &connectionName)
 {
     //Execute SQL query without retrieving any values
@@ -154,24 +156,15 @@ void MainWindow::sanitationUserInput(QMap<QString, QString>&userFields)
  */
 }
 
-//PROTECTED MEMBERS
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    event->accept();
-    this->writeUserSettings();
-}
-
 //PRIVATE MEMBERS
-MainWindow::MainWindow(QObject *parent) : QObject(parent) //PENDING
+MainWindow::MainWindow(QQuickView *parent) : QQuickView(parent) //PENDING StatusBar
 {
     PRINT_FUNCTION_NAME
     //Retrieve persistent data from last user's sesion
    if(this->readUserSettings() == QSettings::AccessError)
-        this->setWindowFullScreen(true);
-    //createInterDbConnection(); Lo creamos en el main actualmente
+        windowSize = this->get_screenResolution();
     //statusBar()->showMessage(QObject::tr("Ready"), 1500);
-
-}
+    }
 void MainWindow::registerSingleton(void)
 {
     qmlRegisterSingletonType<MainWindow>("MainClass", 1, 0, "MainWindow",
@@ -181,7 +174,6 @@ void MainWindow::registerSingleton(void)
         return uniqueInstance;
             });
 }
-
 void MainWindow::createInterDbConnection(void)
 {
     try
@@ -234,24 +226,24 @@ QSize MainWindow::get_screenResolution(void)
 }
 QSettings::Status MainWindow::readUserSettings(void)
 {
+    PRINT_FUNCTION_NAME
     //Retrieve configuration from the last user's session
     QSettings userSettings(QObject::tr("Fx Team®"), QObject::tr("Sellblaster"));
     userSettings.beginGroup(QObject::tr("mainwindow"));
-    setWindowSize(userSettings.value(QObject::tr("size")).toSize());
-    setWindowPosition(userSettings.value(QObject::tr("position")).toPoint());
-    setWindowFullScreen(userSettings.value(QObject::tr("fullScreen")).toBool());
+    windowSize = userSettings.value(QObject::tr("size")).toSize();
+    windowPosition = userSettings.value(QObject::tr("position")).toPoint();
     QString userName = (userSettings.value(QObject::tr("username")).toString());
     userSettings.endGroup();
     return userSettings.status();
 }
 QSettings::Status MainWindow::writeUserSettings(void)
 {
+    PRINT_FUNCTION_NAME
     //Store configuration before closing the application
     QSettings userSettings(QObject::tr("Fx Team®"), QObject::tr("Sellblaster"));
     userSettings.beginGroup("mainwindow");
-    userSettings.setValue(QObject::tr("size"), this->getWindowSize()); //QSize
-    userSettings.setValue(QObject::tr("position"), this->getWindowPosition()); //QPoint
-    userSettings.setValue(QObject::tr("fullScreen"), this->getWindowFullScreen()); //bool
+    userSettings.setValue(QObject::tr("size"), windowSize); //QSize
+    userSettings.setValue(QObject::tr("position"), windowPosition); //QPoint
     userSettings.setValue(QObject::tr("username"), this->get_usernameFromDb());
     userSettings.endGroup();
     return userSettings.status();
@@ -265,70 +257,24 @@ QString MainWindow::get_usernameFromDb(void) //MAIN_DB_TYPE
     return user;
 }
 
-//SETTERS & GETTERS
-QString MainWindow::getUserName() const
-{
-    return userName;
-}
-void MainWindow::setUserName(const QString &value)
-{
-    if(value != userName)
-    {
-        userName = value;
-        emit userNameChanged();
-    }
-}
-bool MainWindow::getWindowFullScreen() const
-{
-    return windowFullScreen;
-}
-void MainWindow::setWindowFullScreen(bool value)
-{
-    if(value != windowFullScreen)
-    {
-        windowFullScreen = value;
-        emit windowFullScreenChanged();
-    }
-}
-QPoint MainWindow::getWindowPosition() const
-{
-    return windowPosition;
-}
-void MainWindow::setWindowPosition(const QPoint &value)
-{
-    if(value != windowPosition)
-    {
-        windowPosition = value;
-        emit windowPositionChanged();
-    }
-}
-QSize MainWindow::getWindowSize() const
-{
-    return windowSize;
-}
-void MainWindow::setWindowSize(const QSize &value)
-{
-    if(value != windowSize)
-    {
-        windowSize = value;
-        emit windowSizeChanged();
-    }
-}
-
 //PRIVATE SLOTS
-void MainWindow::on_actionDatabases_triggered(void)
+void MainWindow::onAnadirProveedor(void)
 {
-//    if(dbManagementWidget.isNull())
-//        dbManagementWidget = new DatabaseManagement(this);
-//    dbManagementWidget->show();
+    AddSupplier::createComponent();
 }
-void MainWindow::on_actionSalir_triggered(void)
+void MainWindow::onActionExitTriggered(void)
 {
 //    emit this->close();
 }
-void MainWindow::on_actionA_adir_empresa_triggered()
+void MainWindow::onActionAddCompanyTriggered()
 {
 //    auto *addSupplierWidget = new AddSupplier(this);
 //    addSupplierWidget->show();
 //    addSupplierWidget->setAttribute(Qt::WA_DeleteOnClose);
+}
+void MainWindow::onClosingHandler() //PENDING Save before exit
+{
+    PRINT_FUNCTION_NAME
+    writeUserSettings(); //Recupera los datos de Q_Property()
+    //Falta que pregunte si hay que guardar los datos antes de salir
 }

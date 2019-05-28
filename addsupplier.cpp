@@ -4,28 +4,49 @@
 #include "checkboxlist.h"
 #include <QMap>
 
-//CONSTRUCTORS
-AddSupplier::AddSupplier(QWidget *parent) : QDialog(parent), ui(new Ui::addSupplier)
+//static initialization
+AddSupplier* AddSupplier::uniqueInstance = Q_NULLPTR;
+int AddSupplier::typeId = 0;
+
+//PUBLIC MEMBERS
+void AddSupplier::createComponent(void)
 {
-    ui->setupUi(this);
+    if(uniqueInstance == Q_NULLPTR)
+    {
+        uniqueInstance = new AddSupplier;
+        //registerSingleton();
+
+        //Load QML component
+        auto *engine = new QQmlApplicationEngine;
+        engine->load(QUrl(QStringLiteral("qrc:/qml/NewProveedor.qml")));
+
+        //Connect C++ to QML Signals / Slots
+        //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
+        //connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
+
+        //Connect QML to C++ Signals/Slots
+        //connect(engine->rootObjects().value(typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(closeEvent(QCloseEvent*)));
+        //connect(engine->rootObjects().value(typeId), SIGNAL(closingPrueba()), uniqueInstance, SLOT(onCloseEventCaller()));
+    }
+}
+
+//PRIVATE MEMBERS
+AddSupplier::AddSupplier(QObject *parent) : QObject(parent) //private singleton constructor
+{
     this->fillComboBoxesFromDb();
     //fill ComboBox with checkboxes
     this->fillComboBoxWithCheckBoxFromDb();
     //PENDING
-
 }
-AddSupplier::~AddSupplier()
+void AddSupplier::registerSingleton(void) //NO UTILIZADA
 {
-    delete ui;
+    qmlRegisterSingletonType<AddSupplier>("SupplierClass", 1, 0, "SupplierClass",
+        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+        Q_UNUSED(scriptEngine)
+        Q_UNUSED(engine)
+        return uniqueInstance;
+            });
 }
-
-//PROTECTED MEMBERS
-void AddSupplier::closeEvent(QCloseEvent *event)
-{
-    event->accept();
-}
-
-//PRIVATE MEMBERS
 void AddSupplier::fillComboBoxWithCheckBoxFromDb(void)
 {
     QSqlQuery result;
@@ -49,7 +70,7 @@ void AddSupplier::fillComboBoxWithCheckBoxFromDb(void)
     //QStyle checkBoxComboStyle;
 
     modelo = new QStandardItemModel(4, 1, this);
-    ui->alloyComboBox->setModel(modelo);
+    //ui->alloyComboBox->setModel(modelo);
     //ui->alloyComboBox->setStyle(QStyleFactory::create("windows"));
 
     iItem1 = new QStandardItem(QIcon::fromTheme("document-open"), "Abrir documento");
@@ -75,8 +96,8 @@ void AddSupplier::fillComboBoxesFromDb(void)
     {
         paisList.append(result.value(0).toString());
     }
-    ui->paisComboBox->addItems(paisList);
-    ui->paisComboBox->setCurrentIndex(-1);
+    //ui->paisComboBox->addItems(paisList);
+    //ui->paisComboBox->setCurrentIndex(-1);
     ////////////////////////////////////////////////////////////////
     sqlQuery = "CALL get_DropDownMenusData('activity', 'activity')";
     MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
@@ -85,8 +106,8 @@ void AddSupplier::fillComboBoxesFromDb(void)
     {
         activityList.append(result.value(0).toString());
     }
-    ui->activityComboBox->addItems(activityList);
-    ui->activityComboBox->setCurrentIndex(-1);
+    //ui->activityComboBox->addItems(activityList);
+    //ui->activityComboBox->setCurrentIndex(-1);
     ////////////////////////////////////////////////////////////////
     sqlQuery = "CALL get_DropDownMenusData('department', 'department')";
     MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
@@ -95,8 +116,8 @@ void AddSupplier::fillComboBoxesFromDb(void)
     {
         areaList.append(result.value(0).toString());
     }
-    ui->areaComboBox->addItems(areaList);
-    ui->areaComboBox->setCurrentIndex(-1);
+    //ui->areaComboBox->addItems(areaList);
+    //ui->areaComboBox->setCurrentIndex(-1);
     ////////////////////////////////////////////////////////////////
     sqlQuery = "CALL get_DropDownMenusData('position', 'position')";
     MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
@@ -105,56 +126,56 @@ void AddSupplier::fillComboBoxesFromDb(void)
     {
         positionList.append(result.value(0).toString());
     }
-    ui->puestoComboBox->addItems(positionList);
-    ui->puestoComboBox->setCurrentIndex(-1);
+    //ui->puestoComboBox->addItems(positionList);
+    //ui->puestoComboBox->setCurrentIndex(-1);
 }
 bool AddSupplier::sanitationCheck(QString tag)
 {
     if(tag == "empresa")
     {
         //1- Checking some fields are not empty
-        if(ui->empresaLineEdit->text().isEmpty() |
-            ui->activityComboBox->currentText().isEmpty() |
-            ui->paisComboBox->currentText().isEmpty() |
-            ui->ciudadLineEdit->text().isEmpty())
+        if(empresa.isEmpty() |
+            actividad.isEmpty() |
+            pais.isEmpty() |
+            ciudad.isEmpty())
             return EXIT_FAILURE;
 
         //2- Sanitation of user' input
         userDataFields.clear();
-        userDataFields.insert("company", ui->empresaLineEdit->text());
-        userDataFields.insert("holding", ui->holdingLineEdit->text());
-        userDataFields.insert("web", ui->webLineEdit->text());
-        userDataFields.insert("panjiba", ui->panjibaLineEdit->text());
-        userDataFields.insert("maps", ui->mapsLineEdit->text());
-        userDataFields.insert("city", ui->ciudadLineEdit->text());
-        userDataFields.insert("description", ui->descripcionTextEdit->toPlainText());
-        userDataFields.insert("comments", ui->notasTextEdit->toPlainText());
+        userDataFields.insert("company", empresa);
+        userDataFields.insert("holding", holding);
+        userDataFields.insert("web", web);
+        userDataFields.insert("panjiba", panjiba);
+        userDataFields.insert("maps", maps);
+        userDataFields.insert("city", ciudad);
+        userDataFields.insert("description", descripcion);
+        userDataFields.insert("comments", notasEmpresa);
         MainWindow::sanitationUserInput(userDataFields);
         return EXIT_SUCCESS;
     }
     else if (tag == "contacto")
     {
         //1- Checking some fields are not empty
-        if(ui->empresaLineEdit->text().isEmpty() | //Hay que controlarlo en todas las tags
-                ui->emailLineEdit->text().isEmpty())
+        if(empresa.isEmpty() | //Hay que controlarlo en todas las tags
+                email.isEmpty())
             return EXIT_FAILURE;
 
         //2- Sanitation of user' input
         userDataFields.clear();
-        userDataFields.insert("company", ui->empresaLineEdit->text());
-        userDataFields.insert("nombre", ui->nombreLineEdit->text());
-        userDataFields.insert("apellido", ui->apellidoLineEdit->text());
-        userDataFields.insert("email", ui->emailLineEdit->text());
-        userDataFields.insert("telefono", ui->telefonoLineEdit->text());
-        userDataFields.insert("movil", ui->movilLineEdit->text());
-        userDataFields.insert("notas", ui->contactoNotasTextEdit->toPlainText());
+        userDataFields.insert("company", empresa);
+        userDataFields.insert("nombre", nombre);
+        userDataFields.insert("apellido", apellido);
+        userDataFields.insert("email", email);
+        userDataFields.insert("telefono", telefono);
+        userDataFields.insert("movil", movil);
+        userDataFields.insert("notas", notasContactos);
         MainWindow::sanitationUserInput(userDataFields);
         return EXIT_SUCCESS;
     }
     else
     {
         //Checking some fields are not empty
-        if(ui->empresaLineEdit->text().isEmpty())  //Hay que controlarlo en todas las tags
+        if(empresa.isEmpty())  //Hay que controlarlo en todas las tags
             return EXIT_FAILURE;
         else return EXIT_SUCCESS;
     }
@@ -163,7 +184,7 @@ void AddSupplier::empresaApplyButton(void)
 {
     if (this->sanitationCheck("empresa") == EXIT_FAILURE)
     {
-        errorMessage = new QErrorMessage(this);
+        errorMessage = new QErrorMessage;
         errorMessage->showMessage(QObject::tr("Revise que los campos obligatorios no estén vacios!"));
         errorMessage->resize(400,200);
         return;
@@ -172,11 +193,11 @@ void AddSupplier::empresaApplyButton(void)
     {
         //Retrieve index from ComboBoxes and & Sanitation for numeric values
         QString idActivity, idPayment, moq;
-        int fieldValue= ui->activityComboBox->currentIndex();
-        fieldValue == -1 ? idActivity = "null" : idActivity = QString::number(fieldValue+1);
-        fieldValue= ui->pagoComboBox->currentIndex();
-        fieldValue == -1 ? idPayment = "null" : idPayment = QString::number((fieldValue+1));
-        ui->moqLineEdit->text().isEmpty() == true ? moq = "null" : moq = ui->moqLineEdit->text();
+//        int fieldValue= ui->activityComboBox->currentIndex();
+//        fieldValue == -1 ? idActivity = "null" : idActivity = QString::number(fieldValue+1);
+//        fieldValue= ui->pagoComboBox->currentIndex();
+//        fieldValue == -1 ? idPayment = "null" : idPayment = QString::number((fieldValue+1));
+//        ui->moqLineEdit->text().isEmpty() == true ? moq = "null" : moq = ui->moqLineEdit->text();
 
         //OPTION #1: Stored Procedures
         QString sqlQuery = "CALL insert_Supplier(";
@@ -186,9 +207,9 @@ void AddSupplier::empresaApplyButton(void)
         .append(userDataFields.value("web")).append("', '")
         .append(userDataFields.value("panjiba")).append("', '")
         .append(userDataFields.value("maps")).append("', '")
-        .append(ui->paisComboBox->currentText()).append("', '")
+        //.append(ui->paisComboBox->currentText()).append("', '")
         .append(userDataFields.value("city")).append("', '")
-        .append(ui->postalCodeLineEdit->text()).append("', '")
+        //.append(ui->postalCodeLineEdit->text()).append("', '")
         .append(userDataFields.value("description")).append("', ")
         .append(moq).append(", '")  //number, sin ' '
         .append(userDataFields.value("comments")).append("', ")
@@ -228,7 +249,7 @@ void AddSupplier::contactoApplyButton(void)
 {
     if(this->sanitationCheck("contacto") == EXIT_FAILURE)
     {
-        errorMessage = new QErrorMessage(this);
+        errorMessage = new QErrorMessage;
         errorMessage->showMessage(QObject::tr("Revise que los campos obligatorios no estén vacios!"));
         errorMessage->resize(400,200);
         return;
@@ -237,10 +258,10 @@ void AddSupplier::contactoApplyButton(void)
     {
         //Retrieve index from ComboBoxes and & Sanitation for numeric values
         QString idArea, idPuesto;
-        int fieldValue= ui->areaComboBox->currentIndex();
-        fieldValue == -1 ? idArea = "null" : idArea = QString::number(fieldValue+1);
-        fieldValue= ui->puestoComboBox->currentIndex();
-        fieldValue == -1 ? idPuesto = "null" : idPuesto = QString::number((fieldValue+1));
+//        int fieldValue= ui->areaComboBox->currentIndex();
+//        fieldValue == -1 ? idArea = "null" : idArea = QString::number(fieldValue+1);
+//        fieldValue= ui->puestoComboBox->currentIndex();
+//        fieldValue == -1 ? idPuesto = "null" : idPuesto = QString::number((fieldValue+1));
 
         //OPTION #1: Stored Procedures
         QString sqlQuery = "CALL insert_Contact(";
@@ -289,25 +310,28 @@ void AddSupplier::contactoApplyButton(void)
 //PRIVATE SLOTS
 void AddSupplier::on_empresaButtonBox_clicked(QAbstractButton *button)
 {
-    if(ui->empresaButtonBox->standardButton(button) == QDialogButtonBox::Apply)
-        this->empresaApplyButton();
-    else if(ui->empresaButtonBox->standardButton(button) == QDialogButtonBox::Cancel)
-        this->close();
-    else //QDialogButtonBox::Save
-    {
-        this->empresaApplyButton();
-        this->close();
-    }
+//    if(ui->empresaButtonBox->standardButton(button) == QDialogButtonBox::Apply)
+//        this->empresaApplyButton();
+//    else if(ui->empresaButtonBox->standardButton(button) == QDialogButtonBox::Cancel)
+//        this->close();
+//    else //QDialogButtonBox::Save
+//    {
+//        this->empresaApplyButton();
+//        this->close();
+//    }
 }
 void AddSupplier::on_contactoButtonBox_clicked(QAbstractButton *button)
 {
-    if(ui->contactoButtonBox->standardButton(button) == QDialogButtonBox::Apply)
-        this->contactoApplyButton();
-    else if(ui->contactoButtonBox->standardButton(button) == QDialogButtonBox::Cancel)
-        this->close();
-    else //QDialogButtonBox::Save
-    {
-        this->contactoApplyButton();
-        this->close();
-    }
+//    if(ui->contactoButtonBox->standardButton(button) == QDialogButtonBox::Apply)
+//        this->contactoApplyButton();
+//    else if(ui->contactoButtonBox->standardButton(button) == QDialogButtonBox::Cancel)
+//        this->close();
+//    else //QDialogButtonBox::Save
+//    {
+//        this->contactoApplyButton();
+//        this->close();
+//    }
 }
+
+//SETTERS & GETTERS
+

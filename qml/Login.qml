@@ -28,22 +28,28 @@ Window {
         id: form
 
         textInputUsename.text: LoginDialog.userName
+        textError.text: LoginDialog.errorMsg
+        textError.visible: LoginDialog.errorVisible
 
-        textInputUsename.onEditingFinished: LoginDialog.onUserNameUpdated(
-                                                textInputUsename.text)
-        textInputPassword.onEditingFinished: LoginDialog.onPasswordUpdated(
-                                                 textInputPassword.text)
+        textInputUsename.onEditingFinished: LoginDialog.userName = textInputUsename.text
+        textInputPassword.onEditingFinished: LoginDialog.password = textInputPassword.text
 
         buttonCancelar.onClicked: LoginDialog.onCancelarClicked()
         buttonAceptar.onClicked: LoginDialog.onAceptarClicked()
 
-        textError.text: LoginDialog.errorMsg
-        textError.visible: LoginDialog.errorVisible
+        Keys.onPressed: {
+            if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return)
+                LoginDialog.onAceptarClicked()
+            if (event.key === Qt.Key_Escape)
+                LoginDialog.onCancelarClicked()
+        }
     }
 }
+
+
+
 
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
-
