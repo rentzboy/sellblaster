@@ -55,17 +55,16 @@ signals:
     void areaChanged();
     void puestoChanged();
 
-
-
 public:
     AddSupplier(const AddSupplier &other) = delete;
     AddSupplier operator=(const AddSupplier &other) = delete;
     ~AddSupplier() = default;
     static void createComponent(void);
 
-private slots:
-    void on_empresaButtonBox_clicked(QAbstractButton *button);
-    void on_contactoButtonBox_clicked(QAbstractButton *button);
+public slots:
+    void onEmpresaButtonAceptarClicked(void);
+    void onEmpresaButtonCancelarClicked(void);
+    void onEmpresaButtonGuardarClicked(void);
 
 private:
     explicit AddSupplier(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)

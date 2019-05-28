@@ -5,22 +5,27 @@ import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
 import "components"
+import SupplierClass 1.0
 
 EmpresaTabForm {
     id: form
 
-    textFieldEmpresa.onEditingFinished: AddSupplier.empresa = textFieldEmpresa.text
-    textFieldHolding.onEditingFinished: AddSupplier.holding = textFieldHolding.text
-    comboBoxActividad.onEditingFinished: AddSupplier.actividad = comboBoxActividad.text
-    textFieldWeb.onEditingFinished: AddSupplier.web = textFieldWeb.text
-    textFieldPanjiba.onEditingFinished: AddSupplier.panjiba = textFieldPanjiba.text
-    textFieldMaps.onEditingFinished: AddSupplier.maps = textFieldMaps.text
-    comboBoxPais.onEditingFinished: AddSupplier.pais = comboBoxPais.text
-    textFieldCiudad.onEditingFinished: AddSupplier.ciudad = textFieldCiudad.text
-    textFieldPostcode.onEditingFinished: AddSupplier.postcode = textFieldPostcode.text
-    textFieldMoq.onEditingFinished: AddSupplier.moq = textFieldMoq.text
-    textFieldNotasEmpresa.onEditingFinished: AddSupplier.notasEmpresa = textFieldNotas.text
-    textFieldPago.onEditingFinished: AddSupplier.formaPago = textFieldPago.text
+    textFieldEmpresa.onEditingFinished: SupplierClass.empresa = textFieldEmpresa.text
+    textFieldHolding.onEditingFinished: SupplierClass.holding = textFieldHolding.text
+    comboBoxActividad.onCurrentIndexChanged: SupplierClass.actividad = comboBoxActividad.currentText
+    textFieldWeb.onEditingFinished: SupplierClass.web = textFieldWeb.text
+    textFieldPanjiba.onEditingFinished: SupplierClass.panjiba = textFieldPanjiba.text
+    textFieldMaps.onEditingFinished: SupplierClass.maps = textFieldMaps.text
+    comboBoxPais.onCurrentIndexChanged: SupplierClass.pais = comboBoxPais.currentText
+    textFieldCiudad.onEditingFinished: SupplierClass.ciudad = textFieldCiudad.text
+    textFieldPostcode.onEditingFinished: SupplierClass.postcode = textFieldPostcode.text
+    textFieldMoq.onEditingFinished: SupplierClass.moq = textFieldMoq.text
+    textFieldNotasEmpresa.onEditingFinished: SupplierClass.notasEmpresa = textFieldNotas.text
+    textFieldPago.onEditingFinished: SupplierClass.formaPago = textFieldPago.text
+
+    empresaButtonAceptar.onClicked: SupplierClass.onEmpresaButtonAceptarClicked()
+    empresaButtonCancelar.onClicked: SupplierClass.onEmpresaButtonCancelarClicked()
+    empresaButtonGuardar.onClicked: SupplierClass.onEmpresaButtonGuardarClicked()
 
     //SLOTS
     function onCloseQmlInstance() {

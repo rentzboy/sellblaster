@@ -21,6 +21,9 @@ Item {
     property alias textFieldMoq: textFieldMoq
     property alias textFieldNotasEmpresa: textFieldNotasEmpresa
     property alias textFieldPago: textFieldPago
+    property alias empresaButtonAceptar: empresaButtonAceptar
+    property alias empresaButtonCancelar: empresaButtonCancelar
+    property alias empresaButtonGuardar: empresaButtonGuardar
     visible: true
     Rectangle {
         clip: true
@@ -45,15 +48,15 @@ Item {
             id: row
             spacing: 15
             Button {
-                id: buttonAceptar
+                id: empresaButtonAceptar
                 text: qsTr("Aceptar")
             }
             Button {
-                id: buttonCancelar
+                id: empresaButtonCancelar
                 text: qsTr("Cancelar")
             }
             Button {
-                id: buttonGuardar
+                id: empresaButtonGuardar
                 text: qsTr("Guardar")
             }
         }

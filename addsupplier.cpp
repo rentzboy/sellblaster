@@ -14,7 +14,7 @@ void AddSupplier::createComponent(void)
     if(uniqueInstance == Q_NULLPTR)
     {
         uniqueInstance = new AddSupplier;
-        //registerSingleton();
+        registerSingleton();
 
         //Load QML component
         auto *engine = new QQmlApplicationEngine;
@@ -38,7 +38,7 @@ AddSupplier::AddSupplier(QObject *parent) : QObject(parent) //private singleton 
     this->fillComboBoxWithCheckBoxFromDb();
     //PENDING
 }
-void AddSupplier::registerSingleton(void) //NO UTILIZADA
+void AddSupplier::registerSingleton(void)
 {
     qmlRegisterSingletonType<AddSupplier>("SupplierClass", 1, 0, "SupplierClass",
         [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
@@ -307,30 +307,27 @@ void AddSupplier::contactoApplyButton(void)
     }
 }
 
-//PRIVATE SLOTS
-void AddSupplier::on_empresaButtonBox_clicked(QAbstractButton *button)
+//PUBLIC SLOTS
+void AddSupplier::onEmpresaButtonAceptarClicked(void)
 {
-//    if(ui->empresaButtonBox->standardButton(button) == QDialogButtonBox::Apply)
-//        this->empresaApplyButton();
-//    else if(ui->empresaButtonBox->standardButton(button) == QDialogButtonBox::Cancel)
-//        this->close();
-//    else //QDialogButtonBox::Save
-//    {
-//        this->empresaApplyButton();
-//        this->close();
-//    }
+    PRINT_FUNCTION_NAME
+    qDebug() << "Valor del campo empresa: " << empresa;
+    qDebug() << "Valor del campo pais: " << pais;
+    qDebug() << "Valor del campo ciudad: " << ciudad;
 }
-void AddSupplier::on_contactoButtonBox_clicked(QAbstractButton *button)
+void AddSupplier::onEmpresaButtonCancelarClicked(void)
 {
-//    if(ui->contactoButtonBox->standardButton(button) == QDialogButtonBox::Apply)
-//        this->contactoApplyButton();
-//    else if(ui->contactoButtonBox->standardButton(button) == QDialogButtonBox::Cancel)
-//        this->close();
-//    else //QDialogButtonBox::Save
-//    {
-//        this->contactoApplyButton();
-//        this->close();
-//    }
+    PRINT_FUNCTION_NAME
+    qDebug() << "Valor del campo empresa: " << empresa;
+    qDebug() << "Valor del campo pais: " << pais;
+    qDebug() << "Valor del campo ciudad: " << ciudad;
+}
+void AddSupplier::onEmpresaButtonGuardarClicked(void)
+{
+    PRINT_FUNCTION_NAME
+    qDebug() << "Valor del campo empresa: " << empresa;
+    qDebug() << "Valor del campo pais: " << pais;
+    qDebug() << "Valor del campo ciudad: " << ciudad;
 }
 
 //SETTERS & GETTERS
