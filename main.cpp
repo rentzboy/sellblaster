@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
         //Load first QML page
         LoginDialog::createComponent();
 
-        /* ========== SOLO PARA PROBAR COMPONENTES (Load QML component) ========== */
-//        auto *engine = new QQmlApplicationEngine;
-//        MainWindow::createComponent();
-//        engine->load(QUrl(QStringLiteral("qrc:/qml/NewProveedor.qml")));
+        /* ========== SOLO PARA PROBAR COMPONENTES (Load QML component) ==========
+        auto *engine = new QQmlApplicationEngine;
+        MainWindow::createComponent();
+        engine->load(QUrl(QStringLiteral("qrc:/qml/EmpresaTab.qml")));*/
 
         return app.exec();
     }

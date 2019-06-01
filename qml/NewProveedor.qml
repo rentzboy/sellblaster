@@ -10,7 +10,7 @@ import MainClass 1.0
 Window {
     id: newProveedorWindow
     visible: true
-    minimumWidth: 1150 //menor que MainWindow
+    minimumWidth: 1200 //menor que MainWindow
     minimumHeight: 600 //menow que MainWindow
     title: qsTr("Nuevo proveedor")
 

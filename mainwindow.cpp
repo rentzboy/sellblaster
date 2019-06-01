@@ -142,6 +142,7 @@ bool MainWindow::createExternDbConnection(const QMap<QString, QString> connectio
 }
 void MainWindow::sanitationUserInput(QMap<QString, QString>&userFields)
 {
+    //Comprobar que el usuario no haya escrito simbolos que puedan romper la consulta SQL
     for (auto &itr : userFields ) //pasar x referencia si vamos a modificar los valores del rango
     {
         itr.remove(QChar('\"'));

@@ -10,22 +10,62 @@ import SupplierClass 1.0
 EmpresaTabForm {
     id: form
 
-    textFieldEmpresa.onEditingFinished: SupplierClass.empresa = textFieldEmpresa.text
-    textFieldHolding.onEditingFinished: SupplierClass.holding = textFieldHolding.text
-    comboBoxActividad.onCurrentIndexChanged: SupplierClass.actividad = comboBoxActividad.currentText
-    textFieldWeb.onEditingFinished: SupplierClass.web = textFieldWeb.text
-    textFieldPanjiba.onEditingFinished: SupplierClass.panjiba = textFieldPanjiba.text
-    textFieldMaps.onEditingFinished: SupplierClass.maps = textFieldMaps.text
-    comboBoxPais.onCurrentIndexChanged: SupplierClass.pais = comboBoxPais.currentText
-    textFieldCiudad.onEditingFinished: SupplierClass.ciudad = textFieldCiudad.text
-    textFieldPostcode.onEditingFinished: SupplierClass.postcode = textFieldPostcode.text
-    textFieldMoq.onEditingFinished: SupplierClass.moq = textFieldMoq.text
-    textFieldNotasEmpresa.onEditingFinished: SupplierClass.notasEmpresa = textFieldNotas.text
-    textFieldPago.onEditingFinished: SupplierClass.formaPago = textFieldPago.text
+    //TextFields
+    textFieldEmpresa.onEditingFinished: textValueToBackEnd(
+                                            "empresa", textFieldEmpresa.text)
+    textFieldHolding.onEditingFinished: textValueToBackEnd(
+                                            "holding", textFieldHolding.text)
+    textFieldWeb.onEditingFinished: textValueToBackEnd("web", textFieldWeb.text)
+    textFieldPanjiba.onEditingFinished: textValueToBackEnd(
+                                            "panjiba", textFieldPanjiba.text)
+    textFieldMaps.onEditingFinished: textValueToBackEnd("maps",
+                                                        textFieldMaps.text)
+    textFieldCiudad.onEditingFinished: textValueToBackEnd("ciudad",
+                                                          textFieldCiudad.text)
+    textFieldPostcode.onEditingFinished: textValueToBackEnd(
+                                             "postcode", textFieldPostcode.text)
+    textFieldMoq.onEditingFinished: textValueToBackEnd("moq", textFieldMoq.text)
+    textFieldNotasEmpresa.onEditingFinished: textValueToBackEnd(
+                                                 "notasEmpresa",
+                                                 textFieldNotasEmpresa.text)
 
-    empresaButtonAceptar.onClicked: SupplierClass.onEmpresaButtonAceptarClicked()
-    empresaButtonCancelar.onClicked: SupplierClass.onEmpresaButtonCancelarClicked()
-    empresaButtonGuardar.onClicked: SupplierClass.onEmpresaButtonGuardarClicked()
+    //ComboBoxes
+    comboBoxPais.currentIndex: -1
+    comboBoxPais.model: SupplierClass.paisList
+    comboBoxPais.onCurrentIndexChanged: comboBoxValueToBackEnd(
+                                            "pais", comboBoxPais.currentIndex)
+
+    comboBoxActividad.currentIndex: -1
+    comboBoxActividad.model: SupplierClass.actividadList
+    comboBoxActividad.onCurrentIndexChanged: comboBoxValueToBackEnd(
+                                                 "actividad",
+                                                 comboBoxActividad.currentIndex)
+
+    //PENDING --> ES COMBOBOX
+    //textFieldPago.onEditingFinished: SupplierClass.formaPago = textFieldPago.text)
+    aceptarButton.onClicked: SupplierClass.onAceptarButton("empresa")
+    cancelarButton.onClicked: SupplierClass.onCancelarButton("empresa")
+    guardarButton.onClicked: SupplierClass.onGuardarButton("empresa")
+
+    //JS FUNCTIONS
+    function textValueToBackEnd(field, txt) {
+        SupplierClass.textValueToBackEnd(field, txt)
+    }
+
+    function comboBoxValueToBackEnd(field, index) {
+        var txt
+        switch (field) {
+        case "pais":
+            txt = SupplierClass.paisList[index]
+            break
+        case "actividad":
+            txt = SupplierClass.actividadList[index]
+            break
+        default:
+
+        }
+        textValueToBackEnd(field, txt)
+    }
 
     //SLOTS
     function onCloseQmlInstance() {

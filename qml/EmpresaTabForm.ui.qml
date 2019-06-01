@@ -21,9 +21,9 @@ Item {
     property alias textFieldMoq: textFieldMoq
     property alias textFieldNotasEmpresa: textFieldNotasEmpresa
     property alias textFieldPago: textFieldPago
-    property alias empresaButtonAceptar: empresaButtonAceptar
-    property alias empresaButtonCancelar: empresaButtonCancelar
-    property alias empresaButtonGuardar: empresaButtonGuardar
+    property alias aceptarButton: aceptarButton
+    property alias cancelarButton: cancelarButton
+    property alias guardarButton: guardarButton
     visible: true
     Rectangle {
         clip: true
@@ -48,15 +48,15 @@ Item {
             id: row
             spacing: 15
             Button {
-                id: empresaButtonAceptar
+                id: aceptarButton
                 text: qsTr("Aceptar")
             }
             Button {
-                id: empresaButtonCancelar
+                id: cancelarButton
                 text: qsTr("Cancelar")
             }
             Button {
-                id: empresaButtonGuardar
+                id: guardarButton
                 text: qsTr("Guardar")
             }
         }
@@ -107,7 +107,7 @@ Item {
                 }
                 Item {
                     id: spacer2
-                    width: 20
+                    width: 5
                 }
 
                 Label {
@@ -150,7 +150,7 @@ Item {
                 }
                 Item {
                     id: spacer5
-                    width: 20
+                    width: 5
                 }
 
                 Label {
@@ -191,7 +191,7 @@ Item {
                 }
                 Item {
                     id: spacer8
-                    width: 20
+                    width: 5
                 }
 
                 Label {
@@ -234,7 +234,7 @@ Item {
 
                 Item {
                     id: spacer11
-                    width: 20
+                    width: 5
                 }
             }
         }
@@ -271,7 +271,7 @@ Item {
                 }
                 Item {
                     id: spacer20
-                    width: 20
+                    width: 5
                     Layout.fillWidth: true
                 }
             }
@@ -279,8 +279,10 @@ Item {
     }
 }
 
+
+
+
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
-

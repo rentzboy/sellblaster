@@ -47,6 +47,7 @@ Item {
             }
             TextField {
                 id: textInputUsename
+                renderType: Text.NativeRendering
                 Layout.columnSpan: 2
                 Layout.fillWidth: true
                 Layout.fillHeight: true
