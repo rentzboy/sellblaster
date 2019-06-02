@@ -6,14 +6,15 @@
 #include <QErrorMessage>
 #include <QMap>
 #include <QStandardItemModel>
+#include <QQuickView>
 
-class AddSupplier : public QObject
+class AddSupplier : public QQuickView
 {
     Q_OBJECT
     ///////////////////////EMPRESA////////////////////////////////////
     Q_PROPERTY(QStringList actividadList MEMBER actividadList)
     Q_PROPERTY(QStringList paisList MEMBER paisList)
-    Q_PROPERTY(QStringList formaPago MEMBER formaPagoList)
+    Q_PROPERTY(QStringList formaPagoList MEMBER formaPagoList)
     ///////////////////////CONTACTOS////////////////////////////////////
     Q_PROPERTY(QStringList areaList MEMBER areaList)
     Q_PROPERTY(QStringList puestoList MEMBER puestoList)
@@ -26,18 +27,18 @@ public:
     Q_INVOKABLE void textValueToBackEnd(QString key, QString value);
 
 public slots:
-    void onAceptarButton(QString tag);
-    void onCancelarButton(QString tag);
-    void onGuardarButton(QString tag);
+    void onAceptarButton(QString tab);
+    void onCancelarButton(QString tab);
+    void onGuardarButton(QString tab);
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 private:
-    explicit AddSupplier(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)
+    explicit AddSupplier(QQuickView *parent = Q_NULLPTR); //Private construstror (Singleton class)
     static void registerSingleton(void);
     //Members
     void fillComboBoxWithCheckBoxFromDb(void);
     void fillComboBoxesFromDb(void);
-    bool sanitationCheck(QString tag);
+    bool sanitationCheck(QString tab);
     //Attributes
     static AddSupplier *uniqueInstance;
     static int typeId;

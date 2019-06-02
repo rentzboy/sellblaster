@@ -41,10 +41,15 @@ EmpresaTabForm {
                                                  "actividad",
                                                  comboBoxActividad.currentIndex)
 
-    //PENDING --> ES COMBOBOX
-    //textFieldPago.onEditingFinished: SupplierClass.formaPago = textFieldPago.text)
+    comboBoxFormaPago.currentIndex: -1
+    comboBoxFormaPago.model: SupplierClass.formaPagoList
+    comboBoxFormaPago.onCurrentIndexChanged: comboBoxValueToBackEnd(
+                                                 "formaPago",
+                                                 comboBoxFormaPago.currentIndex)
+
+    //Buttons
     aceptarButton.onClicked: SupplierClass.onAceptarButton("empresa")
-    cancelarButton.onClicked: SupplierClass.onCancelarButton("empresa")
+    cancelarButton.onClicked: close()
     guardarButton.onClicked: SupplierClass.onGuardarButton("empresa")
 
     //JS FUNCTIONS
@@ -60,6 +65,9 @@ EmpresaTabForm {
             break
         case "actividad":
             txt = SupplierClass.actividadList[index]
+            break
+        case "formaPago":
+            txt = SupplierClass.formaPagoList[index]
             break
         default:
 

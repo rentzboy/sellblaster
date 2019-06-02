@@ -20,10 +20,11 @@ Item {
     property alias textFieldPostcode: textFieldPostcode
     property alias textFieldMoq: textFieldMoq
     property alias textFieldNotasEmpresa: textFieldNotasEmpresa
-    property alias textFieldPago: textFieldPago
+    property alias comboBoxFormaPago: comboBoxFormaPago
     property alias aceptarButton: aceptarButton
     property alias cancelarButton: cancelarButton
     property alias guardarButton: guardarButton
+
     visible: true
     Rectangle {
         clip: true
@@ -264,8 +265,9 @@ Item {
                     text: qsTr("Forma pago:")
                     Layout.minimumWidth: 120
                 }
-                TextField {
-                    id: textFieldPago
+                ComboBox {
+                    id: comboBoxFormaPago
+                    Layout.preferredHeight: textFieldEmpresa.height
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                 }
