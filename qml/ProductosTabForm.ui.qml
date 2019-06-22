@@ -8,7 +8,7 @@ import QtQuick.Controls.Material 2.0
 import "components"
 
 Item {
-    id: contactosTab
+    id: productosTab
     property alias textFieldNombre: textFieldNombre
     property alias textFieldApellido: textFieldApellido
     property alias textFieldEmail: textFieldEmail
@@ -162,8 +162,6 @@ Item {
                     wrapMode: Text.WordWrap
                     Layout.fillHeight: false
                     Layout.fillWidth: true
-                    KeyNavigation.tab: comboBoxArea
-                    KeyNavigation.priority: KeyNavigation.BeforeItem
                 }
                 Item {
                     id: spacer6
@@ -242,10 +240,8 @@ Item {
     }
 }
 
-
-
-
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
+

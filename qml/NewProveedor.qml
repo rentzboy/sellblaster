@@ -10,7 +10,7 @@ import MainClass 1.0
 Window {
     id: newProveedorWindow
     visible: true
-    minimumWidth: 1200 //menor que MainWindow
+    minimumWidth: 1400 //menor que MainWindow
     minimumHeight: 600 //menow que MainWindow
     title: qsTr("Nuevo proveedor")
 
@@ -41,6 +41,25 @@ Window {
         anchors.leftMargin: 15
         anchors.bottomMargin: 15
         anchors.topMargin: 15
+        focus: true
+
+        Keys.onPressed: {
+            if (event.key === Qt.Key_PageUp) {
+                if (bar.currentIndex === 0) {
+                    event.accepted = true
+                } else {
+                    bar.currentIndex--
+                    event.accepted = true
+                }
+            } else if (event.key === Qt.Key_PageDown) {
+                if (bar.currentIndex === bar.count) {
+                    event.accepted = true
+                } else {
+                    bar.currentIndex++
+                    event.accepted = true
+                }
+            }
+        }
     }
 }
 

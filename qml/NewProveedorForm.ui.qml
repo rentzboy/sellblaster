@@ -11,6 +11,7 @@ import "components"
 
 Item {
     id: newProveedorFormWindow
+    property alias bar: bar
     visible: true
 
     Pane {
@@ -49,6 +50,7 @@ Item {
         }
 
         StackLayout {
+            id: stackLayout
             //Solo muestra 1 childItem, que corresponde con el currentIndex
             width: parent.width
             height: parent.height - bar.height
@@ -64,6 +66,7 @@ Item {
             }
             ContactosTab {
                 id: contactos
+                width: 2
                 Layout.fillHeight: parent
                 Layout.fillWidth: parent
             }

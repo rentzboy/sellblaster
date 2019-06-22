@@ -25,9 +25,9 @@ EmpresaTabForm {
     textFieldPostcode.onEditingFinished: textValueToBackEnd(
                                              "postcode", textFieldPostcode.text)
     textFieldMoq.onEditingFinished: textValueToBackEnd("moq", textFieldMoq.text)
-    textFieldNotasEmpresa.onEditingFinished: textValueToBackEnd(
-                                                 "notasEmpresa",
-                                                 textFieldNotasEmpresa.text)
+    textAreaNotasEmpresa.onEditingFinished: textValueToBackEnd(
+                                                "notasEmpresa",
+                                                textAreaNotasEmpresa.text)
 
     //ComboBoxes
     comboBoxPais.currentIndex: -1
@@ -48,9 +48,9 @@ EmpresaTabForm {
                                                  comboBoxFormaPago.currentIndex)
 
     //Buttons
-    aceptarButton.onClicked: SupplierClass.onAceptarButton("empresa")
-    cancelarButton.onClicked: close()
-    guardarButton.onClicked: SupplierClass.onGuardarButton("empresa")
+    buttonAceptar.onClicked: SupplierClass.onAceptarButton("empresa")
+    buttonCancelar.onClicked: close()
+    buttonGuardar.onClicked: SupplierClass.onGuardarButton("empresa")
 
     //JS FUNCTIONS
     function textValueToBackEnd(field, txt) {
@@ -78,6 +78,21 @@ EmpresaTabForm {
     //SLOTS
     function onCloseQmlInstance() {
         close()
+    }
+
+    function resetFormFields() {
+        textFieldEmpresa.clear()
+        textFieldHolding.clear()
+        comboBoxPais.currentIndex = -1
+        textFieldWeb.clear()
+        textFieldPanjiba.clear()
+        textFieldMaps.clear()
+        comboBoxPais.currentIndex = -1
+        textFieldCiudad.clear()
+        textFieldPostcode.clear()
+        textFieldMoq.clear()
+        textAreaNotasEmpresa.clear()
+        comboBoxFormaPago.currentIndex = -1
     }
 }
 

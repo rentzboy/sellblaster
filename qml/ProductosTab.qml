@@ -9,7 +9,6 @@ import SupplierClass 1.0
 
 ContactosTabForm {
     id: form
-    objectName: "ContactosTabForm"
 
     //TextFields
     textFieldNombre.onEditingFinished: textValueToBackEnd("nombre",
@@ -47,6 +46,7 @@ ContactosTabForm {
     function textValueToBackEnd(field, txt) {
         SupplierClass.textValueToBackEnd(field, txt)
     }
+
     function comboBoxValueToBackEnd(field, index) {
         var txt
         switch (field) {
@@ -62,25 +62,9 @@ ContactosTabForm {
         textValueToBackEnd(field, txt)
     }
 
-    //SIGNALS
-
     //SLOTS
     function onCloseQmlInstance() {
         close()
-    }
-    function onClearFormFields(tab) {
-        //hay que definirla para cada pestaña
-        if (tab === "contacto") {
-            textFieldNombre.clear()
-            textFieldApellido.clear()
-            textFieldEmail.clear()
-            textFieldTelefono.clear()
-            textFieldMovil.clear()
-            textAreaNotasContacto.clear()
-            comboBoxArea.currentIndex = -1
-            comboBoxPuesto.currentIndex = -1
-            textFieldNombre
-        }
     }
 }
 

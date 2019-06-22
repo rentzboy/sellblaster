@@ -23,6 +23,7 @@ void MainWindow::createComponent(void)
 
         //Connect C++ to QML Signals / Slots
         //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
+        //Solo funciona para SLOTS definidos en archivo .qml que cargamos mediante engine->load
         connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
         //Connect QML to C++ Signals/Slots
         //connect(engine->rootObjects().value(typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(closeEvent(QCloseEvent*)));

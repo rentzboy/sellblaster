@@ -19,11 +19,11 @@ Item {
     property alias textFieldCiudad: textFieldCiudad
     property alias textFieldPostcode: textFieldPostcode
     property alias textFieldMoq: textFieldMoq
-    property alias textFieldNotasEmpresa: textFieldNotasEmpresa
+    property alias textAreaNotasEmpresa: textAreaNotasEmpresa
     property alias comboBoxFormaPago: comboBoxFormaPago
-    property alias aceptarButton: aceptarButton
-    property alias cancelarButton: cancelarButton
-    property alias guardarButton: guardarButton
+    property alias buttonAceptar: buttonAceptar
+    property alias buttonCancelar: buttonCancelar
+    property alias buttonGuardar: buttonGuardar
 
     visible: true
     Rectangle {
@@ -49,15 +49,15 @@ Item {
             id: row
             spacing: 15
             Button {
-                id: aceptarButton
+                id: buttonAceptar
                 text: qsTr("Aceptar")
             }
             Button {
-                id: cancelarButton
+                id: buttonCancelar
                 text: qsTr("Cancelar")
             }
             Button {
-                id: guardarButton
+                id: buttonGuardar
                 text: qsTr("Guardar")
             }
         }
@@ -91,6 +91,7 @@ Item {
                     id: textFieldEmpresa
                     Layout.minimumWidth: 150 //Solo hay que indicarlo en los elementos de la row #1
                     Layout.fillWidth: true
+                    maximumLength: 100
                 }
                 Item {
                     id: spacer1
@@ -105,6 +106,7 @@ Item {
                     id: textFieldHolding
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
+                    maximumLength: 100
                 }
                 Item {
                     id: spacer2
@@ -134,6 +136,8 @@ Item {
                 TextField {
                     id: textFieldWeb
                     Layout.fillWidth: true
+                    inputMethodHints: Qt.ImhUrlCharactersOnly
+                    maximumLength: 100
                 }
                 Item {
                     id: spacer4
@@ -148,6 +152,8 @@ Item {
                     id: textFieldPanjiba
                     width: 150
                     Layout.fillWidth: true
+                    inputMethodHints: Qt.ImhUrlCharactersOnly
+                    maximumLength: 200
                 }
                 Item {
                     id: spacer5
@@ -161,6 +167,8 @@ Item {
                 TextField {
                     id: textFieldMaps
                     Layout.fillWidth: true
+                    inputMethodHints: Qt.ImhUrlCharactersOnly
+                    maximumLength: 200
                 }
                 Item {
                     id: spacer6
@@ -189,6 +197,7 @@ Item {
                 TextField {
                     id: textFieldCiudad
                     Layout.fillWidth: true
+                    maximumLength: 100
                 }
                 Item {
                     id: spacer8
@@ -202,6 +211,9 @@ Item {
                 TextField {
                     id: textFieldPostcode
                     Layout.fillWidth: true
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    maximumLength: 5
+                    inputMask: "99999"
                 }
                 Item {
                     id: spacer9
@@ -215,6 +227,8 @@ Item {
                 TextField {
                     id: textFieldMoq
                     Layout.fillWidth: true
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    inputMask: "000"
                 }
                 Item {
                     id: spacer10
@@ -226,11 +240,13 @@ Item {
                     text: qsTr("Notas:")
                 }
                 TextArea {
-                    id: textFieldNotasEmpresa
+                    id: textAreaNotasEmpresa
                     wrapMode: Text.WordWrap
                     Layout.fillHeight: false
                     Layout.fillWidth: true
                     Layout.columnSpan: 4
+                    KeyNavigation.tab: comboBoxFormaPago
+                    KeyNavigation.priority: KeyNavigation.BeforeItem
                 }
 
                 Item {

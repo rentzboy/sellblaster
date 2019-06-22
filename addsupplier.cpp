@@ -1,8 +1,11 @@
 #include "addsupplier.h"
 #include "basic_headers.h"
 #include <QMap>
+#include <QMessageBox>
+#include <QQmlProperty>
 
 //static initialization
+QQmlApplicationEngine* AddSupplier::engine = Q_NULLPTR;
 AddSupplier* AddSupplier::uniqueInstance = Q_NULLPTR;
 int AddSupplier::typeId = 0;
 
@@ -12,15 +15,19 @@ void AddSupplier::createComponent(void)
     if(uniqueInstance == Q_NULLPTR)
     {
         uniqueInstance = new AddSupplier;
+        //uniqueInstance->setObjectName("newSupplierObject");
         registerSingleton();
 
         //Load QML component
-        auto *engine = new QQmlApplicationEngine;
+        engine = new QQmlApplicationEngine;
         engine->load(QUrl(QStringLiteral("qrc:/qml/NewProveedor.qml")));
 
         //Connect C++ to QML Signals / Slots
-        //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
-        //connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
+        //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funciona)
+        //Solo funciona para SLOTS definidos en archivo .qml que cargamos mediante engine->load
+        connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
+        QObject *contactosTabObject = engine->rootObjects().value(typeId)->findChild<QObject*> ("ContactosTabForm");
+        connect(uniqueInstance, SIGNAL(clearFormFields(QVariant)), contactosTabObject, SLOT(onClearFormFields(QVariant)));
 
         //Connect QML to C++ Signals/Slots
         //connect(engine->rootObjects().value(typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(closeEvent(QCloseEvent*)));
@@ -29,7 +36,7 @@ void AddSupplier::createComponent(void)
     else
     {
         //Load QML component
-        auto *engine = new QQmlApplicationEngine;
+        engine = new QQmlApplicationEngine;
         engine->load(QUrl(QStringLiteral("qrc:/qml/NewProveedor.qml")));
     }
 }
@@ -39,7 +46,7 @@ void AddSupplier::textValueToBackEnd(QString key, QString value)
 }
 
 //PRIVATE MEMBERS
-AddSupplier::AddSupplier(QQuickView *parent) : QQuickView(parent) //private singleton constructor
+AddSupplier::AddSupplier(QObject *parent) : QObject(parent) //private singleton constructor
 {
     this->fillComboBoxesFromDb();
     //fill ComboBox with checkboxes
@@ -77,20 +84,20 @@ void AddSupplier::fillComboBoxWithCheckBoxFromDb(void) //PENDING
 
     //QStyle checkBoxComboStyle;
 
-    modelo = new QStandardItemModel(4, 1, this);
-    //ui->alloyComboBox->setModel(modelo);
-    //ui->alloyComboBox->setStyle(QStyleFactory::create("windows"));
+//    modelo = new QStandardItemModel(4, 1, this);
+//    //ui->alloyComboBox->setModel(modelo);
+//    //ui->alloyComboBox->setStyle(QStyleFactory::create("windows"));
 
-    iItem1 = new QStandardItem(QIcon::fromTheme("document-open"), "Abrir documento");
-    modelo->setItem(0,0, iItem1);
-    iItem1->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-    iItem1->setData(Qt::Unchecked, Qt::CheckStateRole);
+//    iItem1 = new QStandardItem(QIcon::fromTheme("document-open"), "Abrir documento");
+//    modelo->setItem(0,0, iItem1);
+//    iItem1->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+//    iItem1->setData(Qt::Unchecked, Qt::CheckStateRole);
 
-    iItem2 = new QStandardItem(QIcon::fromTheme("document-save"), "Guardar documento");
-    modelo->setItem(1,0, iItem2);
-    iItem2->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-    iItem2->setData(Qt::Unchecked, Qt::CheckStateRole);
-    //ui->alloyComboBox->setView(new QListView);
+//    iItem2 = new QStandardItem(QIcon::fromTheme("document-save"), "Guardar documento");
+//    modelo->setItem(1,0, iItem2);
+//    iItem2->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+//    iItem2->setData(Qt::Unchecked, Qt::CheckStateRole);
+//    //ui->alloyComboBox->setView(new QListView);
 }
 void AddSupplier::fillComboBoxesFromDb(void)
 {
@@ -137,9 +144,9 @@ bool AddSupplier::sanitationCheck(QString tab)
     if(tab == "empresa")
     {
         //Checking key fields & numeric fields are not empty
-        if(formField.value("empresa").isEmpty()   ||
-            formField.value("ciudad").isEmpty()      ||
-            formField.value("actividad").isEmpty()  ||
+        if(formField.value("empresa").isEmpty()     ||
+            formField.value("ciudad").isEmpty()        ||
+            formField.value("actividad").isEmpty()    ||
             formField.value("formaPago").isEmpty() ||
             formField.value("pais").isEmpty())
             return EXIT_FAILURE;
@@ -148,6 +155,7 @@ bool AddSupplier::sanitationCheck(QString tab)
     {
         //Checking key fields & numeric fields are not empty
         if(formField.value("empresa").isEmpty() || //Hay que controlarlo en todas las tabs
+            formField.value("nombre").isEmpty()     ||
             formField.value("email").isEmpty()     ||
             formField.value("area").isEmpty()       ||
             formField.value("puesto").isEmpty())
@@ -157,47 +165,65 @@ bool AddSupplier::sanitationCheck(QString tab)
     MainWindow::sanitationUserInput(formField);
     return EXIT_SUCCESS;
 }
+void AddSupplier::resetFields(QString tab)
+{
+    if(tab == "contacto")
+    {
+        //Clear QMap values
+        formField["nombre"] = "";
+        formField["apellido"] = "";
+        formField["email"] = "";
+        formField["telefono"] = "";
+        formField["movil"] = "";
+        formField["notasContacto"] = "";
+        //Clear form values using JavaScript
+        emit clearFormFields(tab);
+    }
+}
 
 //PUBLIC SLOTS
-void AddSupplier::onAceptarButton(QString tab) //PENDING reset fields
+void AddSupplier::onAceptarButton(QString tab)
 {
     PRINT_FUNCTION_NAME
     qDebug() << "TAB: " << tab << " ---- <QMAPS> " << formField;
+
     if(tab == "empresa")
     {
-        if (this->sanitationCheck(tab) == EXIT_FAILURE) //
+        if (this->sanitationCheck(tab) == EXIT_FAILURE)
         {
             errorMessage = new QErrorMessage;
+            errorMessage->setAttribute(Qt::WA_DeleteOnClose);
             errorMessage->showMessage(QObject::tr("Revise que los campos obligatorios no estén vacios!"));
             errorMessage->resize(400,200);
             return;
         }
 
-        try
-        {
-            //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
-            QString idActividad = QString::number (actividadList.indexOf(formField.value("actividad")));
-            QString idPais = QString::number (paisList.indexOf(formField.value("pais")));
-            QString idFormaPago = QString::number (formaPagoList.indexOf(formField.value("formaPago")));
+        //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
+        //Además hay que CurrentIndex++, pues el first == 0
+        QString idActividad = QString::number (actividadList.indexOf(formField.value("actividad")) + 1);
+        QString idPais = QString::number (paisList.indexOf(formField.value("pais")) + 1);
+        QString idFormaPago = QString::number (formaPagoList.indexOf(formField.value("formaPago")) + 1);
 
-            //OPTION #1: Stored Procedures
-            QString sqlQuery = "CALL insert_Supplier(";
-            sqlQuery.append("'").append(formField.value("empresa")).append("', '")
-            .append(formField.value("holding")).append("', ")
-            .append(idActividad).append(", '") //number, sin ' '
-            .append(formField.value("web")).append("', '")
-            .append(formField.value("panjiba")).append("', '")
-            .append(formField.value("maps")).append("', ")
-            .append(idPais).append(", '")//number, sin ' '
-            .append(formField.value("ciudad")).append("', '")
-            .append(formField.value("postcode")).append("', '") //varchar
-            .append(formField.value("moq")).append("', '")  //varchar
-            .append(formField.value("notasEmpresa")).append("', ")
-            .append(idFormaPago).append(");"); //number, sin ' '
-            qDebug() << "Stored Procedure: " << sqlQuery;
-            MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME);
+        //OPTION #1: Stored Procedures
+        QString sqlQuery = "CALL insert_Supplier(";
+        sqlQuery.append("'").append(formField.value("empresa")).append("', '")
+        .append(formField.value("holding")).append("', ")
+        .append(idActividad).append(", '") //number, sin ' '
+        .append(formField.value("web")).append("', '")
+        .append(formField.value("panjiba")).append("', '")
+        .append(formField.value("maps")).append("', ")
+        .append(idPais).append(", '")//number, sin ' '
+        .append(formField.value("ciudad")).append("', '")
+        .append(formField.value("postcode")).append("', '") //varchar
+        .append(formField.value("moq")).append("', '")  //varchar
+        .append(formField.value("notasEmpresa")).append("', ")
+        .append(idFormaPago).append(");"); //number, sin ' '
+        qDebug() << "Stored Procedure: " << sqlQuery;
 
-            /* OPTION #2: Qt Function
+        if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
+            QMessageBox::information(Q_NULLPTR, "Database", "La empresa se ha dado de alta",QMessageBox::Ok);
+
+        /* OPTION #2: Qt Function
              //Database connection
              auto tmp = QSqlDatabase::database(MAIN_DB_CONNECTION_NAME);
              if(!tmp.isOpen())
@@ -219,28 +245,52 @@ void AddSupplier::onAceptarButton(QString tab) //PENDING reset fields
 
              if(!query.exec())
                  throw(query.lastError()); */
-        }
-        catch(const QSqlError &e)
+    }
+    else if (tab == "contacto")
+    {
+        if (this->sanitationCheck(tab) == EXIT_FAILURE)
         {
-            EXCEPTION_HANDLER
+            errorMessage = new QErrorMessage;
+            errorMessage->setAttribute(Qt::WA_DeleteOnClose);
+            errorMessage->showMessage(QObject::tr("Revise que los campos obligatorios no estén vacios!"));
+            errorMessage->resize(400,200);
+            return;
         }
-        //Si todo ha ido bien......y hemos llegado hasta qui
-        //RESET  private attributes ==  Reset QML fields  (signals / slots)
 
+        //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
+        QString idArea = QString::number (areaList.indexOf(formField.value("area")) + 1);
+        QString idPuesto = QString::number (puestoList.indexOf(formField.value("puesto")) + 1);
 
+        //OPTION #1: Stored Procedures
+        QString sqlQuery = "CALL insert_Contact(";
+        sqlQuery.append("'").append(formField.value("empresa")).append("', '")
+        .append(formField.value("nombre")).append("', '")
+        .append(formField.value("apellido")).append("', '")
+        .append(formField.value("email")).append("', '")
+        .append(formField.value("telefono")).append("', '")
+        .append(formField.value("movil")).append("', ")
+        .append(idArea).append(", ") //number, sin ' '
+        .append(idPuesto).append(", '") //number, sin ' '
+        .append(formField.value("notasContacto")).append("');");
 
-}
+        qDebug() << "Stored Procedure: " << sqlQuery;
+        if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
+        {
+            resetFields(tab);
+            qDebug() << "Maps values: " << formField;
+        }
+    }
 }
 void AddSupplier::onCancelarButton(QString tab)
 {
     PRINT_FUNCTION_NAME
-    //Hay que resetear antes los campos ????
     Q_UNUSED(tab)
+    emit this->closeQmlInstance();
 }
 void AddSupplier::onGuardarButton(QString tab)
 {
     this->onAceptarButton(tab);
-    this->close();
+    emit this->closeQmlInstance();
 }
 //SETTERS & GETTERS
 

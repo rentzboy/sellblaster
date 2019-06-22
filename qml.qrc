@@ -5,7 +5,6 @@
         <file>qml/Login.qml</file>
         <file>qml/components/qmldir</file>
         <file>qml/LoginForm.ui.qml</file>
-        <file>qml/pruebas.qml</file>
         <file>qml/MainWindow.qml</file>
         <file>qml/MainWindowForm.ui.qml</file>
         <file>qml/components/BackgroundZ1.qml</file>
@@ -17,5 +16,7 @@
         <file>qml/NewProveedorForm.ui.qml</file>
         <file>qml/ContactosTab.qml</file>
         <file>qml/ContactosTabForm.ui.qml</file>
+        <file>qml/ProductosTab.qml</file>
+        <file>qml/ProductosTabForm.ui.qml</file>
     </qresource>
 </RCC>

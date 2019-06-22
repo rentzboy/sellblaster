@@ -14,7 +14,7 @@ ApplicationWindow {
     visible: true
     //minimumHeight y minimumWidth tienen que ser > que los minH y minW de los popups
     minimumHeight: 800
-    minimumWidth: 1400
+    minimumWidth: 1500
     title: qsTr("Sellblaster - Copia registrada")
 
     onHeightChanged: function updateHeightProperty() {

@@ -7,10 +7,12 @@
 #include <QMap>
 #include <QStandardItemModel>
 #include <QQuickView>
+#include <QQmlApplicationEngine>
 
-class AddSupplier : public QQuickView
+class AddSupplier : public QObject
 {
     Q_OBJECT
+    Q_CLASSINFO("name", "newSupplierObject")
     ///////////////////////EMPRESA////////////////////////////////////
     Q_PROPERTY(QStringList actividadList MEMBER actividadList)
     Q_PROPERTY(QStringList paisList MEMBER paisList)
@@ -33,13 +35,15 @@ public slots:
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 private:
-    explicit AddSupplier(QQuickView *parent = Q_NULLPTR); //Private construstror (Singleton class)
+    explicit AddSupplier(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)
     static void registerSingleton(void);
     //Members
     void fillComboBoxWithCheckBoxFromDb(void);
     void fillComboBoxesFromDb(void);
     bool sanitationCheck(QString tab);
+    void resetFields(QString tab);
     //Attributes
+    static QQmlApplicationEngine *engine;
     static AddSupplier *uniqueInstance;
     static int typeId;
     QStringList paisList;
@@ -56,6 +60,8 @@ private:
     QStandardItem *iItem2 = Q_NULLPTR;
 
 signals:
+    void closeQmlInstance(void);
+    void clearFormFields(QVariant tab);
 };
 
 #endif // ADDSUPPLIER_H
