@@ -12,6 +12,7 @@ import "components"
 Item {
     id: newProveedorFormWindow
     property alias bar: bar
+    property int comboBoxAreaCurrentIndex: comboBoxAreaCurrentIndex
     visible: true
 
     Pane {
@@ -28,22 +29,26 @@ Item {
 
             TabButton {
                 text: qsTr("Empresa")
+                objectName: "empresa"
                 clip: true
                 display: AbstractButton.TextOnly
                 width: 150
             }
             TabButton {
                 text: qsTr("Contactos")
+                objectName: "contactos"
                 display: AbstractButton.TextOnly
                 width: 150
             }
             TabButton {
                 text: qsTr("Productos")
+                objectName: "productos"
                 display: AbstractButton.TextOnly
                 width: 150
             }
             TabButton {
                 text: qsTr("Certificaciones")
+                objectName: "certificaciones"
                 display: AbstractButton.TextOnly
                 width: 200
             }
@@ -70,7 +75,7 @@ Item {
                 Layout.fillHeight: parent
                 Layout.fillWidth: parent
             }
-            Item {
+            ProductosTab {
                 id: productos
                 Layout.fillHeight: parent
                 Layout.fillWidth: parent

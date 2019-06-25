@@ -82,8 +82,8 @@ ApplicationWindow {
                 MenuItem {
                     id: salirApp
                     text: "Salir"
-                    shortcut: "Ctrl+S"
-                    onTriggered: close() //emite el signal closing()
+                    shortcut: StandardKey.Quit
+                    onTriggered: Qt.quit()
                 }
             }
 

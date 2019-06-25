@@ -6,9 +6,10 @@ import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
 import "components"
 import SupplierClass 1.0
+import "supplier.js" as Supplier
 
 ContactosTabForm {
-    id: form
+    id: contactosForm
     objectName: "ContactosTabForm"
 
     //TextFields
@@ -27,14 +28,18 @@ ContactosTabForm {
                                                  textAreaNotasContacto.text)
 
     //ComboBoxes
-    comboBoxArea.currentIndex: -1
+    //comboBoxArea.currentIndex: -1 => el model se carga a posteriori
     comboBoxArea.model: SupplierClass.areaList
-    comboBoxArea.onCurrentIndexChanged: comboBoxValueToBackEnd(
+    comboBoxArea.onModelChanged: Supplier.initializationComboBoxIndex(
+                                     "comboBoxArea")
+    comboBoxArea.onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(
                                             "area", comboBoxArea.currentIndex)
 
-    comboBoxPuesto.currentIndex: -1
+    //comboBoxPuesto.currentIndex: -1 => el model se carga a posteriori
     comboBoxPuesto.model: SupplierClass.puestoList
-    comboBoxPuesto.onCurrentIndexChanged: comboBoxValueToBackEnd(
+    comboBoxPuesto.onModelChanged: Supplier.initializationComboBoxIndex(
+                                       "comboBoxPuesto")
+    comboBoxPuesto.onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(
                                               "puesto",
                                               comboBoxPuesto.currentIndex)
 
@@ -43,44 +48,25 @@ ContactosTabForm {
     buttonCancelar.onClicked: close()
     buttonGuardar.onClicked: SupplierClass.onGuardarButton("contacto")
 
-    //JS FUNCTIONS
-    function textValueToBackEnd(field, txt) {
-        SupplierClass.textValueToBackEnd(field, txt)
-    }
-    function comboBoxValueToBackEnd(field, index) {
-        var txt
-        switch (field) {
-        case "area":
-            txt = SupplierClass.areaList[index]
-            break
-        case "puesto":
-            txt = SupplierClass.puestoList[index]
-            break
-        default:
-
-        }
-        textValueToBackEnd(field, txt)
-    }
-
-    //SIGNALS
-
     //SLOTS
     function onCloseQmlInstance() {
         close()
     }
-    function onClearFormFields(tab) {
+    function onClearContactosFields(tab) {
         //hay que definirla para cada pestaña
-        if (tab === "contacto") {
-            textFieldNombre.clear()
-            textFieldApellido.clear()
-            textFieldEmail.clear()
-            textFieldTelefono.clear()
-            textFieldMovil.clear()
-            textAreaNotasContacto.clear()
-            comboBoxArea.currentIndex = -1
-            comboBoxPuesto.currentIndex = -1
-            textFieldNombre
-        }
+        console.log("Se ha llamado a la función onClearContactosFields(" + tab + ")")
+        textFieldEmpresa.clear()
+        textFieldHolding.clear()
+        comboBoxPais.currentIndex = -1
+        textFieldWeb.clear()
+        textFieldPanjiba.clear()
+        textFieldMaps.clear()
+        comboBoxPais.currentIndex = -1
+        textFieldCiudad.clear()
+        textFieldPostcode.clear()
+        textFieldMoq.clear()
+        textAreaNotasEmpresa.clear()
+        comboBoxFormaPago.currentIndex = -1
     }
 }
 

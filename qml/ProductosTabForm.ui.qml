@@ -9,17 +9,21 @@ import "components"
 
 Item {
     id: productosTab
-    property alias textFieldNombre: textFieldNombre
-    property alias textFieldApellido: textFieldApellido
-    property alias textFieldEmail: textFieldEmail
-    property alias textFieldTelefono: textFieldTelefono
-    property alias textFieldMovil: textFieldMovil
-    property alias textAreaNotasContacto: textAreaNotasContacto
-    property alias comboBoxArea: comboBoxArea
-    property alias comboBoxPuesto: comboBoxPuesto
     property alias buttonAceptar: buttonAceptar
     property alias buttonCancelar: buttonCancelar
     property alias buttonGuardar: buttonGuardar
+    property alias comboBoxFormato: comboBoxFormato
+    property alias comboBoxMaterial: comboBoxMaterial
+    property alias comboBoxTratamiento: comboBoxTratamiento
+    property alias comboBoxAleacion: comboBoxAleacion
+    property alias comboBoxTemple: comboBoxTemple
+    property alias textFieldEspesorMin: textFieldEspesorMin
+    property alias textFieldLargoMin: textFieldLargoMin
+    property alias comboBoxAcabado: comboBoxAcabado
+    property alias textFieldEspesorMax: textFieldEspesorMax
+    property alias textFieldAnchoMin: textFieldAnchoMin
+    property alias textFieldAnchoMax: textFieldAnchoMax
+    property alias textFieldLargoMax: textFieldLargoMax
     visible: true
     Rectangle {
         clip: true
@@ -73,20 +77,20 @@ Item {
                 columnSpacing: 15
                 rowSpacing: 15
                 anchors.fill: parent
-                rows: 3
+                rows: 4
                 columns: 9
                 clip: true
 
                 Label {
-                    id: labelNombre
-                    text: qsTr("Nombre:")
+                    id: labelFormato
+                    text: qsTr("Formato:")
                     Layout.minimumWidth: 120 //Para alinearlo con Datos financieros
                 }
-                TextField {
-                    id: textFieldNombre
-                    Layout.minimumWidth: 150 //Solo hay que indicarlo en los elementos de la row #1
+                ComboBox {
+                    id: comboBoxFormato
                     Layout.fillWidth: true
-                    maximumLength: 100
+                    Layout.minimumWidth: 150 //Solo hay que indicarlo en los elementos de la row #1
+                    Layout.preferredHeight: textFieldEspesorMin.height
                 }
                 Item {
                     id: spacer1
@@ -94,14 +98,14 @@ Item {
                 }
 
                 Label {
-                    id: labelApellido
-                    text: qsTr("Apellido:")
+                    id: labelMaterial
+                    text: qsTr("Material:")
                 }
-                TextField {
-                    id: textFieldApellido
+                ComboBox {
+                    id: comboBoxMaterial
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
-                    maximumLength: 100
+                    Layout.preferredHeight: textFieldEspesorMin.height
                 }
                 Item {
                     id: spacer2
@@ -109,14 +113,14 @@ Item {
                 }
 
                 Label {
-                    id: labelEmail
-                    text: qsTr("Email:")
+                    id: labelTratamiento
+                    text: qsTr("Tratamiento:")
                 }
-                TextField {
-                    id: textFieldEmail
+                ComboBox {
+                    id: comboBoxTratamiento
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
-                    inputMethodHints: Qt.ImhEmailCharactersOnly
+                    Layout.preferredHeight: textFieldEspesorMin.height
                 }
                 Item {
                     id: spacer3
@@ -125,13 +129,13 @@ Item {
                 }
 
                 Label {
-                    id: labelTelefono
-                    text: qsTr("Telefono:")
+                    id: labelAleacion
+                    text: qsTr("Aleación:")
                 }
-                TextField {
-                    id: textFieldTelefono
+                ComboBox {
+                    id: comboBoxAleacion
                     Layout.fillWidth: true
-                    inputMethodHints: Qt.ImhDialableCharactersOnly
+                    Layout.preferredHeight: textFieldEspesorMin.height
                 }
                 Item {
                     id: spacer4
@@ -139,14 +143,14 @@ Item {
                 }
 
                 Label {
-                    id: labelMovil
-                    text: qsTr("Movil:")
+                    id: labelTemple
+                    text: qsTr("Temple:")
                 }
-                TextField {
-                    id: textFieldMovil
+                ComboBox {
+                    id: comboBoxTemple
                     width: 150
                     Layout.fillWidth: true
-                    inputMethodHints: Qt.ImhDialableCharactersOnly
+                    Layout.preferredHeight: textFieldEspesorMin.height
                 }
                 Item {
                     id: spacer5
@@ -154,14 +158,14 @@ Item {
                 }
 
                 Label {
-                    id: labelNotas
-                    text: qsTr("Notas:")
+                    id: labelAcabado
+                    text: qsTr("Acabado:")
                 }
-                TextArea {
-                    id: textAreaNotasContacto
-                    wrapMode: Text.WordWrap
-                    Layout.fillHeight: false
+                ComboBox {
+                    id: comboBoxAcabado
+                    width: 150
                     Layout.fillWidth: true
+                    Layout.preferredHeight: textFieldEspesorMin.height
                 }
                 Item {
                     id: spacer6
@@ -170,13 +174,13 @@ Item {
                 }
 
                 Label {
-                    id: labelArea
-                    text: qsTr("Area:")
+                    id: labelEspesorMin
+                    text: qsTr("Espesor min:")
                 }
-                ComboBox {
-                    id: comboBoxArea
+                TextField {
+                    id: textFieldEspesorMin
+                    Layout.minimumWidth: 150
                     Layout.fillWidth: true
-                    Layout.preferredHeight: textFieldNombre.height
                 }
                 Item {
                     id: spacer7
@@ -184,16 +188,72 @@ Item {
                 }
 
                 Label {
-                    id: labelPuesto
-                    text: qsTr("Puesto:")
+                    id: labelLargoMin
+                    text: qsTr("Largo min:")
                 }
-                ComboBox {
-                    id: comboBoxPuesto
+                TextField {
+                    id: textFieldLargoMin
+                    Layout.minimumWidth: 150
                     Layout.fillWidth: true
-                    Layout.fillHeight: true
                 }
                 Item {
                     id: spacer8
+                    width: 20
+                }
+
+                Label {
+                    id: labelAnchoMin
+                    text: qsTr("Ancho min:")
+                }
+                TextField {
+                    id: textFieldAnchoMin
+                    Layout.minimumWidth: 150
+                    Layout.fillWidth: true
+                }
+                Item {
+                    id: spacer9
+                    width: 20
+                }
+
+                Label {
+                    id: labelEspesorMax
+                    text: qsTr("Espesor max:")
+                }
+                TextField {
+                    id: textFieldEspesorMax
+                    Layout.minimumWidth: 150
+                    Layout.fillWidth: true
+                }
+                Item {
+                    id: spacer10
+                    width: 20
+                }
+
+                Label {
+                    id: labelLargoMax
+                    text: qsTr("Largo max:")
+                }
+                TextField {
+                    id: textFieldLargoMax
+                    Layout.minimumWidth: 150
+                    Layout.fillWidth: true
+                }
+                Item {
+                    id: spacer11
+                    width: 20
+                }
+
+                Label {
+                    id: labelAnchoMax
+                    text: qsTr("Ancho max:")
+                }
+                TextField {
+                    id: textFieldAnchoMax
+                    Layout.minimumWidth: 150
+                    Layout.fillWidth: true
+                }
+                Item {
+                    id: spacer12
                     width: 20
                 }
             }
@@ -240,8 +300,10 @@ Item {
     }
 }
 
+
+
+
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
-

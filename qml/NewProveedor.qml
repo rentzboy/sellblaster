@@ -6,6 +6,8 @@ import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
 import "components"
 import MainClass 1.0
+import SupplierClass 1.0
+import "supplier.js" as Supplier
 
 Window {
     id: newProveedorWindow
@@ -42,6 +44,25 @@ Window {
         anchors.bottomMargin: 15
         anchors.topMargin: 15
         focus: true
+        bar.onCurrentIndexChanged: onBarIndexChanged(bar.currentItem.objectName)
+
+        //Initial values
+        property int contactosTabCounter: 1
+        property int productosTabCounter: 1
+
+        function onBarIndexChanged(tab) {
+            console.log("Se ha llamado a la función onBarIndexChanged(" + tab + ")")
+            if (tab === "empresa") {
+
+                //Se llama desde el constructor
+            } else if (contactosTabCounter === 1 && tab === "contactos") {
+                SupplierClass.fillComboBoxesFromDb(tab)
+                contactosTabCounter-- //Qml inicializa los comboBoxIndex a 0
+            } else if (productosTabCounter === 1 && tab === "productos") {
+                SupplierClass.fillComboBoxesFromDb(tab)
+                productosTabCounter--
+            }
+        }
 
         Keys.onPressed: {
             if (event.key === Qt.Key_PageUp) {

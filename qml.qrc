@@ -18,5 +18,7 @@
         <file>qml/ContactosTabForm.ui.qml</file>
         <file>qml/ProductosTab.qml</file>
         <file>qml/ProductosTabForm.ui.qml</file>
+        <file>qml/supplier.js</file>
+        <file>qml/components/ComboBox1.qml</file>
     </qresource>
 </RCC>

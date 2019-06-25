@@ -6,65 +6,87 @@ import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
 import "components"
 import SupplierClass 1.0
+import "supplier.js" as Supplier
 
-ContactosTabForm {
+ProductosTabForm {
     id: form
+    objectName: "ProductosTabForm"
 
     //TextFields
-    textFieldNombre.onEditingFinished: textValueToBackEnd("nombre",
-                                                          textFieldNombre.text)
-    textFieldApellido.onEditingFinished: textValueToBackEnd(
-                                             "apellido", textFieldApellido.text)
-    textFieldEmail.onEditingFinished: textValueToBackEnd("email",
-                                                         textFieldEmail.text)
-    textFieldTelefono.onEditingFinished: textValueToBackEnd(
-                                             "telefono", textFieldTelefono.text)
-    textFieldMovil.onEditingFinished: textValueToBackEnd("movil",
-                                                         textFieldMovil.text)
-    textAreaNotasContacto.onEditingFinished: textValueToBackEnd(
-                                                 "notasContacto",
-                                                 textAreaNotasContacto.text)
+    textFieldLargoMin.onEditingFinished: Supplier.textValueToBackEnd(
+                                             "largoMin", textFieldNombre.text)
+    textFieldLargoMax.onEditingFinished: Supplier.textValueToBackEnd(
+                                             "largoMax", textFieldNombre.text)
+    textFieldEspesorMin.onEditingFinished: Supplier.textValueToBackEnd(
+                                               "espesorMin",
+                                               textFieldNombre.text)
+    textFieldEspesorMax.onEditingFinished: Supplier.textValueToBackEnd(
+                                               "espesorMax",
+                                               textFieldNombre.text)
+    textFieldAnchoMin.onEditingFinished: Supplier.textValueToBackEnd(
+                                             "anchoMin", textFieldNombre.text)
+    textFieldAnchoMax.onEditingFinished: Supplier.textValueToBackEnd(
+                                             "anchoMax", textFieldNombre.text)
 
     //ComboBoxes
-    comboBoxArea.currentIndex: -1
-    comboBoxArea.model: SupplierClass.areaList
-    comboBoxArea.onCurrentIndexChanged: comboBoxValueToBackEnd(
-                                            "area", comboBoxArea.currentIndex)
-
-    comboBoxPuesto.currentIndex: -1
-    comboBoxPuesto.model: SupplierClass.puestoList
-    comboBoxPuesto.onCurrentIndexChanged: comboBoxValueToBackEnd(
-                                              "puesto",
-                                              comboBoxPuesto.currentIndex)
+    //comboBoxFormato.currentIndex: -1 => el model se carga a posteriori
+    comboBoxFormato.model: SupplierClass.formatoList
+    comboBoxFormato.onModelChanged: Supplier.initializationComboBoxIndex(
+                                        "comboBoxFormato")
+    comboBoxFormato.onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(
+                                               "formato",
+                                               comboBoxFormato.currentIndex)
+    comboBoxMaterial.model: SupplierClass.materialList
+    comboBoxMaterial.onModelChanged: Supplier.initializationComboBoxIndex(
+                                         "comboBoxMaterial")
+    comboBoxMaterial.onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(
+                                                "material",
+                                                comboBoxMaterial.currentIndex)
+    comboBoxTratamiento.model: SupplierClass.formatoList
+    comboBoxTratamiento.onModelChanged: Supplier.initializationComboBoxIndex(
+                                            "comboBoxTratamiento")
+    comboBoxTratamiento.onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(
+                                                   "tratamiento",
+                                                   comboBoxTratamiento.currentIndex)
+    comboBoxAleacion.model: SupplierClass.aleacionList
+    comboBoxAleacion.onModelChanged: Supplier.initializationComboBoxIndex(
+                                         "comboBoxAleacion")
+    comboBoxAleacion.onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(
+                                                "aleacion",
+                                                comboBoxAleacion.currentIndex)
+    comboBoxTemple.model: SupplierClass.templeList
+    comboBoxTemple.onModelChanged: Supplier.initializationComboBoxIndex(
+                                       "comboBoxTemple")
+    comboBoxTemple.onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(
+                                              "temple",
+                                              comboBoxTemple.currentIndex)
+    comboBoxAcabado.model: SupplierClass.acabadoList
+    comboBoxAcabado.onModelChanged: Supplier.initializationComboBoxIndex(
+                                        "comboBoxAcabado")
+    comboBoxAcabado.onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(
+                                               "acabado",
+                                               comboBoxAcabado.currentIndex)
 
     //Buttons
     buttonAceptar.onClicked: SupplierClass.onAceptarButton("contacto")
     buttonCancelar.onClicked: close()
     buttonGuardar.onClicked: SupplierClass.onGuardarButton("contacto")
 
-    //JS FUNCTIONS
-    function textValueToBackEnd(field, txt) {
-        SupplierClass.textValueToBackEnd(field, txt)
-    }
-
-    function comboBoxValueToBackEnd(field, index) {
-        var txt
-        switch (field) {
-        case "area":
-            txt = SupplierClass.areaList[index]
-            break
-        case "puesto":
-            txt = SupplierClass.puestoList[index]
-            break
-        default:
-
-        }
-        textValueToBackEnd(field, txt)
-    }
-
     //SLOTS
     function onCloseQmlInstance() {
         close()
+    }
+    function onClearProductosFields(tab) {
+        //hay que definirla para cada pestaña
+        console.log("Se ha llamado a la función onClearProductosFields(" + tab + ")")
+        textFieldNombre.clear()
+        textFieldApellido.clear()
+        textFieldEmail.clear()
+        textFieldTelefono.clear()
+        textFieldMovil.clear()
+        textAreaNotasContacto.clear()
+        comboBoxArea.currentIndex = -1
+        comboBoxPuesto.currentIndex = -1
     }
 }
 

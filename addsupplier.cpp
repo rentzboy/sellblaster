@@ -15,7 +15,6 @@ void AddSupplier::createComponent(void)
     if(uniqueInstance == Q_NULLPTR)
     {
         uniqueInstance = new AddSupplier;
-        //uniqueInstance->setObjectName("newSupplierObject");
         registerSingleton();
 
         //Load QML component
@@ -27,7 +26,9 @@ void AddSupplier::createComponent(void)
         //Solo funciona para SLOTS definidos en archivo .qml que cargamos mediante engine->load
         connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
         QObject *contactosTabObject = engine->rootObjects().value(typeId)->findChild<QObject*> ("ContactosTabForm");
-        connect(uniqueInstance, SIGNAL(clearFormFields(QVariant)), contactosTabObject, SLOT(onClearFormFields(QVariant)));
+        connect(uniqueInstance, SIGNAL(clearFormFields(QVariant)), contactosTabObject, SLOT(onClearContactosFields(QVariant)));
+        QObject *productosTabObject = engine->rootObjects().value(typeId)->findChild<QObject*> ("ProductosTabForm");
+        connect(uniqueInstance, SIGNAL(clearFormFields(QVariant)), productosTabObject, SLOT(onClearProductosFields(QVariant)));
 
         //Connect QML to C++ Signals/Slots
         //connect(engine->rootObjects().value(typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(closeEvent(QCloseEvent*)));
@@ -48,7 +49,7 @@ void AddSupplier::textValueToBackEnd(QString key, QString value)
 //PRIVATE MEMBERS
 AddSupplier::AddSupplier(QObject *parent) : QObject(parent) //private singleton constructor
 {
-    this->fillComboBoxesFromDb();
+    this->fillComboBoxesFromDb("empresa");
     //fill ComboBox with checkboxes
     this->fillComboBoxWithCheckBoxFromDb();
     //PENDING
@@ -99,44 +100,100 @@ void AddSupplier::fillComboBoxWithCheckBoxFromDb(void) //PENDING
 //    iItem2->setData(Qt::Unchecked, Qt::CheckStateRole);
 //    //ui->alloyComboBox->setView(new QListView);
 }
-void AddSupplier::fillComboBoxesFromDb(void)
+void AddSupplier::fillComboBoxesFromDb(QString tab)
 {
+    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
     //Fill drop-down menus with database values
     QSqlQuery result; //sirve para todas las consultas
 
-    QString sqlQuery = "CALL get_DropDownMenusData('country', 'country')";
-    MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-    while(result.next())
+    if(tab == "empresa") //Se carga desde el constructor
     {
-        paisList.append(result.value(0).toString());
+        QString sqlQuery = "CALL get_DropDownMenusData('country', 'country')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            paisList.append(result.value(0).toString());
+        }
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenusData('activity', 'activity')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            actividadList.append(result.value(0).toString());
+        }
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenusData('payment', 'payment')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            formaPagoList.append(result.value(0).toString());
+        }
     }
-    ////////////////////////////////////////////////////////////////
-    sqlQuery = "CALL get_DropDownMenusData('activity', 'activity')";
-    MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-    while(result.next())
+    else if (tab == "contactos") //Se llama desde JS, al actualizarse el TabBar
     {
-        actividadList.append(result.value(0).toString());
+        QString sqlQuery = "CALL get_DropDownMenusData('department', 'department')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            areaList.append(result.value(0).toString());
+        }
+        emit areaListChanged();
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenusData('position', 'position')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            puestoList.append(result.value(0).toString());
+        }
+        emit puestoListChanged();
     }
-    ////////////////////////////////////////////////////////////////
-    sqlQuery = "CALL get_DropDownMenusData('payment', 'payment')";
-    MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-    while(result.next())
+    else if(tab == "productos")
     {
-        formaPagoList.append(result.value(0).toString());
-    }
-    ////////////////////////////////////////////////////////////////
-    sqlQuery = "CALL get_DropDownMenusData('department', 'department')";
-    MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-    while(result.next())
-    {
-        areaList.append(result.value(0).toString());
-    }
-    ////////////////////////////////////////////////////////////////
-    sqlQuery = "CALL get_DropDownMenusData('position', 'position')";
-    MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-    while(result.next())
-    {
-        puestoList.append(result.value(0).toString());
+        QString sqlQuery = "CALL get_DropDownMenusData('type', 'type')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            formatoList.append(result.value(0).toString());
+        }
+        emit formatoListChanged();
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenusData('metal', 'metal')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            materialList.append(result.value(0).toString());
+        }
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenusData('treatment', 'treatment')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            tratamientoList.append(result.value(0).toString());
+        }
+        emit tratamientoListChanged();
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenusData('alloy', 'alloy')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            aleacionList.append(result.value(0).toString());
+        }
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenusData('temper', 'temper')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            templeList.append(result.value(0).toString());
+        }
+        emit templeListChanged();
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenusData('finition', 'finition')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            acabadoList.append(result.value(0).toString());
+        }
+        emit acabadoListChanged();
     }
 }
 bool AddSupplier::sanitationCheck(QString tab)

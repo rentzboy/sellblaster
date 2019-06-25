@@ -9,7 +9,7 @@ class LoginDialog : public QObject
     Q_OBJECT
     Q_PROPERTY(QString userName MEMBER userName NOTIFY userNameChanged)
     Q_PROPERTY(QString password MEMBER password NOTIFY passwordChanged)
-    Q_PROPERTY(QString errorMsg MEMBER errorMsg NOTIFY errorMsgChanged)
+    Q_PROPERTY(QString errorMsg MEMBER errorMsg CONSTANT)
     Q_PROPERTY(bool errorVisible MEMBER errorVisible NOTIFY errorVisibleChanged)
 
 public:
@@ -29,9 +29,8 @@ public slots:
     void onCancelarClicked(void);
 
 signals:
-    void userNameChanged();
-    void passwordChanged();
-    void errorMsgChanged();
+    void userNameChanged();  //no utilizado -pending refactoring-
+    void passwordChanged();  //no utilizado -pending refactoring-
     void errorVisibleChanged();
     void closeQmlInstance();
 

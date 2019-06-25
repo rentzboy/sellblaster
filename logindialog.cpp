@@ -98,7 +98,10 @@ void LoginDialog::onAceptarClicked(void)
 
         //Connect to MAIN_DB
         if (MainWindow::createExternDbConnection(connectionDetails) == EXIT_FAILURE)
+        {
             errorVisible = true;
+            emit errorVisibleChanged();
+        }
         else
         {
             emit this->closeQmlInstance();

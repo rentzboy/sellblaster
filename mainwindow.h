@@ -46,9 +46,9 @@ private:
 
 signals:
     void closeQmlInstance();
-    void userNameChanged();
-    void windowSizeChanged();
-    void windowPositionChanged();
+    void userNameChanged(); //no utilizado -pending refactoring-
+    void windowSizeChanged(); //deprecated -pending refactoring-
+    void windowPositionChanged(); //deprecated -pending refactoring-
 
 public slots:
     void onClosingHandler(void);
