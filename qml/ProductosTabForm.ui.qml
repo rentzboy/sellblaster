@@ -86,8 +86,9 @@ Item {
                     text: qsTr("Formato:")
                     Layout.minimumWidth: 120 //Para alinearlo con Datos financieros
                 }
-                ComboBox {
+                ComboBox1 {
                     id: comboBoxFormato
+                    objectName: "formato"
                     Layout.fillWidth: true
                     Layout.minimumWidth: 150 //Solo hay que indicarlo en los elementos de la row #1
                     Layout.preferredHeight: textFieldEspesorMin.height
@@ -101,8 +102,9 @@ Item {
                     id: labelMaterial
                     text: qsTr("Material:")
                 }
-                ComboBox {
+                ComboBox1 {
                     id: comboBoxMaterial
+                    objectName: "material"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                     Layout.preferredHeight: textFieldEspesorMin.height
@@ -116,8 +118,9 @@ Item {
                     id: labelTratamiento
                     text: qsTr("Tratamiento:")
                 }
-                ComboBox {
+                ComboBox1 {
                     id: comboBoxTratamiento
+                    objectName: "tratamiento"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                     Layout.preferredHeight: textFieldEspesorMin.height
@@ -132,8 +135,9 @@ Item {
                     id: labelAleacion
                     text: qsTr("Aleación:")
                 }
-                ComboBox {
+                ComboBox1 {
                     id: comboBoxAleacion
+                    objectName: "aleacion"
                     Layout.fillWidth: true
                     Layout.preferredHeight: textFieldEspesorMin.height
                 }
@@ -146,8 +150,9 @@ Item {
                     id: labelTemple
                     text: qsTr("Temple:")
                 }
-                ComboBox {
+                ComboBox1 {
                     id: comboBoxTemple
+                    objectName: "temple"
                     width: 150
                     Layout.fillWidth: true
                     Layout.preferredHeight: textFieldEspesorMin.height
@@ -161,8 +166,9 @@ Item {
                     id: labelAcabado
                     text: qsTr("Acabado:")
                 }
-                ComboBox {
+                ComboBox1 {
                     id: comboBoxAcabado
+                    objectName: "acabado"
                     width: 150
                     Layout.fillWidth: true
                     Layout.preferredHeight: textFieldEspesorMin.height
@@ -177,8 +183,9 @@ Item {
                     id: labelEspesorMin
                     text: qsTr("Espesor min:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldEspesorMin
+                    objectName: "espesorMin"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                 }
@@ -191,8 +198,9 @@ Item {
                     id: labelLargoMin
                     text: qsTr("Largo min:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldLargoMin
+                    objectName: "largoMin"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                 }
@@ -205,8 +213,9 @@ Item {
                     id: labelAnchoMin
                     text: qsTr("Ancho min:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldAnchoMin
+                    objectName: "anchoMin"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                 }
@@ -219,8 +228,9 @@ Item {
                     id: labelEspesorMax
                     text: qsTr("Espesor max:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldEspesorMax
+                    objectName: "espesorMax"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                 }
@@ -233,8 +243,9 @@ Item {
                     id: labelLargoMax
                     text: qsTr("Largo max:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldLargoMax
+                    objectName: "largoMax"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                 }
@@ -247,8 +258,9 @@ Item {
                     id: labelAnchoMax
                     text: qsTr("Ancho max:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldAnchoMax
+                    objectName: "anchoMax"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                 }
@@ -285,7 +297,7 @@ Item {
                     text: qsTr("Forma pago:")
                     Layout.minimumWidth: 120
                 }
-                TextField {
+                TextField1 {
                     id: textFieldPago
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
@@ -304,6 +316,6 @@ Item {
 
 
 /*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
+    D{i:0;autoSize:true;height:480;width:1000}
 }
  ##^##*/

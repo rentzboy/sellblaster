@@ -32,7 +32,9 @@ void AddSupplier::createComponent(void)
 
         //Connect QML to C++ Signals/Slots
         //connect(engine->rootObjects().value(typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(closeEvent(QCloseEvent*)));
-        //connect(engine->rootObjects().value(typeId), SIGNAL(closingPrueba()), uniqueInstance, SLOT(onCloseEventCaller()));
+        connect(engine->rootObjects().value(typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(onCloseEventCaller()));
+
+        qDebug() << "***** FINAL CREATE_COMPONENT ADDSUPPLIER *****";
     }
     else
     {
@@ -45,13 +47,18 @@ void AddSupplier::textValueToBackEnd(QString key, QString value)
 {
     formField.insert(key, value); //no puede haber 2 key iguales en el QMap
 }
+AddSupplier::~AddSupplier()
+{
+    PRINT_FUNCTION_NAME
+    emit destroyed(this);
+}
 
 //PRIVATE MEMBERS
 AddSupplier::AddSupplier(QObject *parent) : QObject(parent) //private singleton constructor
 {
     this->fillComboBoxesFromDb("empresa");
     //fill ComboBox with checkboxes
-    this->fillComboBoxWithCheckBoxFromDb();
+    //this->fillComboBoxWithCheckBoxFromDb();
     //PENDING
 }
 void AddSupplier::registerSingleton(void)
@@ -156,6 +163,7 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
             formatoList.append(result.value(0).toString());
         }
         emit formatoListChanged();
+        qDebug() << "materialList: " << materialList;
         ////////////////////////////////////////////////////////////////
         sqlQuery = "CALL get_DropDownMenusData('metal', 'metal')";
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
@@ -163,6 +171,8 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
         {
             materialList.append(result.value(0).toString());
         }
+        emit materialListChanged();
+        qDebug() << "materialList: " << materialList;
         ////////////////////////////////////////////////////////////////
         sqlQuery = "CALL get_DropDownMenusData('treatment', 'treatment')";
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
@@ -178,6 +188,7 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
         {
             aleacionList.append(result.value(0).toString());
         }
+        emit aleacionListChanged();
         ////////////////////////////////////////////////////////////////
         sqlQuery = "CALL get_DropDownMenusData('temper', 'temper')";
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
@@ -236,6 +247,12 @@ void AddSupplier::resetFields(QString tab)
         //Clear form values using JavaScript
         emit clearFormFields(tab);
     }
+}
+void AddSupplier::onCloseEventCaller(void) //ESTO VA FUERA NO ??
+{
+    PRINT_FUNCTION_NAME
+    //Hay que borrar las variables; QMaps y las xxxList
+
 }
 
 //PUBLIC SLOTS

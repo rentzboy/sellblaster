@@ -7,8 +7,8 @@ import QtQuick.Layouts 1.3
 import "components"
 import MainClass 1.0
 import SupplierClass 1.0
-import "supplier.js" as Supplier
 
+//import "components/js/supplier.js" as Supplier
 Window {
     id: newProveedorWindow
     visible: true
@@ -30,10 +30,12 @@ Window {
             y = 0
     }
 
+    //JS
+    onClosing: onCloseQmlInstance() //marca fallo pero está bien....
     //SLOTS
     function onCloseQmlInstance() {
+        close.accepted = true
         console.log("Se ha llamado a la función: onCloseQmlInstance.")
-        close()
     }
 
     NewProveedorForm {
@@ -50,14 +52,16 @@ Window {
         property int contactosTabCounter: 1
         property int productosTabCounter: 1
 
+        //Para cargar los comboBoxes 1 sola vez para cada pestaña
         function onBarIndexChanged(tab) {
             console.log("Se ha llamado a la función onBarIndexChanged(" + tab + ")")
             if (tab === "empresa") {
 
                 //Se llama desde el constructor
             } else if (contactosTabCounter === 1 && tab === "contactos") {
+                console.log("OJO: se ejecuta BAR_INDEX_CONTACTOS")
                 SupplierClass.fillComboBoxesFromDb(tab)
-                contactosTabCounter-- //Qml inicializa los comboBoxIndex a 0
+                contactosTabCounter--
             } else if (productosTabCounter === 1 && tab === "productos") {
                 SupplierClass.fillComboBoxesFromDb(tab)
                 productosTabCounter--

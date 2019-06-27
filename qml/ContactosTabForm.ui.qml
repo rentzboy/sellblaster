@@ -9,6 +9,9 @@ import "components"
 
 Item {
     id: contactosTab
+    property alias buttonAceptar: buttonAceptar
+    property alias buttonCancelar: buttonCancelar
+    property alias buttonGuardar: buttonGuardar
     property alias textFieldNombre: textFieldNombre
     property alias textFieldApellido: textFieldApellido
     property alias textFieldEmail: textFieldEmail
@@ -17,9 +20,6 @@ Item {
     property alias textAreaNotasContacto: textAreaNotasContacto
     property alias comboBoxArea: comboBoxArea
     property alias comboBoxPuesto: comboBoxPuesto
-    property alias buttonAceptar: buttonAceptar
-    property alias buttonCancelar: buttonCancelar
-    property alias buttonGuardar: buttonGuardar
     visible: true
     Rectangle {
         clip: true
@@ -82,8 +82,9 @@ Item {
                     text: qsTr("Nombre:")
                     Layout.minimumWidth: 120 //Para alinearlo con Datos financieros
                 }
-                TextField {
+                TextField1 {
                     id: textFieldNombre
+                    objectName: "nombre"
                     Layout.minimumWidth: 150 //Solo hay que indicarlo en los elementos de la row #1
                     Layout.fillWidth: true
                     maximumLength: 100
@@ -97,8 +98,9 @@ Item {
                     id: labelApellido
                     text: qsTr("Apellido:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldApellido
+                    objectName: "apellido"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                     maximumLength: 100
@@ -112,8 +114,9 @@ Item {
                     id: labelEmail
                     text: qsTr("Email:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldEmail
+                    objectName: "email"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhEmailCharactersOnly
@@ -128,8 +131,9 @@ Item {
                     id: labelTelefono
                     text: qsTr("Telefono:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldTelefono
+                    objectName: "telefono"
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhDialableCharactersOnly
                 }
@@ -142,8 +146,9 @@ Item {
                     id: labelMovil
                     text: qsTr("Movil:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldMovil
+                    objectName: "movil"
                     width: 150
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhDialableCharactersOnly
@@ -157,8 +162,9 @@ Item {
                     id: labelNotas
                     text: qsTr("Notas:")
                 }
-                TextArea {
+                TextArea1 {
                     id: textAreaNotasContacto
+                    objectName: "notasContacto"
                     wrapMode: Text.WordWrap
                     Layout.fillHeight: false
                     Layout.fillWidth: true
@@ -175,8 +181,9 @@ Item {
                     id: labelArea
                     text: qsTr("Area:")
                 }
-                ComboBox {
+                ComboBox1 {
                     id: comboBoxArea
+                    objectName: "area"
                     Layout.fillWidth: true
                     Layout.preferredHeight: textFieldNombre.height
                 }
@@ -189,8 +196,9 @@ Item {
                     id: labelPuesto
                     text: qsTr("Puesto:")
                 }
-                ComboBox {
+                ComboBox1 {
                     id: comboBoxPuesto
+                    objectName: "puesto"
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                 }
@@ -223,12 +231,13 @@ Item {
                 clip: true
 
                 Label {
-                    id: labelPago
-                    text: qsTr("Forma pago:")
+                    id: labelGarbage
+                    text: qsTr("Garbage:")
                     Layout.minimumWidth: 120
                 }
-                TextField {
-                    id: textFieldPago
+                TextField1 {
+                    id: textFieldGarbage
+                    objectName: "garbage"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                 }
@@ -246,6 +255,6 @@ Item {
 
 
 /*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
+    D{i:0;autoSize:true;height:480;width:1000}
 }
  ##^##*/

@@ -31,8 +31,9 @@ class AddSupplier : public QObject
 public:
     AddSupplier(const AddSupplier &other) = delete;
     AddSupplier operator=(const AddSupplier &other) = delete;
-    ~AddSupplier() = default;
+    ~AddSupplier();
     static void createComponent(void);
+    void onCloseEventCaller(void);
     Q_INVOKABLE void textValueToBackEnd(QString key, QString value);
     Q_INVOKABLE void fillComboBoxesFromDb(QString tab);
 

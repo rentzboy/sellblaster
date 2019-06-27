@@ -6,42 +6,17 @@ import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
 import "components"
 import SupplierClass 1.0
-import "supplier.js" as Supplier
+import "../js/supplier.js" as Supplier
 
 ContactosTabForm {
     id: contactosForm
     objectName: "ContactosTabForm"
 
-    //TextFields
-    textFieldNombre.onEditingFinished: textValueToBackEnd("nombre",
-                                                          textFieldNombre.text)
-    textFieldApellido.onEditingFinished: textValueToBackEnd(
-                                             "apellido", textFieldApellido.text)
-    textFieldEmail.onEditingFinished: textValueToBackEnd("email",
-                                                         textFieldEmail.text)
-    textFieldTelefono.onEditingFinished: textValueToBackEnd(
-                                             "telefono", textFieldTelefono.text)
-    textFieldMovil.onEditingFinished: textValueToBackEnd("movil",
-                                                         textFieldMovil.text)
-    textAreaNotasContacto.onEditingFinished: textValueToBackEnd(
-                                                 "notasContacto",
-                                                 textAreaNotasContacto.text)
+    //TextFields (ver TextField1.qml)
 
-    //ComboBoxes
-    //comboBoxArea.currentIndex: -1 => el model se carga a posteriori
+    //ComboBoxes (ver ComboBox1.qml)
     comboBoxArea.model: SupplierClass.areaList
-    comboBoxArea.onModelChanged: Supplier.initializationComboBoxIndex(
-                                     "comboBoxArea")
-    comboBoxArea.onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(
-                                            "area", comboBoxArea.currentIndex)
-
-    //comboBoxPuesto.currentIndex: -1 => el model se carga a posteriori
     comboBoxPuesto.model: SupplierClass.puestoList
-    comboBoxPuesto.onModelChanged: Supplier.initializationComboBoxIndex(
-                                       "comboBoxPuesto")
-    comboBoxPuesto.onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(
-                                              "puesto",
-                                              comboBoxPuesto.currentIndex)
 
     //Buttons
     buttonAceptar.onClicked: SupplierClass.onAceptarButton("contacto")
@@ -49,24 +24,17 @@ ContactosTabForm {
     buttonGuardar.onClicked: SupplierClass.onGuardarButton("contacto")
 
     //SLOTS
-    function onCloseQmlInstance() {
-        close()
-    }
     function onClearContactosFields(tab) {
-        //hay que definirla para cada pestaña
+        //hay que definirla para cada pestaña; se llama desde C++
         console.log("Se ha llamado a la función onClearContactosFields(" + tab + ")")
-        textFieldEmpresa.clear()
-        textFieldHolding.clear()
-        comboBoxPais.currentIndex = -1
-        textFieldWeb.clear()
-        textFieldPanjiba.clear()
-        textFieldMaps.clear()
-        comboBoxPais.currentIndex = -1
-        textFieldCiudad.clear()
-        textFieldPostcode.clear()
-        textFieldMoq.clear()
-        textAreaNotasEmpresa.clear()
-        comboBoxFormaPago.currentIndex = -1
+        textFieldNombre.clear()
+        textFieldApellido.clear()
+        textFieldEmail.clear()
+        textFieldTelefono.clear()
+        textFieldMovil.clear()
+        textAreaNotasContacto.clear()
+        comboBoxArea.currentIndex = -1
+        comboBoxPuesto.currentIndex = -1
     }
 }
 

@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/components/BackgroundTextField.qml</file>
-        <file>qml/components/TextInputField.qml</file>
         <file>qml/Login.qml</file>
         <file>qml/components/qmldir</file>
         <file>qml/LoginForm.ui.qml</file>
@@ -18,7 +16,9 @@
         <file>qml/ContactosTabForm.ui.qml</file>
         <file>qml/ProductosTab.qml</file>
         <file>qml/ProductosTabForm.ui.qml</file>
-        <file>qml/supplier.js</file>
         <file>qml/components/ComboBox1.qml</file>
+        <file>js/supplier.js</file>
+        <file>qml/components/TextField1.qml</file>
+        <file>qml/components/TextArea1.qml</file>
     </qresource>
 </RCC>

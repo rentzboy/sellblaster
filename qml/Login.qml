@@ -19,11 +19,6 @@ Window {
     BackgroundZ1 {
     }
 
-    //SLOTS
-    function onCloseQmlInstance() {
-        close()
-    }
-
     LoginForm {
         id: form
 
@@ -46,10 +41,8 @@ Window {
     }
 }
 
-
-
-
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
+

@@ -1,4 +1,4 @@
 
-BackgroundTextField BackgroundTextField.qml
-TextInputField TextInputField.qml
+TextArea1 TextArea1.qml
+TextField1 TextField1.qml
 ComboBox1 ComboBox1.qml

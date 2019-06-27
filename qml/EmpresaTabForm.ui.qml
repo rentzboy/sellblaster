@@ -87,8 +87,9 @@ Item {
                     text: qsTr("Empresa:")
                     Layout.minimumWidth: 120 //Para alinearlo con Datos financieros
                 }
-                TextField {
+                TextField1 {
                     id: textFieldEmpresa
+                    objectName: "empresa"
                     Layout.minimumWidth: 150 //Solo hay que indicarlo en los elementos de la row #1
                     Layout.fillWidth: true
                     maximumLength: 100
@@ -102,8 +103,9 @@ Item {
                     id: labelHolding
                     text: qsTr("Holding:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldHolding
+                    objectName: "holding"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                     maximumLength: 100
@@ -117,8 +119,9 @@ Item {
                     id: labelActividad
                     text: qsTr("Actividad:")
                 }
-                ComboBox {
+                ComboBox1 {
                     id: comboBoxActividad
+                    objectName: "actividad"
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -133,8 +136,9 @@ Item {
                     id: labelWeb
                     text: qsTr("Web:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldWeb
+                    objectName: "web"
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhUrlCharactersOnly
                     maximumLength: 100
@@ -148,8 +152,9 @@ Item {
                     id: labelPanjiba
                     text: qsTr("Panjiba:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldPanjiba
+                    objectName: "panjiba"
                     width: 150
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhUrlCharactersOnly
@@ -164,8 +169,9 @@ Item {
                     id: labelMaps
                     text: qsTr("G.Maps:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldMaps
+                    objectName: "maps"
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhUrlCharactersOnly
                     maximumLength: 200
@@ -180,8 +186,9 @@ Item {
                     id: labelPais
                     text: qsTr("Pais:")
                 }
-                ComboBox {
+                ComboBox1 {
                     id: comboBoxPais
+                    objectName: "pais"
                     Layout.fillWidth: true
                     Layout.preferredHeight: textFieldEmpresa.height
                 }
@@ -194,8 +201,9 @@ Item {
                     id: labelCiudad
                     text: qsTr("Ciudad:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldCiudad
+                    objectName: "ciudad"
                     Layout.fillWidth: true
                     maximumLength: 100
                 }
@@ -208,8 +216,9 @@ Item {
                     id: labelPostcode
                     text: qsTr("Postcode:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldPostcode
+                    objectName: "postcode"
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhDigitsOnly
                     maximumLength: 5
@@ -224,8 +233,9 @@ Item {
                     id: labelMoq
                     text: qsTr("MOQ:")
                 }
-                TextField {
+                TextField1 {
                     id: textFieldMoq
+                    objectName: "moq"
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhDigitsOnly
                     inputMask: "000"
@@ -239,8 +249,9 @@ Item {
                     id: labelNotas
                     text: qsTr("Notas:")
                 }
-                TextArea {
+                TextArea1 {
                     id: textAreaNotasEmpresa
+                    objectName: "notasEmpresa"
                     wrapMode: Text.WordWrap
                     Layout.fillHeight: false
                     Layout.fillWidth: true
@@ -281,8 +292,9 @@ Item {
                     text: qsTr("Forma pago:")
                     Layout.minimumWidth: 120
                 }
-                ComboBox {
+                ComboBox1 {
                     id: comboBoxFormaPago
+                    objectName: "formaPago"
                     Layout.preferredHeight: textFieldEmpresa.height
                     Layout.minimumWidth: 150
                     Layout.fillWidth: true
@@ -301,6 +313,6 @@ Item {
 
 
 /*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
+    D{i:0;autoSize:true;height:480;width:1000}
 }
  ##^##*/
