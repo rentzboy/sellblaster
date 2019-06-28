@@ -18,7 +18,7 @@ LoginDialog::LoginDialog(QObject *parent) : QObject(parent),
 }
 void LoginDialog::registerSingleton(void)
 {
-    typeId = qmlRegisterSingletonType<LoginDialog>("LoginClass", 1, 0, "LoginDialog",
+    typeId = qmlRegisterSingletonType<LoginDialog>("LoginClass", 1, 0, "LoginType",
         [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
             Q_UNUSED(scriptEngine)
             Q_UNUSED(engine)
@@ -57,7 +57,7 @@ void LoginDialog::createComponent(void)
 
         //Connect Signals(C++) to Slots(QML)
         //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
-        connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
+        //connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
     }
 }
 

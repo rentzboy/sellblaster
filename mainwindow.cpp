@@ -24,10 +24,9 @@ void MainWindow::createComponent(void)
         //Connect C++ to QML Signals / Slots
         //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
         //Solo funciona para SLOTS definidos en archivo .qml que cargamos mediante engine->load
-        connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
+        //connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
+
         //Connect QML to C++ Signals/Slots
-        //connect(engine->rootObjects().value(typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(closeEvent(QCloseEvent*)));
-        //connect(engine->rootObjects().value(typeId), SIGNAL(closingPrueba()), uniqueInstance, SLOT(onCloseEventCaller()));
     }
 }
 bool MainWindow::executeForwardSql(const QString &sqlQuery, const QString &connectionName)
@@ -169,7 +168,7 @@ MainWindow::MainWindow(QQuickView *parent) : QQuickView(parent) //PENDING Status
     }
 void MainWindow::registerSingleton(void)
 {
-    qmlRegisterSingletonType<MainWindow>("MainClass", 1, 0, "MainWindow",
+    qmlRegisterSingletonType<MainWindow>("MainClass", 1, 0, "MainWindowType",
         [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
         Q_UNUSED(scriptEngine)
         Q_UNUSED(engine)

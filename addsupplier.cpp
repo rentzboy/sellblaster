@@ -21,18 +21,19 @@ void AddSupplier::createComponent(void)
         engine = new QQmlApplicationEngine;
         engine->load(QUrl(QStringLiteral("qrc:/qml/NewProveedor.qml")));
 
-        //Connect C++ to QML Signals / Slots
-        //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funciona)
-        //Solo funciona para SLOTS definidos en archivo .qml que cargamos mediante engine->load
-        connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
+        /* DEPRECATED:
+         * Hemos encontrado otras maneras + sencillas, pero lo dejo pues explica como conectar los signals/slots
+        Connect C++ to QML Signals / Slots
+        engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funciona)
+        Solo funciona para SLOTS definidos en archivo .qml que cargamos mediante engine->load
         QObject *contactosTabObject = engine->rootObjects().value(typeId)->findChild<QObject*> ("ContactosTabForm");
         connect(uniqueInstance, SIGNAL(clearFormFields(QVariant)), contactosTabObject, SLOT(onClearContactosFields(QVariant)));
         QObject *productosTabObject = engine->rootObjects().value(typeId)->findChild<QObject*> ("ProductosTabForm");
         connect(uniqueInstance, SIGNAL(clearFormFields(QVariant)), productosTabObject, SLOT(onClearProductosFields(QVariant)));
 
-        //Connect QML to C++ Signals/Slots
-        //connect(engine->rootObjects().value(typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(closeEvent(QCloseEvent*)));
-        connect(engine->rootObjects().value(typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(onCloseEventCaller()));
+        Connect QML to C++ Signals/Slots
+        connect(engine->rootObjects().value(typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(closeEvent(QCloseEvent*)));
+        connect(engine->rootObjects().value(typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(onCloseEventCaller())); */
 
         qDebug() << "***** FINAL CREATE_COMPONENT ADDSUPPLIER *****";
     }
@@ -63,7 +64,7 @@ AddSupplier::AddSupplier(QObject *parent) : QObject(parent) //private singleton 
 }
 void AddSupplier::registerSingleton(void)
 {
-    qmlRegisterSingletonType<AddSupplier>("SupplierClass", 1, 0, "SupplierClass",
+    qmlRegisterSingletonType<AddSupplier>("SupplierClass", 1, 0, "SupplierType",
         [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
         Q_UNUSED(scriptEngine)
         Q_UNUSED(engine)
@@ -235,7 +236,7 @@ bool AddSupplier::sanitationCheck(QString tab)
 }
 void AddSupplier::resetFields(QString tab)
 {
-    if(tab == "contacto")
+    if(tab == "contactos")
     {
         //Clear QMap values
         formField["nombre"] = "";
@@ -244,6 +245,7 @@ void AddSupplier::resetFields(QString tab)
         formField["telefono"] = "";
         formField["movil"] = "";
         formField["notasContacto"] = "";
+
         //Clear form values using JavaScript
         emit clearFormFields(tab);
     }
@@ -256,7 +258,7 @@ void AddSupplier::onCloseEventCaller(void) //ESTO VA FUERA NO ??
 }
 
 //PUBLIC SLOTS
-void AddSupplier::onAceptarButton(QString tab)
+bool AddSupplier::onAceptarButton(QString tab)
 {
     PRINT_FUNCTION_NAME
     qDebug() << "TAB: " << tab << " ---- <QMAPS> " << formField;
@@ -269,7 +271,7 @@ void AddSupplier::onAceptarButton(QString tab)
             errorMessage->setAttribute(Qt::WA_DeleteOnClose);
             errorMessage->showMessage(QObject::tr("Revise que los campos obligatorios no estén vacios!"));
             errorMessage->resize(400,200);
-            return;
+            return EXIT_FAILURE;
         }
 
         //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
@@ -295,7 +297,11 @@ void AddSupplier::onAceptarButton(QString tab)
         qDebug() << "Stored Procedure: " << sqlQuery;
 
         if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
+        {
             QMessageBox::information(Q_NULLPTR, "Database", "La empresa se ha dado de alta",QMessageBox::Ok);
+            return EXIT_SUCCESS;
+        }
+        return EXIT_FAILURE;
 
         /* OPTION #2: Qt Function
              //Database connection
@@ -320,7 +326,7 @@ void AddSupplier::onAceptarButton(QString tab)
              if(!query.exec())
                  throw(query.lastError()); */
     }
-    else if (tab == "contacto")
+    else if (tab == "contactos")
     {
         if (this->sanitationCheck(tab) == EXIT_FAILURE)
         {
@@ -328,7 +334,7 @@ void AddSupplier::onAceptarButton(QString tab)
             errorMessage->setAttribute(Qt::WA_DeleteOnClose);
             errorMessage->showMessage(QObject::tr("Revise que los campos obligatorios no estén vacios!"));
             errorMessage->resize(400,200);
-            return;
+            return EXIT_FAILURE;
         }
 
         //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
@@ -352,19 +358,25 @@ void AddSupplier::onAceptarButton(QString tab)
         {
             resetFields(tab);
             qDebug() << "Maps values: " << formField;
+            return EXIT_SUCCESS;
         }
+        return EXIT_FAILURE;
+    }
+    else if (tab == "productos")
+    {
+
     }
 }
 void AddSupplier::onCancelarButton(QString tab)
 {
     PRINT_FUNCTION_NAME
-    Q_UNUSED(tab)
-    emit this->closeQmlInstance();
+    this->resetFields(tab);
+    emit this->closeQmlInstance(); //trow in C++, catcher in QML
 }
 void AddSupplier::onGuardarButton(QString tab)
 {
-    this->onAceptarButton(tab);
-    emit this->closeQmlInstance();
+    if(this->onAceptarButton(tab) == EXIT_SUCCESS)
+        emit this->closeQmlInstance();
 }
 //SETTERS & GETTERS
 

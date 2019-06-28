@@ -38,7 +38,7 @@ public:
     Q_INVOKABLE void fillComboBoxesFromDb(QString tab);
 
 public slots:
-    void onAceptarButton(QString tab);
+    bool onAceptarButton(QString tab);
     void onCancelarButton(QString tab);
     void onGuardarButton(QString tab);
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +76,7 @@ private:
 signals:
     void closeQmlInstance(void);
     void clearFormFields(QVariant tab);
+    void clearFormFields(QString tab);
     //Notify signals
     void actividadListChanged(void);
     void paisListChanged(void);

@@ -1,9 +1,9 @@
 //Ver Importing JavaScript Resources in QML
-.import  SupplierClass 1.0 as SupplierClass
+.import  SupplierClass 1.0 as Supplier
 
 //JS FUNCTIONS
 function textValueToBackEnd(fieldName, value) {
-    SupplierClass.SupplierClass.textValueToBackEnd(fieldName, value)
+    Supplier.SupplierType.textValueToBackEnd(fieldName, value)
 }
 function comboBoxIndexToBackEnd(fieldName, index) {
     console.log("Se ha llamado a comboBoxIndexToBackEnd: (" + fieldName + ", " + index + ")")
@@ -12,37 +12,37 @@ function comboBoxIndexToBackEnd(fieldName, index) {
     var txt
     switch (fieldName) {
     case "pais":
-        txt = SupplierClass.SupplierClass.paisList[index]
+        txt = Supplier.SupplierType.paisList[index]
         break
     case "actividad":
-        txt = SupplierClass.SupplierClass.actividadList[index]
+        txt = Supplier.SupplierType.actividadList[index]
         break
     case "formaPago":
-        txt = SupplierClass.SupplierClass.formaPagoList[index]
+        txt = Supplier.SupplierType.formaPagoList[index]
         break
     case "area":
-        txt = SupplierClass.SupplierClass.areaList[index]
+        txt = Supplier.SupplierType.areaList[index]
         break
     case "puesto":
-        txt = SupplierClass.SupplierClass.puestoList[index]
+        txt = Supplier.SupplierType.puestoList[index]
         break
     case "formato":
-        txt = SupplierClass.SupplierClass.formatoList[index]
+        txt = Supplier.SupplierType.formatoList[index]
         break
     case "material":
-        txt = SupplierClass.SupplierClass.materialList[index]
+        txt = Supplier.SupplierType.materialList[index]
         break
     case "tratamiento":
-        txt = SupplierClass.SupplierClass.tratamientoList[index]
+        txt = Supplier.SupplierType.tratamientoList[index]
         break
     case "aleacion":
-        txt = SupplierClass.SupplierClass.aleacionList[index]
+        txt = Supplier.SupplierType.aleacionList[index]
         break
     case "temple":
-        txt = SupplierClass.SupplierClass.templeList[index]
+        txt = Supplier.SupplierType.templeList[index]
         break
     case "acabado":
-        txt = SupplierClass.SupplierClass.acabadoList[index]
+        txt = Supplier.SupplierType.acabadoList[index]
         break
     default:
 

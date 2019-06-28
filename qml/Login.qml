@@ -19,24 +19,32 @@ Window {
     BackgroundZ1 {
     }
 
+    Connections {
+        target: LoginType
+        onCloseQmlInstance: function onCloseQmlInstance() {
+            console.log("Se ha llamado a onCloseQmlInstance() desde Login.qml")
+            close()
+        }
+    }
+
     LoginForm {
         id: form
 
-        textInputUsename.text: LoginDialog.userName
-        textError.text: LoginDialog.errorMsg
-        textError.visible: LoginDialog.errorVisible
+        textInputUsename.text: LoginType.userName
+        textError.text: LoginType.errorMsg
+        textError.visible: LoginType.errorVisible
 
-        textInputUsename.onEditingFinished: LoginDialog.userName = textInputUsename.text
-        textInputPassword.onEditingFinished: LoginDialog.password = textInputPassword.text
+        textInputUsename.onEditingFinished: LoginType.userName = textInputUsename.text
+        textInputPassword.onEditingFinished: LoginType.password = textInputPassword.text
 
-        buttonCancelar.onClicked: LoginDialog.onCancelarClicked()
-        buttonAceptar.onClicked: LoginDialog.onAceptarClicked()
+        buttonCancelar.onClicked: LoginType.onCancelarClicked()
+        buttonAceptar.onClicked: LoginType.onAceptarClicked()
 
         Keys.onPressed: {
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return)
-                LoginDialog.onAceptarClicked()
+                LoginType.onAceptarClicked()
             if (event.key === Qt.Key_Escape)
-                LoginDialog.onCancelarClicked()
+                LoginType.onCancelarClicked()
         }
     }
 }

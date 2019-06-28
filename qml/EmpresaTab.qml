@@ -15,20 +15,27 @@ EmpresaTabForm {
     //TextFields (ver TextField1.qml)
 
     //ComboBoxes
-    comboBoxPais.model: SupplierClass.paisList
-    comboBoxActividad.model: SupplierClass.actividadList
-    comboBoxFormaPago.model: SupplierClass.formaPagoList
+    comboBoxPais.model: SupplierType.paisList
+    comboBoxActividad.model: SupplierType.actividadList
+    comboBoxFormaPago.model: SupplierType.formaPagoList
 
     //Buttons
-    buttonAceptar.onClicked: SupplierClass.onAceptarButton("empresa")
-    buttonCancelar.onClicked: close()
-    buttonGuardar.onClicked: SupplierClass.onGuardarButton("empresa")
+    buttonAceptar.onClicked: SupplierType.onAceptarButton("empresa")
+    buttonCancelar.onClicked: SupplierType.onCancelarButton("empresa")
+    buttonGuardar.onClicked: SupplierType.onGuardarButton("empresa")
+
+    Connections {
+        target: SupplierType
+        onClearFormFields: onClearFormFields(tab)
+    }
 
     //SLOTS
     function onClearFormFields(tab) {
         //hay que definirla para cada pestaña; se llama desde C++
-        console.log("Se ha llamado a la función onClearFormFields(" + tab + ")")
-        textFieldEmpresa.clear()
+        console.log("Se ha llamado a la función onClearFormFields(" + tab
+                    + ") desde EmpresaTab.qml")
+        if (tab === "empresa")
+            textFieldEmpresa.clear()
         textFieldHolding.clear()
         comboBoxPais.currentIndex = -1
         textFieldWeb.clear()

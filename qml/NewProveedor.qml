@@ -8,7 +8,6 @@ import "components"
 import MainClass 1.0
 import SupplierClass 1.0
 
-//import "components/js/supplier.js" as Supplier
 Window {
     id: newProveedorWindow
     visible: true
@@ -19,23 +18,25 @@ Window {
     BackgroundZ1 {
     }
 
-    Component.onCompleted: function setWindowPosition() {
-        if (MainWindow.windowSize.width > minimumWidth)
-            x = ((MainWindow.windowSize.width - minimumWidth) / 2) + MainWindow.windowPosition.x
-        else
-            x = 0
-        if (MainWindow.windowSize.height > minimumHeight)
-            y = ((MainWindow.windowSize.height - minimumHeight) / 2) + MainWindow.windowPosition.y
-        else
-            y = 0
+    Connections {
+        target: SupplierType
+        onCloseQmlInstance: function onCloseQmlInstance() {
+            console.log("Se ha llamado a onCloseQmlInstance() desde NewProveedor.qml")
+            close()
+        }
     }
 
-    //JS
-    onClosing: onCloseQmlInstance() //marca fallo pero está bien....
-    //SLOTS
-    function onCloseQmlInstance() {
-        close.accepted = true
-        console.log("Se ha llamado a la función: onCloseQmlInstance.")
+    Component.onCompleted: function setWindowPosition() {
+        if (MainWindowType.windowSize.width > minimumWidth)
+            x = ((MainWindowType.windowSize.width - minimumWidth) / 2)
+                    + MainWindowType.windowPosition.x
+        else
+            x = 0
+        if (MainWindowType.windowSize.height > minimumHeight)
+            y = ((MainWindowType.windowSize.height - minimumHeight) / 2)
+                    + MainWindowType.windowPosition.y
+        else
+            y = 0
     }
 
     NewProveedorForm {
@@ -60,10 +61,10 @@ Window {
                 //Se llama desde el constructor
             } else if (contactosTabCounter === 1 && tab === "contactos") {
                 console.log("OJO: se ejecuta BAR_INDEX_CONTACTOS")
-                SupplierClass.fillComboBoxesFromDb(tab)
+                SupplierType.fillComboBoxesFromDb(tab)
                 contactosTabCounter--
             } else if (productosTabCounter === 1 && tab === "productos") {
-                SupplierClass.fillComboBoxesFromDb(tab)
+                SupplierType.fillComboBoxesFromDb(tab)
                 productosTabCounter--
             }
         }

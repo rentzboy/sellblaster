@@ -29,8 +29,8 @@ public slots:
     void onCancelarClicked(void);
 
 signals:
-    void userNameChanged();  //no utilizado -pending refactoring-
-    void passwordChanged();  //no utilizado -pending refactoring-
+    void userNameChanged();  //NOTIFY no utilizado
+    void passwordChanged();  //NOTIFY no utilizado
     void errorVisibleChanged();
     void closeQmlInstance();
 

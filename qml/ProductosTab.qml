@@ -15,17 +15,17 @@ ProductosTabForm {
     //TextFields
 
     //ComboBoxes
-    comboBoxFormato.model: SupplierClass.formatoList
-    comboBoxMaterial.model: SupplierClass.materialList
-    comboBoxTratamiento.model: SupplierClass.formatoList
-    comboBoxAleacion.model: SupplierClass.aleacionList
-    comboBoxTemple.model: SupplierClass.templeList
-    comboBoxAcabado.model: SupplierClass.acabadoList
+    comboBoxFormato.model: SupplierType.formatoList
+    comboBoxMaterial.model: SupplierType.materialList
+    comboBoxTratamiento.model: SupplierType.formatoList
+    comboBoxAleacion.model: SupplierType.aleacionList
+    comboBoxTemple.model: SupplierType.templeList
+    comboBoxAcabado.model: SupplierType.acabadoList
 
     //Buttons
-    buttonAceptar.onClicked: SupplierClass.onAceptarButton("contacto")
-    buttonCancelar.onClicked: close()
-    buttonGuardar.onClicked: SupplierClass.onGuardarButton("contacto")
+    buttonAceptar.onClicked: SupplierType.onAceptarButton("productos")
+    buttonCancelar.onClicked: SupplierType.onCancelarButton("productos")
+    buttonGuardar.onClicked: SupplierType.onGuardarButton("productos")
 
     //SLOTS
     function onClearProductosFields(tab) {

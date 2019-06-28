@@ -18,41 +18,43 @@ ApplicationWindow {
     title: qsTr("Sellblaster - Copia registrada")
 
     onHeightChanged: function updateHeightProperty() {
-        MainWindow.windowSize.height = height
-        console.log("HeightChanged: " + MainWindow.windowSize.height)
+        MainWindowType.windowSize.height = height
+        //console.log("HeightChanged: " + MainWindowType.windowSize.height)
     }
 
     onWidthChanged: function updateWidthProperty() {
-        MainWindow.windowSize.width = width
-        console.log("WidthChanged: " + MainWindow.windowSize.width)
+        MainWindowType.windowSize.width = width
+        //console.log("WidthChanged: " + MainWindowType.windowSize.width)
     }
 
     onXChanged: function updateX() {
-        MainWindow.windowPosition.x = x
+        MainWindowType.windowPosition.x = x
     }
 
     onYChanged: function updateY() {
-        MainWindow.windowPosition.y = y
+        MainWindowType.windowPosition.y = y
     }
 
     onClosing: function closeApp() {
-        //PENDING -guardar antes de salir-
+        //PENDING -preguntar si cerrar sin guardar antes de salir-
         console.log("Recuperando los datos de la pantalla onClosing")
-        console.log(MainWindow.windowSize.width)
-        console.log(MainWindow.windowSize.height)
-        MainWindow.onClosingHandler()
+        //console.log(MainWindowType.windowSize.width)
+        //console.log(MainWindowType.windowSize.height)
+        close.accepted = false //no sirve de nada, se cierra igual al final del {}
+        MainWindowType.onClosingHandler()
+        console.log("Good night Qt !!")
     }
 
     Component.onCompleted: function setWindowSize() {
         //OJO: Hasta que no se carga el componente no se pueden recuperar los valores
-        x = MainWindow.windowPosition.x
-        y = MainWindow.windowPosition.y
-        width = MainWindow.windowSize.width
-        height = MainWindow.windowSize.height
-        console.log(MainWindow.windowSize.width)
-        console.log(MainWindow.windowSize.height)
-        console.log("Modelo screen: " + Screen.model)
-        console.log("Numero serie screen: " + Screen.serialNumber)
+        x = MainWindowType.windowPosition.x
+        y = MainWindowType.windowPosition.y
+        width = MainWindowType.windowSize.width
+        height = MainWindowType.windowSize.height
+        //console.log(MainWindowType.windowSize.width)
+        //console.log(MainWindowType.windowSize.height)
+        //console.log("Modelo screen: " + Screen.model)
+        //console.log("Numero serie screen: " + Screen.serialNumber)
     }
 
     //FUNCTIONS
@@ -60,6 +62,7 @@ ApplicationWindow {
     //SIGNALS
     //SLOTS
     function onCloseQmlInstance() {
+        console.log("Se ha llamado a onCloseQmlInstance desde MainWindow.qml")
         close()
     }
     MainWindowForm {
@@ -76,7 +79,7 @@ ApplicationWindow {
                     id: newProveedor
                     text: "Añadir proveedor"
                     shortcut: "Ctrl+A"
-                    onTriggered: MainWindow.onAnadirProveedor()
+                    onTriggered: MainWindowType.onAnadirProveedor()
                 }
 
                 MenuItem {
