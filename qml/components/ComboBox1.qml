@@ -25,9 +25,11 @@ ComboBox {
 
     //JS
     function onComboBoxCompleted() {
-        console.log("Componente cargado: " + objectName)
+        console.log("Componente cargado: " + objectName + " con el modelo: " + model)
     }
     function initializationComboBoxIndex(comboBox) {
+        //Despues de cargar un modelo, automáticamente el currentIndex se actualiza a 0
+        //por lo que hay que ponerlo a -1 si no queremos que salga el 1ft valor seleccionado
         console.log("Se ha llamado a la función initializationComboBoxIndex(" + comboBox + ")")
         currentIndex = -1
     }

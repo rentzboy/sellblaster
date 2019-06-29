@@ -23,24 +23,29 @@ ContactosTabForm {
     buttonCancelar.onClicked: SupplierType.onCancelarButton("contactos")
     buttonGuardar.onClicked: SupplierType.onGuardarButton("contactos")
 
+    Connections {
+        target: SupplierType
+        onClearFormFields: onClearFormFields(tab)
+    }
+
     //SLOTS
-    function onClearContactosFields(tab) {
+    function onClearFormFields(tab) {
         //hay que definirla para cada pestaña; se llama desde C++
         //Borra los valores de los campos pero no resetea las variables de la clase C++
-        //Es necesario resetear el valor de las member variables para que no
-        //pase el valor en la siguiente query aunque el usuario no lo rellene
-        console.log("Se ha llamado a la función onClearContactosFields(" + tab + ")")
-        textFieldNombre.clear()
-        textFieldApellido.clear()
-        textFieldEmail.clear()
-        textFieldTelefono.clear()
-        textFieldMovil.clear()
-        textAreaNotasContacto.clear()
-        comboBoxArea.currentIndex = -1
-        comboBoxPuesto.currentIndex = -1
+        console.log("Se ha llamado a la función onClearFormFields(" + tab
+                    + ") desde ContactosTab.qml")
+        if (tab === "contactos") {
+            textFieldNombre.clear()
+            textFieldApellido.clear()
+            textFieldEmail.clear()
+            textFieldTelefono.clear()
+            textFieldMovil.clear()
+            textAreaNotasContacto.clear()
+            comboBoxArea.currentIndex = -1
+            comboBoxPuesto.currentIndex = -1
+        }
     }
 }
-
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }

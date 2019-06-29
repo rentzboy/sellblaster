@@ -46,6 +46,7 @@ void AddSupplier::createComponent(void)
 }
 void AddSupplier::textValueToBackEnd(QString key, QString value)
 {
+    //Guarda todos los valores de los formFields: comboBoxes y textFields
     formField.insert(key, value); //no puede haber 2 key iguales en el QMap
 }
 AddSupplier::~AddSupplier()
@@ -236,15 +237,44 @@ bool AddSupplier::sanitationCheck(QString tab)
 }
 void AddSupplier::resetFields(QString tab)
 {
-    if(tab == "contactos")
+    if(tab == "empresa")
+    {
+        QString xx = nullptr;
+        //Clear QMap values
+        formField["empresa"].clear();
+        formField["holding"].clear();
+        formField["actividad"].clear();
+        formField["web"].clear();
+        formField["panjiba"].clear();
+        formField["maps"].clear();
+        formField["pais"].clear();
+        formField["ciudad"].clear();
+        formField["postcode"].clear();
+        formField["moq"].clear();
+        formField["notasEmpresa"].clear();
+        formField["formaPago"].clear();
+
+        //Clear form values using JavaScript
+        emit clearFormFields(tab);
+    }
+    else if(tab == "contactos")
     {
         //Clear QMap values
-        formField["nombre"] = "";
-        formField["apellido"] = "";
-        formField["email"] = "";
-        formField["telefono"] = "";
-        formField["movil"] = "";
-        formField["notasContacto"] = "";
+        formField["nombre"].clear();
+        formField["apellido"].clear();
+        formField["email"].clear();
+        formField["telefono"].clear();
+        formField["movil"].clear();
+        formField["notasContacto"].clear();
+        formField["area"].clear();
+        formField["puesto"].clear();
+
+        //Clear form values using JavaScript
+        emit clearFormFields(tab);
+    }
+    else if(tab == "productos")
+    {
+        //Clear QMap values
 
         //Clear form values using JavaScript
         emit clearFormFields(tab);
@@ -275,10 +305,10 @@ bool AddSupplier::onAceptarButton(QString tab)
         }
 
         //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
-        //Además hay que CurrentIndex++, pues el first == 0
-        QString idActividad = QString::number (actividadList.indexOf(formField.value("actividad")) + 1);
-        QString idPais = QString::number (paisList.indexOf(formField.value("pais")) + 1);
-        QString idFormaPago = QString::number (formaPagoList.indexOf(formField.value("formaPago")) + 1);
+        //El index de xxxList empieza en 0, pero los registros de la DB en 1 => +1
+        QString idActividad = QString::number (actividadList.indexOf(formField.value("actividad")) +1);
+        QString idPais = QString::number (paisList.indexOf(formField.value("pais")) +1);
+        QString idFormaPago = QString::number (formaPagoList.indexOf(formField.value("formaPago")) +1);
 
         //OPTION #1: Stored Procedures
         QString sqlQuery = "CALL insert_Supplier(";
@@ -370,13 +400,16 @@ bool AddSupplier::onAceptarButton(QString tab)
 void AddSupplier::onCancelarButton(QString tab)
 {
     PRINT_FUNCTION_NAME
-    this->resetFields(tab);
+    Q_UNUSED(tab)
+    this->resetFields("empresa");
+    this->resetFields("contactos");
+    this->resetFields("productos");
     emit this->closeQmlInstance(); //trow in C++, catcher in QML
 }
 void AddSupplier::onGuardarButton(QString tab)
 {
     if(this->onAceptarButton(tab) == EXIT_SUCCESS)
-        emit this->closeQmlInstance();
+        onCancelarButton(tab);
 }
 //SETTERS & GETTERS
 

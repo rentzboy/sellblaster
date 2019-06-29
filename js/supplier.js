@@ -7,7 +7,7 @@ function textValueToBackEnd(fieldName, value) {
 }
 function comboBoxIndexToBackEnd(fieldName, index) {
     console.log("Se ha llamado a comboBoxIndexToBackEnd: (" + fieldName + ", " + index + ")")
-    if (index === 0 || index === -1)
+    if (index === -1)
         return
     var txt
     switch (fieldName) {

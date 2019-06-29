@@ -34,19 +34,20 @@ EmpresaTabForm {
         //hay que definirla para cada pestaña; se llama desde C++
         console.log("Se ha llamado a la función onClearFormFields(" + tab
                     + ") desde EmpresaTab.qml")
-        if (tab === "empresa")
+        if (tab === "empresa") {
             textFieldEmpresa.clear()
-        textFieldHolding.clear()
-        comboBoxPais.currentIndex = -1
-        textFieldWeb.clear()
-        textFieldPanjiba.clear()
-        textFieldMaps.clear()
-        comboBoxPais.currentIndex = -1
-        textFieldCiudad.clear()
-        textFieldPostcode.clear()
-        textFieldMoq.clear()
-        textAreaNotasEmpresa.clear()
-        comboBoxFormaPago.currentIndex = -1
+            textFieldHolding.clear()
+            textFieldWeb.clear()
+            textFieldPanjiba.clear()
+            textFieldMaps.clear()
+            textFieldCiudad.clear()
+            textFieldPostcode.clear()
+            textFieldMoq.clear()
+            textAreaNotasEmpresa.clear()
+            comboBoxActividad.currentIndex = -1
+            comboBoxPais.currentIndex = -1
+            comboBoxFormaPago.currentIndex = -1
+        }
     }
 }
 
