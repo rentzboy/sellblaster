@@ -8,5 +8,7 @@ import "../../js/supplier.js" as Supplier
 
 TextArea {
     id: textArea
+    //overwriteMode: true => cambia el cursor x uno bastante raro ......
+    selectByMouse: true
     onEditingFinished: Supplier.textValueToBackEnd(objectName, text)
 }

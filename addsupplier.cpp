@@ -52,7 +52,9 @@ void AddSupplier::textValueToBackEnd(QString key, QString value)
 AddSupplier::~AddSupplier()
 {
     PRINT_FUNCTION_NAME
-    emit destroyed(this);
+
+    //Importante
+    uniqueInstance = Q_NULLPTR;
 }
 
 //PRIVATE MEMBERS
@@ -165,7 +167,7 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
             formatoList.append(result.value(0).toString());
         }
         emit formatoListChanged();
-        qDebug() << "materialList: " << materialList;
+        //qDebug() << "formatoList: " << formatoList;
         ////////////////////////////////////////////////////////////////
         sqlQuery = "CALL get_DropDownMenusData('metal', 'metal')";
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
@@ -174,7 +176,7 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
             materialList.append(result.value(0).toString());
         }
         emit materialListChanged();
-        qDebug() << "materialList: " << materialList;
+        //qDebug() << "materialList: " << materialList;
         ////////////////////////////////////////////////////////////////
         sqlQuery = "CALL get_DropDownMenusData('treatment', 'treatment')";
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
@@ -183,14 +185,16 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
             tratamientoList.append(result.value(0).toString());
         }
         emit tratamientoListChanged();
+        //qDebug() << "tratamientoList: " << tratamientoList;
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenusData('alloy', 'alloy')";
+        sqlQuery = "CALL get_DropDownMenusData('alloy', 'aisi')";
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
             aleacionList.append(result.value(0).toString());
         }
         emit aleacionListChanged();
+        //qDebug() << "aleacionList: " << aleacionList;
         ////////////////////////////////////////////////////////////////
         sqlQuery = "CALL get_DropDownMenusData('temper', 'temper')";
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
@@ -199,6 +203,7 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
             templeList.append(result.value(0).toString());
         }
         emit templeListChanged();
+        //qDebug() << "templeList: " << templeList;
         ////////////////////////////////////////////////////////////////
         sqlQuery = "CALL get_DropDownMenusData('finition', 'finition')";
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
@@ -207,6 +212,7 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
             acabadoList.append(result.value(0).toString());
         }
         emit acabadoListChanged();
+        //qDebug() << "acabadoList: " << acabadoList;
     }
 }
 bool AddSupplier::sanitationCheck(QString tab)
@@ -279,12 +285,6 @@ void AddSupplier::resetFields(QString tab)
         //Clear form values using JavaScript
         emit clearFormFields(tab);
     }
-}
-void AddSupplier::onCloseEventCaller(void) //ESTO VA FUERA NO ??
-{
-    PRINT_FUNCTION_NAME
-    //Hay que borrar las variables; QMaps y las xxxList
-
 }
 
 //PUBLIC SLOTS
@@ -397,19 +397,24 @@ bool AddSupplier::onAceptarButton(QString tab)
 
     }
 }
-void AddSupplier::onCancelarButton(QString tab)
+void AddSupplier::onCancelarButton(void)
 {
     PRINT_FUNCTION_NAME
-    Q_UNUSED(tab)
+
+    //Opción #1: Eliminar el Objeto
+    delete uniqueInstance;
+
+    /*Opción #2: Resetear todas las variables y los campos del formulario
     this->resetFields("empresa");
     this->resetFields("contactos");
     this->resetFields("productos");
     emit this->closeQmlInstance(); //trow in C++, catcher in QML
+    reset los xxxList para que los comboBoxes no dupliquen sus campos tras cerrar y volver a abrir NewProveedor.qml */
 }
 void AddSupplier::onGuardarButton(QString tab)
 {
     if(this->onAceptarButton(tab) == EXIT_SUCCESS)
-        onCancelarButton(tab);
+        this->onCancelarButton();
 }
 //SETTERS & GETTERS
 

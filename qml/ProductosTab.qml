@@ -12,19 +12,57 @@ ProductosTabForm {
     id: form
     objectName: "ProductosTabForm"
 
+    function onFormatoComboBoxChanged() {
+        //Igual para todos los comboBoxes
+        Supplier.comboBoxIndexToBackEnd("formato", comboBoxFormato.currentIndex)
+        //Customization
+        if (state === "chapa")
+            state = "barra"
+        else if (state === "barra")
+            state = "tubo"
+        else
+            state = "chapa"
+    }
+
+    //States
+    states: [
+        State {
+            name: "chapa"
+            PropertyChanges {
+                target: labelEspesorMin
+                text: qsTr("Espesor min:")
+            }
+        },
+        State {
+            name: "barra"
+            PropertyChanges {
+                target: labelEspesorMin
+                text: qsTr("Diametro")
+            }
+        },
+        State {
+            name: "tubo"
+            PropertyChanges {
+                target: labelEspesorMin
+                text: qsTr("Diametro int:")
+            }
+        }
+    ]
+
     //TextFields
 
     //ComboBoxes
+    comboBoxFormato.onCurrentIndexChanged: onFormatoComboBoxChanged()
     comboBoxFormato.model: SupplierType.formatoList
     comboBoxMaterial.model: SupplierType.materialList
-    comboBoxTratamiento.model: SupplierType.formatoList
+    comboBoxTratamiento.model: SupplierType.tratamientoList
     comboBoxAleacion.model: SupplierType.aleacionList
     comboBoxTemple.model: SupplierType.templeList
     comboBoxAcabado.model: SupplierType.acabadoList
 
     //Buttons
     buttonAceptar.onClicked: SupplierType.onAceptarButton("productos")
-    buttonCancelar.onClicked: SupplierType.onCancelarButton("productos")
+    buttonCancelar.onClicked: SupplierType.onCancelarButton()
     buttonGuardar.onClicked: SupplierType.onGuardarButton("productos")
 
     //SLOTS
@@ -35,8 +73,10 @@ ProductosTabForm {
     }
 }
 
+
+
+
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
-

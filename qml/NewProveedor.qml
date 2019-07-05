@@ -18,12 +18,17 @@ Window {
     BackgroundZ1 {
     }
 
+    onClosing: onCloseQmlInstance()
+    //QML handler for C++ signal
     Connections {
         target: SupplierType
-        onCloseQmlInstance: function onCloseQmlInstance() {
-            console.log("Se ha llamado a onCloseQmlInstance() desde NewProveedor.qml")
-            close()
-        }
+        onCloseQmlInstance: onCloseQmlInstance()
+    }
+
+    //JS
+    function onCloseQmlInstance() {
+        console.log("Se ha llamado a onCloseQmlInstance() desde NewProveedor.qml")
+        SupplierType.onCancelarButton()
     }
 
     Component.onCompleted: function setWindowPosition() {
@@ -84,6 +89,17 @@ Window {
                     bar.currentIndex++
                     event.accepted = true
                 }
+            } else if (event.key === Qt.Key_Return
+                       && event.modifiers === Qt.ControlModifier) {
+                console.log("Key logger: Crtl+Enter")
+                SupplierType.onAceptarButton(bar.currentItem.objectName)
+            } else if (event.key === Qt.Key_G
+                       && event.modifiers === Qt.ControlModifier) {
+                console.log("Key logger: Crtl+G")
+                SupplierType.onGuardarButton(bar.currentItem.objectName)
+            } else if (event.key === Qt.Key_Escape) {
+                console.log("Key logger: Crtl+Esc")
+                SupplierType.onCancelarButton()
             }
         }
     }

@@ -21,7 +21,7 @@ ComboBox {
     onModelChanged: initializationComboBoxIndex(objectName)
     onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(objectName,
                                                            currentIndex)
-    Component.onCompleted: onComboBoxCompleted()
+    //Component.onCompleted: onComboBoxCompleted()
 
     //JS
     function onComboBoxCompleted() {
@@ -30,7 +30,7 @@ ComboBox {
     function initializationComboBoxIndex(comboBox) {
         //Despues de cargar un modelo, automáticamente el currentIndex se actualiza a 0
         //por lo que hay que ponerlo a -1 si no queremos que salga el 1ft valor seleccionado
-        console.log("Se ha llamado a la función initializationComboBoxIndex(" + comboBox + ")")
+        //console.log("Se ha llamado a la función initializationComboBoxIndex(" + comboBox + ")")
         currentIndex = -1
     }
 }

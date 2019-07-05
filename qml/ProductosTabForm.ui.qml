@@ -24,6 +24,7 @@ Item {
     property alias textFieldAnchoMin: textFieldAnchoMin
     property alias textFieldAnchoMax: textFieldAnchoMax
     property alias textFieldLargoMax: textFieldLargoMax
+    property alias labelEspesorMin: labelEspesorMin
     visible: true
     Rectangle {
         clip: true
@@ -181,7 +182,7 @@ Item {
 
                 Label {
                     id: labelEspesorMin
-                    text: qsTr("Espesor min:")
+                    state: "chapa"
                 }
                 TextField1 {
                     id: textFieldEspesorMin
@@ -312,10 +313,8 @@ Item {
     }
 }
 
-
-
-
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:1000}
 }
  ##^##*/
+

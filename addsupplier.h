@@ -33,13 +33,12 @@ public:
     AddSupplier operator=(const AddSupplier &other) = delete;
     ~AddSupplier();
     static void createComponent(void);
-    void onCloseEventCaller(void);
     Q_INVOKABLE void textValueToBackEnd(QString key, QString value);
     Q_INVOKABLE void fillComboBoxesFromDb(QString tab);
 
 public slots:
     bool onAceptarButton(QString tab);
-    void onCancelarButton(QString tab);
+    void onCancelarButton(void);
     void onGuardarButton(QString tab);
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 

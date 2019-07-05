@@ -21,7 +21,7 @@ EmpresaTabForm {
 
     //Buttons
     buttonAceptar.onClicked: SupplierType.onAceptarButton("empresa")
-    buttonCancelar.onClicked: SupplierType.onCancelarButton("empresa")
+    buttonCancelar.onClicked: SupplierType.onCancelarButton()
     buttonGuardar.onClicked: SupplierType.onGuardarButton("empresa")
 
     Connections {

@@ -19,6 +19,7 @@ Window {
     BackgroundZ1 {
     }
 
+    //QML handler for C++ signal
     Connections {
         target: LoginType
         onCloseQmlInstance: function onCloseQmlInstance() {

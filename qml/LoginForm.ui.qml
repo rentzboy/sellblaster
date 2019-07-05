@@ -47,6 +47,8 @@ Item {
             }
             TextField {
                 id: textInputUsename
+                //overwriteMode: true
+                selectByMouse: true
                 renderType: Text.NativeRendering
                 Layout.columnSpan: 2
                 Layout.fillWidth: true
@@ -61,6 +63,8 @@ Item {
 
             TextField {
                 id: textInputPassword
+                //overwriteMode: true
+                selectByMouse: true
                 Layout.columnSpan: 2
                 Layout.fillHeight: true
                 Layout.fillWidth: true

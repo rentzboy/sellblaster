@@ -20,7 +20,7 @@ ContactosTabForm {
 
     //Buttons
     buttonAceptar.onClicked: SupplierType.onAceptarButton("contactos")
-    buttonCancelar.onClicked: SupplierType.onCancelarButton("contactos")
+    buttonCancelar.onClicked: SupplierType.onCancelarButton()
     buttonGuardar.onClicked: SupplierType.onGuardarButton("contactos")
 
     Connections {

@@ -238,7 +238,7 @@ Item {
                     objectName: "moq"
                     Layout.fillWidth: true
                     inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "000"
+                    inputMask: "00"
                 }
                 Item {
                     id: spacer10
