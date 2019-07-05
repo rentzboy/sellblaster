@@ -32,6 +32,7 @@ Window {
         id: form
 
         textInputUsename.text: LoginType.userName
+        textInputPassword.text: "aaaaaa"
         textError.text: LoginType.errorMsg
         textError.visible: LoginType.errorVisible
 

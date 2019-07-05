@@ -25,6 +25,9 @@ Item {
     property alias textFieldAnchoMax: textFieldAnchoMax
     property alias textFieldLargoMax: textFieldLargoMax
     property alias labelEspesorMin: labelEspesorMin
+    property alias labelEspesorMax: labelEspesorMax
+    property alias labelAnchoMin: labelAnchoMin
+    property alias labelAnchoMax: labelAnchoMax
     visible: true
     Rectangle {
         clip: true
@@ -313,8 +316,10 @@ Item {
     }
 }
 
+
+
+
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:1000}
 }
  ##^##*/
-

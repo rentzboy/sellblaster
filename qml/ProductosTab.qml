@@ -13,15 +13,32 @@ ProductosTabForm {
     objectName: "ProductosTabForm"
 
     function onFormatoComboBoxChanged() {
-        //Igual para todos los comboBoxes
-        Supplier.comboBoxIndexToBackEnd("formato", comboBoxFormato.currentIndex)
+        console.log("currentText: " + comboBoxFormato.displayText
+                    + ", currentIndex: " + comboBoxFormato.currentIndex)
+
         //Customization
-        if (state === "chapa")
-            state = "barra"
-        else if (state === "barra")
-            state = "tubo"
-        else
+        switch (comboBoxFormato.displayText) {
+        case "Chapa":
             state = "chapa"
+            break
+        case "Bobina":
+            state = "chapa"
+            break
+        case "Fleje":
+            state = "chapa"
+            break
+        case "Barra":
+            state = "barra"
+            break
+        case "Tubo":
+            state = "tubo"
+            break
+        case "Pletina":
+            state = "pletina"
+            break
+        default:
+
+        }
     }
 
     //States
@@ -32,12 +49,21 @@ ProductosTabForm {
                 target: labelEspesorMin
                 text: qsTr("Espesor min:")
             }
+            PropertyChanges {
+                target: labelEspesorMax
+                text: qsTr("Espesor max:")
+            }
         },
         State {
             name: "barra"
             PropertyChanges {
                 target: labelEspesorMin
                 text: qsTr("Diametro")
+                visible: true
+            }
+            PropertyChanges {
+                target: labelEspesorMax
+                visible: false
             }
         },
         State {
@@ -45,6 +71,83 @@ ProductosTabForm {
             PropertyChanges {
                 target: labelEspesorMin
                 text: qsTr("Diametro int:")
+                visible: true
+            }
+            PropertyChanges {
+                target: labelEspesorMax
+                text: qsTr("Diametro ext:")
+                visible: true
+            }
+            PropertyChanges {
+                target: labelAnchoMin
+                visible: false
+            }
+            PropertyChanges {
+                target: labelAnchoMax
+                visible: fasle
+            }
+        },
+        State {
+            name: "pletina"
+            PropertyChanges {
+                target: labelEspesorMin
+                text: qsTr("Alto:")
+            }
+            PropertyChanges {
+                target: labelEspesorMax
+                text: qsTr("Ancho:")
+            }
+        },
+        State {
+            name: "barra1"
+            PropertyChanges {
+                target: labelEspesorMin
+                text: qsTr("Diametro")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: labelEspesorMax
+                visible: false
+            }
+        },
+        State {
+            name: "barra2"
+            PropertyChanges {
+                target: labelEspesorMin
+                text: qsTr("Diametro")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: labelEspesorMax
+                visible: false
+            }
+        },
+        State {
+            name: "barra3"
+            PropertyChanges {
+                target: labelEspesorMin
+                text: qsTr("Diametro")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: labelEspesorMax
+                visible: false
+            }
+        },
+        State {
+            name: "barra4"
+            PropertyChanges {
+                target: labelEspesorMin
+                text: qsTr("Diametro")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: labelEspesorMax
+                visible: false
             }
         }
     ]
@@ -52,7 +155,8 @@ ProductosTabForm {
     //TextFields
 
     //ComboBoxes
-    comboBoxFormato.onCurrentIndexChanged: onFormatoComboBoxChanged()
+    comboBoxFormato.onDisplayTextChanged: onFormatoComboBoxChanged()
+    //comboBoxFormato.onCurrentIndexChanged:
     comboBoxFormato.model: SupplierType.formatoList
     comboBoxMaterial.model: SupplierType.materialList
     comboBoxTratamiento.model: SupplierType.tratamientoList
@@ -77,6 +181,6 @@ ProductosTabForm {
 
 
 /*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
+    D{i:0;autoSize:true;height:480;width:1000}
 }
  ##^##*/
