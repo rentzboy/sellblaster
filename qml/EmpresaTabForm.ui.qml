@@ -32,11 +32,8 @@ Item {
         border.color: "#bcb1b1"
     }
 
-    GridLayout {
-        columnSpacing: 15
-        rowSpacing: 15
-        rows: 3
-        columns: 1
+    ColumnLayout {
+        spacing: 15
         anchors.right: parent.right
         anchors.rightMargin: 15
         anchors.left: parent.left
