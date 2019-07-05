@@ -47,10 +47,7 @@ Window {
     NewProveedorForm {
         id: form
         anchors.fill: parent
-        anchors.rightMargin: 15
-        anchors.leftMargin: 15
-        anchors.bottomMargin: 15
-        anchors.topMargin: 15
+        anchors.margins: 15
         focus: true
         bar.onCurrentIndexChanged: onBarIndexChanged(bar.currentItem.objectName)
 

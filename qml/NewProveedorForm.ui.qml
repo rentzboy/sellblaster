@@ -25,7 +25,6 @@ Item {
             width: parent.width
             clip: true
             anchors.top: parent.top
-            anchors.topMargin: 0
 
             TabButton {
                 text: qsTr("Empresa")
@@ -60,8 +59,6 @@ Item {
             width: parent.width
             height: parent.height - bar.height
             anchors.top: bar.bottom
-            anchors.topMargin: 0
-            anchors.bottomMargin: 0
             currentIndex: bar.currentIndex
 
             EmpresaTab {
