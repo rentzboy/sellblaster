@@ -18,6 +18,10 @@ import "../../js/supplier.js" as Supplier
 */
 ComboBox {
     id: comboBox
+    Layout.minimumWidth: 150
+    Layout.fillWidth: true
+    Layout.preferredHeight: 35
+
     onModelChanged: initializationComboBoxIndex(objectName)
     onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(objectName,
                                                            currentIndex)

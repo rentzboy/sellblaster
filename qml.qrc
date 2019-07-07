@@ -20,5 +20,11 @@
         <file>js/supplier.js</file>
         <file>qml/components/TextField1.qml</file>
         <file>qml/components/TextArea1.qml</file>
+        <file>qml/components/SpacerH_20.qml</file>
+        <file>qml/GridTextFieldBobina.ui.qml</file>
+        <file>qml/GridTextFieldChapa.ui.qml</file>
+        <file>qml/GridTextFieldBarra.ui.qml</file>
+        <file>qml/GridTextFieldTubo.ui.qml</file>
+        <file>qml/GridTextFieldDisco.ui.qml</file>
     </qresource>
 </RCC>

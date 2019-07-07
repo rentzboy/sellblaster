@@ -42,8 +42,7 @@ Item {
         anchors.topMargin: 15
 
         RowLayout {
-            //Row1: buttons
-            id: row
+            id: rowButtons
             spacing: 15
             Button {
                 id: buttonAceptar
@@ -59,247 +58,206 @@ Item {
             }
         }
 
-        GroupBox {
-            //Row 2: Datos generales
-            id: groupBox1
-            Layout.fillHeight: true
-            Layout.fillWidth: true //que se adapte al tamaño de la ventana
-            topPadding: 60 //asi se muetran los bordes Ok
-            bottomPadding: 20 //asi se muetran los bordes Ok
-            clip: true
-            padding: 15
-            title: qsTr("Datos generales")
+        RowLayout {
+            id: rowDatosGenerales
+            Layout.fillWidth: true
 
-            GridLayout {
-                id: grid
-                columnSpacing: 15
-                rowSpacing: 15
-                anchors.fill: parent
-                rows: 3
-                columns: 9
+            GroupBox {
+                //Row 2: Datos generales
+                id: groupBox1
+                Layout.fillWidth: true //que se adapte al tamaño de la ventana
+                topPadding: 60 //asi se muetran los bordes Ok
+                bottomPadding: 20 //asi se muetran los bordes Ok
                 clip: true
+                padding: 15
+                title: qsTr("Datos generales")
 
-                Label {
-                    id: labelEmpresa
-                    text: qsTr("Empresa:")
-                    Layout.minimumWidth: 120 //Para alinearlo con Datos financieros
-                }
-                TextField1 {
-                    id: textFieldEmpresa
-                    objectName: "empresa"
-                    Layout.minimumWidth: 150 //Solo hay que indicarlo en los elementos de la row #1
-                    Layout.fillWidth: true
-                    maximumLength: 100
-                }
-                Item {
-                    id: spacer1
-                    width: 20
-                }
+                GridLayout {
+                    id: grid
+                    columnSpacing: 15
+                    rowSpacing: 15
+                    anchors.fill: parent
+                    columns: 9
+                    clip: true
 
-                Label {
-                    id: labelHolding
-                    text: qsTr("Holding:")
-                }
-                TextField1 {
-                    id: textFieldHolding
-                    objectName: "holding"
-                    Layout.minimumWidth: 150
-                    Layout.fillWidth: true
-                    maximumLength: 100
-                }
-                Item {
-                    id: spacer2
-                    width: 5
-                }
+                    Label {
+                        id: labelEmpresa
+                        text: qsTr("Empresa:")
+                        Layout.minimumWidth: 100 //Para alinearlo con Datos financieros
+                    }
+                    TextField1 {
+                        id: textFieldEmpresa
+                        objectName: "empresa"
+                        Layout.fillWidth: true
+                        maximumLength: 100
+                    }
+                    SpacerH_20 {
+                    }
+                    Label {
+                        id: labelHolding
+                        text: qsTr("Holding:")
+                    }
+                    TextField1 {
+                        id: textFieldHolding
+                        objectName: "holding"
+                        maximumLength: 100
+                    }
+                    SpacerH_20 {
+                    }
+                    Label {
+                        id: labelActividad
+                        text: qsTr("Actividad:")
+                    }
+                    ComboBox1 {
+                        id: comboBoxActividad
+                        objectName: "actividad"
+                    }
+                    SpacerH_20 {
+                        Layout.fillWidth: true
+                    }
 
-                Label {
-                    id: labelActividad
-                    text: qsTr("Actividad:")
-                }
-                ComboBox1 {
-                    id: comboBoxActividad
-                    objectName: "actividad"
-                    Layout.minimumWidth: 150
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-                Item {
-                    id: spacer3
-                    width: 20
-                    Layout.fillWidth: true
-                }
+                    Label {
+                        id: labelWeb
+                        text: qsTr("Web:")
+                    }
+                    TextField1 {
+                        id: textFieldWeb
+                        objectName: "web"
+                        inputMethodHints: Qt.ImhUrlCharactersOnly
+                        maximumLength: 100
+                    }
+                    SpacerH_20 {
+                    }
 
-                Label {
-                    id: labelWeb
-                    text: qsTr("Web:")
-                }
-                TextField1 {
-                    id: textFieldWeb
-                    objectName: "web"
-                    Layout.fillWidth: true
-                    inputMethodHints: Qt.ImhUrlCharactersOnly
-                    maximumLength: 100
-                }
-                Item {
-                    id: spacer4
-                    width: 20
-                }
+                    Label {
+                        id: labelPanjiba
+                        text: qsTr("Panjiba:")
+                    }
+                    TextField1 {
+                        id: textFieldPanjiba
+                        objectName: "panjiba"
+                        inputMethodHints: Qt.ImhUrlCharactersOnly
+                        maximumLength: 200
+                    }
+                    SpacerH_20 {
+                    }
+                    Label {
+                        id: labelMaps
+                        text: qsTr("G.Maps:")
+                    }
+                    TextField1 {
+                        id: textFieldMaps
+                        objectName: "maps"
+                        inputMethodHints: Qt.ImhUrlCharactersOnly
+                        maximumLength: 200
+                    }
+                    SpacerH_20 {
+                        Layout.fillWidth: true
+                    }
 
-                Label {
-                    id: labelPanjiba
-                    text: qsTr("Panjiba:")
-                }
-                TextField1 {
-                    id: textFieldPanjiba
-                    objectName: "panjiba"
-                    width: 150
-                    Layout.fillWidth: true
-                    inputMethodHints: Qt.ImhUrlCharactersOnly
-                    maximumLength: 200
-                }
-                Item {
-                    id: spacer5
-                    width: 5
-                }
+                    Label {
+                        id: labelPais
+                        text: qsTr("Pais:")
+                    }
+                    ComboBox1 {
+                        id: comboBoxPais
+                        objectName: "pais"
+                    }
+                    SpacerH_20 {
+                    }
+                    Label {
+                        id: labelCiudad
+                        text: qsTr("Ciudad:")
+                    }
+                    TextField1 {
+                        id: textFieldCiudad
+                        objectName: "ciudad"
+                        maximumLength: 100
+                    }
+                    SpacerH_20 {
+                    }
+                    Label {
+                        id: labelPostcode
+                        text: qsTr("Postcode:")
+                    }
+                    TextField1 {
+                        id: textFieldPostcode
+                        objectName: "postcode"
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        maximumLength: 5
+                        inputMask: "99999"
+                    }
+                    SpacerH_20 {
+                        Layout.fillWidth: true
+                    }
+                    Label {
+                        id: labelMoq
+                        text: qsTr("MOQ:")
+                    }
+                    TextField1 {
+                        id: textFieldMoq
+                        objectName: "moq"
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        inputMask: "00"
+                    }
+                    SpacerH_20 {
+                    }
 
-                Label {
-                    id: labelMaps
-                    text: qsTr("G.Maps:")
-                }
-                TextField1 {
-                    id: textFieldMaps
-                    objectName: "maps"
-                    Layout.fillWidth: true
-                    inputMethodHints: Qt.ImhUrlCharactersOnly
-                    maximumLength: 200
-                }
-                Item {
-                    id: spacer6
-                    width: 20
-                    Layout.fillWidth: true
-                }
-
-                Label {
-                    id: labelPais
-                    text: qsTr("Pais:")
-                }
-                ComboBox1 {
-                    id: comboBoxPais
-                    objectName: "pais"
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: textFieldEmpresa.height
-                }
-                Item {
-                    id: spacer7
-                    width: 20
-                }
-
-                Label {
-                    id: labelCiudad
-                    text: qsTr("Ciudad:")
-                }
-                TextField1 {
-                    id: textFieldCiudad
-                    objectName: "ciudad"
-                    Layout.fillWidth: true
-                    maximumLength: 100
-                }
-                Item {
-                    id: spacer8
-                    width: 5
-                }
-
-                Label {
-                    id: labelPostcode
-                    text: qsTr("Postcode:")
-                }
-                TextField1 {
-                    id: textFieldPostcode
-                    objectName: "postcode"
-                    Layout.fillWidth: true
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    maximumLength: 5
-                    inputMask: "99999"
-                }
-                Item {
-                    id: spacer9
-                    width: 20
-                    Layout.fillWidth: true
-                }
-                Label {
-                    id: labelMoq
-                    text: qsTr("MOQ:")
-                }
-                TextField1 {
-                    id: textFieldMoq
-                    objectName: "moq"
-                    Layout.fillWidth: true
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    inputMask: "00"
-                }
-                Item {
-                    id: spacer10
-                    width: 20
-                }
-
-                Label {
-                    id: labelNotas
-                    text: qsTr("Notas:")
-                }
-                TextArea1 {
-                    id: textAreaNotasEmpresa
-                    objectName: "notasEmpresa"
-                    wrapMode: Text.WordWrap
-                    Layout.fillHeight: false
-                    Layout.fillWidth: true
-                    Layout.columnSpan: 4
-                    KeyNavigation.tab: comboBoxFormaPago
-                    KeyNavigation.priority: KeyNavigation.BeforeItem
-                }
-
-                Item {
-                    id: spacer11
-                    width: 5
+                    Label {
+                        id: labelNotas
+                        text: qsTr("Notas:")
+                    }
+                    TextArea1 {
+                        id: textAreaNotasEmpresa
+                        objectName: "notasEmpresa"
+                        wrapMode: Text.WordWrap
+                        Layout.fillHeight: false
+                        Layout.columnSpan: 4
+                        KeyNavigation.tab: comboBoxFormaPago
+                        KeyNavigation.priority: KeyNavigation.BeforeItem
+                    }
+                    SpacerH_20 {
+                        Layout.fillWidth: true
+                    }
                 }
             }
         }
-        GroupBox {
-            //Row 3: Datos financieros
-            id: groupBox2
-            Layout.fillHeight: true
-            Layout.fillWidth: true //que se adapte al tamaño de la ventana
-            topPadding: 60 //asi se muetran los bordes Ok
-            bottomPadding: 20 //asi se muetran los bordes Ok
-            clip: true
-            padding: 15
-            title: qsTr("Datos financieros")
 
-            GridLayout {
-                //Datos financieros
-                id: grid2
-                columnSpacing: 15
-                rowSpacing: 15
-                anchors.fill: parent
-                rows: 2
-                columns: 9
+        RowLayout {
+            id: rowDatosFinancieros
+            Layout.fillWidth: true
+
+            GroupBox {
+                id: groupBoxDatosFinancieros
+                topPadding: 60 //asi se muetran los bordes Ok
+                bottomPadding: 20 //asi se muetran los bordes Ok
+                Layout.fillWidth: true
                 clip: true
+                padding: 15
+                title: qsTr("Datos financieros")
 
-                Label {
-                    id: labelPago
-                    text: qsTr("Forma pago:")
-                    Layout.minimumWidth: 120
-                }
-                ComboBox1 {
-                    id: comboBoxFormaPago
-                    objectName: "formaPago"
-                    Layout.preferredHeight: textFieldEmpresa.height
-                    Layout.minimumWidth: 150
-                    Layout.fillWidth: true
-                }
-                Item {
-                    id: spacer20
-                    width: 5
-                    Layout.fillWidth: true
+                GridLayout {
+                    //Datos financieros
+                    id: grid2
+                    columnSpacing: 15
+                    rowSpacing: 15
+                    anchors.fill: parent
+                    columns: 3
+                    clip: true
+
+                    Label {
+                        id: labelPago
+                        text: qsTr("Forma pago:")
+                        Layout.minimumWidth: 100
+                    }
+                    ComboBox1 {
+                        id: comboBoxFormaPago
+                        objectName: "formaPago"
+                    }
+                    Item {
+                        width: 5
+                        Layout.fillWidth: true
+                    }
                 }
             }
         }

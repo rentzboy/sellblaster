@@ -12,142 +12,121 @@ ProductosTabForm {
     id: form
     objectName: "ProductosTabForm"
 
-    function onFormatoComboBoxChanged() {
-        console.log("currentText: " + comboBoxFormato.displayText
-                    + ", currentIndex: " + comboBoxFormato.currentIndex)
-
-        //Customization
-        switch (comboBoxFormato.displayText) {
-        case "Chapa":
-            state = "chapa"
-            break
-        case "Bobina":
-            state = "chapa"
-            break
-        case "Fleje":
-            state = "chapa"
-            break
-        case "Barra":
-            state = "barra"
-            break
-        case "Tubo":
-            state = "tubo"
-            break
-        case "Pletina":
-            state = "pletina"
-            break
-        default:
-
-        }
-    }
-
     //States
     states: [
         State {
-            name: "chapa"
+            name: "bobina"
             PropertyChanges {
-                target: labelEspesorMin
-                text: qsTr("Espesor min:")
+                target: gridTextFieldChapa
+                visible: false
             }
             PropertyChanges {
-                target: labelEspesorMax
-                text: qsTr("Espesor max:")
+                target: gridTextFieldBobina
+                visible: true
+            }
+            PropertyChanges {
+                target: gridTextFieldBarra
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldTubo
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldDisco
+                visible: false
+            }
+        },
+        State {
+            name: "chapa"
+            PropertyChanges {
+                target: gridTextFieldChapa
+                visible: true
+            }
+            PropertyChanges {
+                target: gridTextFieldBobina
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldBarra
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldTubo
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldDisco
+                visible: false
             }
         },
         State {
             name: "barra"
             PropertyChanges {
-                target: labelEspesorMin
-                text: qsTr("Diametro")
+                target: gridTextFieldChapa
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldBobina
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldBarra
                 visible: true
             }
             PropertyChanges {
-                target: labelEspesorMax
+                target: gridTextFieldTubo
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldDisco
                 visible: false
             }
         },
         State {
             name: "tubo"
             PropertyChanges {
-                target: labelEspesorMin
-                text: qsTr("Diametro int:")
-                visible: true
-            }
-            PropertyChanges {
-                target: labelEspesorMax
-                text: qsTr("Diametro ext:")
-                visible: true
-            }
-            PropertyChanges {
-                target: labelAnchoMin
+                target: gridTextFieldChapa
                 visible: false
             }
             PropertyChanges {
-                target: labelAnchoMax
-                visible: fasle
-            }
-        },
-        State {
-            name: "pletina"
-            PropertyChanges {
-                target: labelEspesorMin
-                text: qsTr("Alto:")
+                target: gridTextFieldBobina
+                visible: false
             }
             PropertyChanges {
-                target: labelEspesorMax
-                text: qsTr("Ancho:")
+                target: gridTextFieldBarra
+                visible: false
             }
-        },
-        State {
-            name: "barra1"
             PropertyChanges {
-                target: labelEspesorMin
-                text: qsTr("Diametro")
+                target: gridTextFieldTubo
                 visible: true
             }
-
             PropertyChanges {
-                target: labelEspesorMax
+                target: gridTextFieldDisco
                 visible: false
             }
         },
         State {
-            name: "barra2"
+            name: "disco"
             PropertyChanges {
-                target: labelEspesorMin
-                text: qsTr("Diametro")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: labelEspesorMax
+                target: gridTextFieldChapa
                 visible: false
             }
-        },
-        State {
-            name: "barra3"
             PropertyChanges {
-                target: labelEspesorMin
-                text: qsTr("Diametro")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: labelEspesorMax
+                target: gridTextFieldBobina
                 visible: false
             }
-        },
-        State {
-            name: "barra4"
             PropertyChanges {
-                target: labelEspesorMin
-                text: qsTr("Diametro")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: labelEspesorMax
+                target: gridTextFieldBarra
                 visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldTubo
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldDisco
+                visible: true
             }
         }
     ]
@@ -156,10 +135,10 @@ ProductosTabForm {
 
     //ComboBoxes
     comboBoxFormato.onDisplayTextChanged: onFormatoComboBoxChanged()
-    //comboBoxFormato.onCurrentIndexChanged:
+
     comboBoxFormato.model: SupplierType.formatoList
     comboBoxMaterial.model: SupplierType.materialList
-    comboBoxTratamiento.model: SupplierType.tratamientoList
+    comboBoxSerie.model: SupplierType.tratamientoList
     comboBoxAleacion.model: SupplierType.aleacionList
     comboBoxTemple.model: SupplierType.templeList
     comboBoxAcabado.model: SupplierType.acabadoList
@@ -169,6 +148,39 @@ ProductosTabForm {
     buttonCancelar.onClicked: SupplierType.onCancelarButton()
     buttonGuardar.onClicked: SupplierType.onGuardarButton("productos")
 
+    //JS
+    function onFormatoComboBoxChanged() {
+        console.log("currentText: " + comboBoxFormato.displayText
+                    + ", currentIndex: " + comboBoxFormato.currentIndex)
+
+        //Customization
+        switch (comboBoxFormato.displayText) {
+        case "Bobina":
+            state = "bobina"
+            break
+        case "Chapa":
+            state = "chapa"
+            break
+        case "Barra":
+            state = "barra"
+            break
+        case "Tubo":
+            state = "tubo"
+            break
+        case "Plancha":
+            state = "chapa"
+            break
+        case "Disco":
+            state = "disco"
+            break
+        case "Pletina":
+            state = "pletina"
+            break
+        default:
+
+        }
+    }
+
     //SLOTS
     function onClearProductosFields(tab) {
         //hay que definirla para cada pestaña; se llama desde C++
@@ -177,10 +189,8 @@ ProductosTabForm {
     }
 }
 
-
-
-
 /*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:1000}
+    D{i:0;autoSize:true;height:480;width:1000}D{i:18;autoSize:true;height:480;width:1000}
 }
  ##^##*/
+

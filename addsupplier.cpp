@@ -178,7 +178,7 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
         emit materialListChanged();
         //qDebug() << "materialList: " << materialList;
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenusData('treatment', 'treatment')";
+        sqlQuery = "CALL get_DropDownMenusData('serie', 'serie')";
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
