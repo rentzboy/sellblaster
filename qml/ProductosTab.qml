@@ -138,7 +138,7 @@ ProductosTabForm {
 
     comboBoxFormato.model: SupplierType.formatoList
     comboBoxMaterial.model: SupplierType.materialList
-    comboBoxSerie.model: SupplierType.tratamientoList
+    comboBoxSerie.model: SupplierType.serieList
     comboBoxAleacion.model: SupplierType.aleacionList
     comboBoxTemple.model: SupplierType.templeList
     comboBoxAcabado.model: SupplierType.acabadoList

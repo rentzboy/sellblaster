@@ -83,7 +83,7 @@ Item {
                     Label {
                         id: labelEmpresa
                         text: qsTr("Empresa:")
-                        Layout.minimumWidth: 100 //Para alinearlo con Datos financieros
+                        Layout.minimumWidth: 130 //Para alinearlo con Datos financieros
                     }
                     TextField1 {
                         id: textFieldEmpresa
@@ -248,7 +248,7 @@ Item {
                     Label {
                         id: labelPago
                         text: qsTr("Forma pago:")
-                        Layout.minimumWidth: 100
+                        Layout.minimumWidth: 130
                     }
                     ComboBox1 {
                         id: comboBoxFormaPago
@@ -264,10 +264,8 @@ Item {
     }
 }
 
-
-
-
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:1000}
 }
  ##^##*/
+

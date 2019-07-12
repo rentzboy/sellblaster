@@ -23,7 +23,7 @@ class AddSupplier : public QObject
     ///////////////////////PRODUCTOS////////////////////////////////////
     Q_PROPERTY(QStringList formatoList MEMBER formatoList NOTIFY formatoListChanged)
     Q_PROPERTY(QStringList materialList MEMBER materialList NOTIFY materialListChanged)
-    Q_PROPERTY(QStringList tratamientoList MEMBER tratamientoList NOTIFY tratamientoListChanged)
+    Q_PROPERTY(QStringList serieList MEMBER serieList NOTIFY serieListChanged)
     Q_PROPERTY(QStringList aleacionList MEMBER aleacionList NOTIFY aleacionListChanged)
     Q_PROPERTY(QStringList templeList MEMBER templeList NOTIFY templeListChanged)
     Q_PROPERTY(QStringList acabadoList MEMBER acabadoList NOTIFY acabadoListChanged)
@@ -35,18 +35,18 @@ public:
     static void createComponent(void);
     Q_INVOKABLE void textValueToBackEnd(QString key, QString value);
     Q_INVOKABLE void fillComboBoxesFromDb(QString tab);
-
+    Q_INVOKABLE void fillDependentComboBoxFromDb(QString comboBox, QString value);
 public slots:
     bool onAceptarButton(QString tab);
     void onCancelarButton(void);
     void onGuardarButton(QString tab);
+    void onFormFieldUpdated(QString field, QString value);
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 private:
     explicit AddSupplier(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)
     static void registerSingleton(void);
     //Members
-    void fillComboBoxWithCheckBoxFromDb(void);
     bool sanitationCheck(QString tab);
     void resetFields(QString tab);
     //Attributes
@@ -60,7 +60,8 @@ private:
     QStringList puestoList;
     QStringList formatoList;
     QStringList materialList;
-    QStringList tratamientoList;
+    QStringList serieList;
+    QStringList serieListFija;
     QStringList aleacionList;
     QStringList templeList;
     QStringList acabadoList;
@@ -77,6 +78,7 @@ signals:
     void clearFormFields(QVariant tab);
     void clearFormFields(QString tab);
     //Notify signals
+    void formFieldUpdated(QString field, QString value);
     void actividadListChanged(void);
     void paisListChanged(void);
     void formaPagoListChanged(void);
@@ -84,7 +86,7 @@ signals:
     void puestoListChanged(void);
     void formatoListChanged(void);
     void materialListChanged(void);
-    void tratamientoListChanged(void);
+    void serieListChanged(void);
     void aleacionListChanged(void);
     void templeListChanged(void);
     void acabadoListChanged(void);

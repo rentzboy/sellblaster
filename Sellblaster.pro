@@ -27,7 +27,7 @@ PRECOMPILED_HEADER  = precompiled_header.h
 
 #Indicamos la versión del compilador a la que tiene que llamar (si no queremos el predeterminado x Linux)
 #No es suficiente con indicarlo en Options > Kit
-QMAKE_CXX = ccache g++-8
+QMAKE_CXX = ccache g++-9
 
 #Indicar la versión de C++
 CONFIG += c++17

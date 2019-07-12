@@ -87,7 +87,7 @@ Item {
                         Label {
                             id: labelFormato
                             text: qsTr("Formato:")
-                            Layout.minimumWidth: 100
+                            Layout.minimumWidth: 135
                         }
                         ComboBox1 {
                             id: comboBoxFormato
@@ -99,7 +99,7 @@ Item {
                         Label {
                             id: labelMaterial
                             text: qsTr("Material:")
-                            Layout.minimumWidth: 100
+                            Layout.minimumWidth: 135
                         }
                         ComboBox1 {
                             id: comboBoxMaterial
@@ -111,11 +111,11 @@ Item {
                         Label {
                             id: labelSerie
                             text: qsTr("Serie:")
-                            Layout.minimumWidth: 100
+                            Layout.minimumWidth: 135
                         }
                         ComboBox1 {
                             id: comboBoxSerie
-                            objectName: "tratamiento"
+                            objectName: "serie"
                         }
                         SpacerH_20 {
                             Layout.fillWidth: true
