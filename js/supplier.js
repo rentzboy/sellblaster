@@ -26,8 +26,8 @@ function comboBoxIndexToBackEnd(fieldName, index) {
     case "puesto":
         txt = Supplier.SupplierType.puestoList[index]
         break
-    case "formato":
-        txt = Supplier.SupplierType.formatoList[index]
+    case "tipo":
+        txt = Supplier.SupplierType.tipoList[index]
         break
     case "material":
         txt = Supplier.SupplierType.materialList[index]

@@ -19,6 +19,7 @@ Window {
     }
 
     onClosing: onCloseQmlInstance()
+
     //QML handler for C++ signal
     Connections {
         target: SupplierType

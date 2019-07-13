@@ -10,7 +10,7 @@ TextArea {
     id: textArea
     Layout.minimumWidth: 150
     Layout.fillWidth: true
-    Layout.preferredHeight: 35
+    Layout.preferredHeight: 40
     //overwriteMode: true => cambia el cursor x uno bastante raro ......
     selectByMouse: true
     onEditingFinished: Supplier.textValueToBackEnd(objectName, text)

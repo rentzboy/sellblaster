@@ -21,7 +21,7 @@ class AddSupplier : public QObject
     Q_PROPERTY(QStringList areaList MEMBER areaList NOTIFY areaListChanged)
     Q_PROPERTY(QStringList puestoList MEMBER puestoList NOTIFY puestoListChanged)
     ///////////////////////PRODUCTOS////////////////////////////////////
-    Q_PROPERTY(QStringList formatoList MEMBER formatoList NOTIFY formatoListChanged)
+    Q_PROPERTY(QStringList tipoList MEMBER tipoList NOTIFY tipoListChanged)
     Q_PROPERTY(QStringList materialList MEMBER materialList NOTIFY materialListChanged)
     Q_PROPERTY(QStringList serieList MEMBER serieList NOTIFY serieListChanged)
     Q_PROPERTY(QStringList aleacionList MEMBER aleacionList NOTIFY aleacionListChanged)
@@ -58,7 +58,7 @@ private:
     QStringList formaPagoList;
     QStringList areaList;
     QStringList puestoList;
-    QStringList formatoList;
+    QStringList tipoList;
     QStringList materialList;
     QStringList serieList;
     QStringList serieListFija;
@@ -84,7 +84,7 @@ signals:
     void formaPagoListChanged(void);
     void areaListChanged(void);
     void puestoListChanged(void);
-    void formatoListChanged(void);
+    void tipoListChanged(void);
     void materialListChanged(void);
     void serieListChanged(void);
     void aleacionListChanged(void);

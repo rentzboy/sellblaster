@@ -134,9 +134,9 @@ ProductosTabForm {
     //TextFields
 
     //ComboBoxes
-    comboBoxFormato.onDisplayTextChanged: onFormatoComboBoxChanged()
+    comboBoxTipo.onDisplayTextChanged: onTipoComboBoxChanged()
 
-    comboBoxFormato.model: SupplierType.formatoList
+    comboBoxTipo.model: SupplierType.tipoList
     comboBoxMaterial.model: SupplierType.materialList
     comboBoxSerie.model: SupplierType.serieList
     comboBoxAleacion.model: SupplierType.aleacionList
@@ -149,12 +149,12 @@ ProductosTabForm {
     buttonGuardar.onClicked: SupplierType.onGuardarButton("productos")
 
     //JS
-    function onFormatoComboBoxChanged() {
-        console.log("currentText: " + comboBoxFormato.displayText
-                    + ", currentIndex: " + comboBoxFormato.currentIndex)
+    function onTipoComboBoxChanged() {
+        console.log("currentText: " + comboBoxTipo.displayText
+                    + ", currentIndex: " + comboBoxTipo.currentIndex)
 
         //Customization
-        switch (comboBoxFormato.displayText) {
+        switch (comboBoxTipo.displayText) {
         case "Bobina":
             state = "bobina"
             break

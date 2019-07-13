@@ -12,7 +12,7 @@ Item {
     property alias buttonAceptar: buttonAceptar
     property alias buttonCancelar: buttonCancelar
     property alias buttonGuardar: buttonGuardar
-    property alias comboBoxFormato: comboBoxFormato
+    property alias comboBoxTipo: comboBoxTipo
     property alias comboBoxMaterial: comboBoxMaterial
     property alias comboBoxSerie: comboBoxSerie
     property alias comboBoxAleacion: comboBoxAleacion
@@ -85,13 +85,13 @@ Item {
                         visible: true
 
                         Label {
-                            id: labelFormato
-                            text: qsTr("Formato:")
+                            id: labelTipo
+                            text: qsTr("Tipo:")
                             Layout.minimumWidth: 135
                         }
                         ComboBox1 {
-                            id: comboBoxFormato
-                            objectName: "formato"
+                            id: comboBoxTipo
+                            objectName: "tipo"
                         }
                         SpacerH_20 {
                         }

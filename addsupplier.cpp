@@ -212,13 +212,13 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
     }
     else if(tab == "productos")
     {
-        QString sqlQuery = "CALL get_DropDownMenusData('type', 'type')"; //Formato
+        QString sqlQuery = "CALL get_DropDownMenusData('type', 'type')"; //Tipo
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
-            formatoList.append(result.value(0).toString());
+            tipoList.append(result.value(0).toString());
         }
-        emit formatoListChanged();
+        emit tipoListChanged();
         ////////////////////////////////////////////////////////////////
         sqlQuery = "CALL get_DropDownMenusData('metal', 'metal')"; //Material
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.

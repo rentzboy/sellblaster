@@ -14,7 +14,7 @@ ComboBox {
     id: comboBox
     Layout.minimumWidth: 150
     Layout.fillWidth: true
-    Layout.preferredHeight: 35
+    Layout.preferredHeight: 40
 
     onModelChanged: initializationComboBoxIndex(objectName)
     onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(objectName,
