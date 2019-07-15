@@ -5,6 +5,7 @@ import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
 import "components"
+import "ui"
 import LoginClass 1.0
 
 Window {

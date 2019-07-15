@@ -4,8 +4,8 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Universal 2.0
 import QtQuick.Dialogs.qml 1.0
-import QtQuick.Controls.Material 2.0
-import "components"
+import QtQuick.Controls.Material 2.12
+import "../../components"
 
 Item {
     id: productosTab
@@ -156,23 +156,23 @@ Item {
                         }
                     }
 
-                    GridTextFieldBobina {
+                    GridTextFieldBobinaForm {
                         id: gridTextFieldBobina
                     }
 
-                    GridTextFieldChapa {
+                    GridTextFieldChapaForm {
                         id: gridTextFieldChapa
                     }
 
-                    GridTextFieldBarra {
+                    GridTextFieldBarraForm {
                         id: gridTextFieldBarra
                     }
 
-                    GridTextFieldTubo {
+                    GridTextFieldTuboForm {
                         id: gridTextFieldTubo
                     }
 
-                    GridTextFieldDisco {
+                    GridTextFieldDiscoForm {
                         id: gridTextFieldDisco
                     }
                 }
@@ -200,6 +200,6 @@ Item {
 
 
 /*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:1000}
+    D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/

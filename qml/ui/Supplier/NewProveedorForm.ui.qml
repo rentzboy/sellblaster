@@ -4,10 +4,9 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Universal 2.0
 import QtQuick.Dialogs.qml 1.0
-import QtQuick.Controls.Material 2.0
+import QtQuick.Controls.Material 2.12
 //Si no importamos labs.plataform el menubar no es nativo (en MS no esta operativo)
 import Qt.labs.platform 1.1
-import "components"
 
 Item {
     id: newProveedorFormWindow
@@ -61,18 +60,18 @@ Item {
             anchors.top: bar.bottom
             currentIndex: bar.currentIndex
 
-            EmpresaTab {
+            EmpresaTabForm {
                 id: empresa
                 Layout.fillHeight: parent
                 Layout.fillWidth: parent
             }
-            ContactosTab {
+            ContactosTabForm {
                 id: contactos
                 width: 2
                 Layout.fillHeight: parent
                 Layout.fillWidth: parent
             }
-            ProductosTab {
+            ProductosTabForm {
                 id: productos
                 Layout.fillHeight: parent
                 Layout.fillWidth: parent

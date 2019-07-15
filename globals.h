@@ -15,7 +15,7 @@
 #define MAIN_DB_CONNECTION_NAME             DB_QMYSQL_CONNECTION_NAME
 
 //#define DIRECTORY_PATH                                      QCoreApplication::applicationDirPath()
-#define DIRECTORY_PATH                                      "/home/renti/Qt5.12.1/Proyectos"
+#define DIRECTORY_PATH                                      "/home/renti/Proyectos"
 #define LOG_FILE_RELATIVE_PATH                     "/Q_Sellblaster/logs/exceptions.txt"
 #define SQLITE_RELATIVE_PATH                          "/Q_Sellblaster/logs/innerdb.sqlite3"
 

@@ -5,6 +5,7 @@ import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
 import "components"
+import "ui/Supplier"
 import SupplierClass 1.0
 import "../js/supplier.js" as Supplier
 

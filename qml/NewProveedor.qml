@@ -5,6 +5,7 @@ import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
 import "components"
+import "ui/Supplier"
 import MainClass 1.0
 import SupplierClass 1.0
 
@@ -63,7 +64,6 @@ Window {
 
                 //Se llama desde el constructor
             } else if (contactosTabCounter === 1 && tab === "contactos") {
-                console.log("OJO: se ejecuta BAR_INDEX_CONTACTOS")
                 SupplierType.fillComboBoxesFromDb(tab)
                 contactosTabCounter--
             } else if (productosTabCounter === 1 && tab === "productos") {
@@ -103,10 +103,8 @@ Window {
     }
 }
 
-
-
-
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
+

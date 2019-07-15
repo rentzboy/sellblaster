@@ -2,10 +2,11 @@
 .import  SupplierClass 1.0 as Supplier
 
 //JS FUNCTIONS
-function textValueToBackEnd(fieldName, value) {
+function textValueToBackEnd(fieldNamevalue) {
     Supplier.SupplierType.textValueToBackEnd(fieldName, value)
 }
-function comboBoxIndexToBackEnd(fieldName, index) {
+//jjj
+function comboBoxIndexToBackEnd(fieldNameindex) {
     //console.log("Se ha llamado a comboBoxIndexToBackEnd: (" + fieldName + ", " + index + ")")
     if (index === -1)
         return

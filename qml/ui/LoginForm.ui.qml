@@ -1,10 +1,9 @@
 ﻿import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.3
-//import QtQuick.Controls.Material 2.12
+import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
-import "components"
 
 Item {
     id: window
@@ -91,7 +90,6 @@ Item {
             color: "#ef2929"
             anchors.topMargin: 15
             anchors.top: gridLayout.bottom
-            //anchors.bottomMargin: 15
             horizontalAlignment: Text.AlignHCenter
             anchors.horizontalCenter: gridLayout.horizontalCenter
         }

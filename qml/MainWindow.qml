@@ -6,9 +6,9 @@ import QtQuick.Layouts 1.3
 //Si no importamos labs.plataform el menubar no es nativo (en MS no esta operativo)
 import Qt.labs.platform 1.1
 import "components"
+import "ui"
 import MainClass 1.0
 
-//import MainClass 1.0
 ApplicationWindow {
     id: window
     visible: true

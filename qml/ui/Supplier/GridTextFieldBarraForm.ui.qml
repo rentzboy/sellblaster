@@ -4,8 +4,8 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Universal 2.0
 import QtQuick.Dialogs.qml 1.0
-import QtQuick.Controls.Material 2.0
-import "components"
+import QtQuick.Controls.Material 2.12
+import "../../components"
 
 GridLayout {
     id: gridTextFieldBarra
@@ -83,3 +83,7 @@ GridLayout {
     }
 }
 
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

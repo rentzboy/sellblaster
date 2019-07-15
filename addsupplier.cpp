@@ -177,6 +177,7 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
         {
             paisList.append(result.value(0).toString());
         }
+        qDebug() << "paisList: " << paisList;
         ////////////////////////////////////////////////////////////////
         sqlQuery = "CALL get_DropDownMenusData('activity', 'activity')";
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
