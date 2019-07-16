@@ -5,10 +5,14 @@ TextField1 TextField1.qml
 ComboBox1 ComboBox1.qml
 SpacerH_20 SpacerH_20.qml
 
-#Necesarios pues los .ui solo los asocia con su .qml si estan en el mismo directorio
+#Necesarios pues los .ui solo están visibles para su .qml si estan en el mismo directorio
 #ui directory
 LoginForm                ../ui/LoginForm.ui.qml
 MainWindowForm    ../ui/MainWindowForm.ui.qml
+EmpresaTab               ../EmpresaTab.qml
+ContactosTab             ../ContactosTab.qml
+ProductosTab             ../ProductosTab.qml
+
 #ui/Supplier directory
 NewProveedorForm   ../ui/Supplier/NewProveedorForm.ui.qml
 EmpresaTabForm       ../ui/Supplier/EmpresaTabForm.ui.qml
