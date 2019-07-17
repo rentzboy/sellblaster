@@ -13,7 +13,6 @@ GridLayout {
     property alias textFieldDiametroMaxBarra: textFieldDiametroMaxBarra
     property alias textFieldLargoMinBarra: textFieldLargoMinBarra
     property alias textFieldLargoMaxBarra: textFieldLargoMaxBarra
-    property alias gridTextFieldBarra: gridTextFieldBarra
 
     Layout.topMargin: 10
     columnSpacing: 15

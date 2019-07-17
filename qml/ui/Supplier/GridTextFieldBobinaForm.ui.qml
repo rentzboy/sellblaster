@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Universal 2.0
 import QtQuick.Dialogs.qml 1.0
 import QtQuick.Controls.Material 2.12
+import SupplierClass 1.0
 import "../../components"
 
 GridLayout {
@@ -13,7 +14,6 @@ GridLayout {
     property alias textFieldEspesorMinBobina: textFieldEspesorMinBobina
     property alias textFieldEspesorMaxBobina: textFieldEspesorMaxBobina
     property alias comboBoxDiametroIntBobina: comboBoxDiametroIntBobina
-    property alias gridTextFieldBobina: gridTextFieldBobina
 
     Layout.topMargin: 10
     Layout.fillWidth: true
@@ -32,6 +32,8 @@ GridLayout {
         id: comboBoxAnchoBobina
         objectName: "anchoBobina"
         width: comboBoxTipo.width
+        model: ListModel {
+        }
     }
     SpacerH_20 {
     }

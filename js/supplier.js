@@ -5,7 +5,7 @@
 function textValueToBackEnd(fieldName, value) {
     Supplier.SupplierType.textValueToBackEnd(fieldName, value)
 }
-//jjj
+
 function comboBoxIndexToBackEnd(fieldName, index) {
     //console.log("Se ha llamado a comboBoxIndexToBackEnd: (" + fieldName + ", " + index + ")")
     if (index === -1)
@@ -45,8 +45,34 @@ function comboBoxIndexToBackEnd(fieldName, index) {
     case "acabado":
         txt = Supplier.SupplierType.acabadoList[index]
         break
+    case "acabado":
+        txt = Supplier.SupplierType.acabadoList[index]
+        break
+    case "formatoChapa":
+        txt = Supplier.SupplierType.formatoList[index]
+        break
+    case "anchoBobina":
+        txt = Supplier.SupplierType.formatoList[index]
+        break
+    case "diametroIntBobina":
+        txt = Supplier.SupplierType.idBobinaList[index]
+        break
     default:
 
     }
     textValueToBackEnd(fieldName, txt)
+}
+
+function onComboBoxCompleted() {
+    //console.log("Componente cargado: " + objectName + " con el modelo: " + model)
+}
+
+function initializationComboBoxIndex() {
+    /*Los comboBox se inician a -1 (no muestran valores) pero al cargar el model,
+    automáticamente coge el primer valor, en este caso el index 0, por lo que
+    muestra un valor aunque el usuario no haya seleccionado nada.
+   La función initializationComboBoxIndex permite que no se muestre ningún
+   valor en el comboBox hasta que el usuario no seleccione uno, por lo
+   que hay que asignarla a onModelChanged.*/
+    currentIndex = -1
 }

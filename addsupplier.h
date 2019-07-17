@@ -27,6 +27,9 @@ class AddSupplier : public QObject
     Q_PROPERTY(QStringList aleacionList MEMBER aleacionList NOTIFY aleacionListChanged)
     Q_PROPERTY(QStringList templeList MEMBER templeList NOTIFY templeListChanged)
     Q_PROPERTY(QStringList acabadoList MEMBER acabadoList NOTIFY acabadoListChanged)
+    Q_PROPERTY(QStringList formatoList MEMBER formatoList NOTIFY formatoListChanged)
+    Q_PROPERTY(QStringList idBobinaList MEMBER idBobinaList NOTIFY idBobinaListChanged)
+
 
 public:
     AddSupplier(const AddSupplier &other) = delete;
@@ -61,10 +64,12 @@ private:
     QStringList tipoList;
     QStringList materialList;
     QStringList serieList;
-    QStringList serieListFija;
     QStringList aleacionList;
     QStringList templeList;
     QStringList acabadoList;
+    QStringList serieListFija;
+    QStringList formatoList;
+    QStringList idBobinaList;
 
     QMap <QString, QString> formField;
     QErrorMessage *errorMessage = Q_NULLPTR;
@@ -90,6 +95,8 @@ signals:
     void aleacionListChanged(void);
     void templeListChanged(void);
     void acabadoListChanged(void);
+    void formatoListChanged(void);
+    void idBobinaListChanged(void);
 };
 
 #endif // ADDSUPPLIER_H

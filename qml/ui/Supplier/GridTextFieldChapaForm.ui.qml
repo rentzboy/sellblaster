@@ -9,10 +9,9 @@ import "../../components"
 
 GridLayout {
     id: gridTextFieldChapa
-    property alias comboBoxTipoChapa: comboBoxTipoChapa
+    property alias comboBoxFormatoChapa: comboBoxFormatoChapa
     property alias textFieldEspesorMinChapa: textFieldEspesorMinChapa
     property alias textFieldEspesorMaxChapa: textFieldEspesorMaxChapa
-    property alias gridTextFieldChapa: gridTextFieldChapa
 
     Layout.topMargin: 10
     columnSpacing: 15
@@ -22,12 +21,12 @@ GridLayout {
     visible: false
 
     Label {
-        id: labelTipoChapa
-        text: qsTr("Tipo:")
+        id: labelFormatoChapa
+        text: qsTr("Formato:")
         Layout.minimumWidth: 135
     }
     ComboBox1 {
-        id: comboBoxTipoChapa
+        id: comboBoxFormatoChapa
         objectName: "tipoChapa"
         width: comboBoxTipo.width
     }
@@ -61,3 +60,8 @@ GridLayout {
         Layout.fillWidth: true
     }
 }
+
+/*##^## Designer {
+    D{i:0;height:600;width:1000}
+}
+ ##^##*/

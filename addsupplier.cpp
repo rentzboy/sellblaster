@@ -54,7 +54,7 @@ void AddSupplier::textValueToBackEnd(QString key, QString value)
     formField.insert(key, value); //no puede haber 2 key iguales en el QMap
 
     //Cargar los comboBoxes relacionados
-    if(key == "material" || key == "serie")
+    if(key == "tipo" || key == "material" || key == "serie")
         emit formFieldUpdated(key, value);
 }
 AddSupplier::~AddSupplier()
@@ -91,9 +91,26 @@ void AddSupplier::fillDependentComboBoxFromDb(QString comboBox, QString value)
 
     QSqlQuery result;
     QString sqlQuery;
-    QString idMetal;
-    QString idSerie;
+    QString idType, idMetal, idSerie, idId;
 
+    if(comboBox == "tipo")
+    {
+        if(value == "Bobina" || value == "Chapa" || value == "Plancha")
+        {
+            //Recuperar Formatos -anchos- bobina
+            formatoList.clear();
+            idType = QString::number(tipoList.indexOf(value) + 1);
+            sqlQuery = "CALL get_DependencyDropDownMenusData(";
+            sqlQuery.append("'format', 'format', 'id_type', ").append(idType).append(");");
+            MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+            while(result.next())
+            {
+                formatoList.append(result.value(0).toString());
+            }
+            emit formatoListChanged();
+            qDebug() << "formatoList: " << formatoList;
+        }
+    }
     if(comboBox == "material")
     {
         //Serie
@@ -165,8 +182,10 @@ void AddSupplier::fillDependentComboBoxFromDb(QString comboBox, QString value)
 }
 void AddSupplier::fillComboBoxesFromDb(QString tab)
 {
+    //Unicamente se llama una vez para cada pestaña -empresa, contactos, productos-
+    //Los resultados NO se actualizan en f(selección usuario)
     qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
-    //Fill drop-down menus with database values
+
     QSqlQuery result; //sirve para todas las consultas
 
     if(tab == "empresa") //Se carga desde el constructor
@@ -211,7 +230,7 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
         }
         emit puestoListChanged();
     }
-    else if(tab == "productos")
+    else if(tab == "productos") //Se llama desde JS, al actualizarse el TabBar
     {
         QString sqlQuery = "CALL get_DropDownMenusData('type', 'type')"; //Tipo
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
@@ -235,6 +254,14 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
         {
             serieListFija.append(result.value(0).toString());
         }
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenusData('inner_diameter', 'inner_diameter')"; //Se utiliza como apoyo
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            idBobinaList.append(result.value(0).toString());
+        }
+        emit idBobinaListChanged();
     }
 }
 bool AddSupplier::sanitationCheck(QString tab)
@@ -302,6 +329,34 @@ void AddSupplier::resetFields(QString tab)
     else if(tab == "productos")
     {
         //Clear QMap values
+        formField["tipo"].clear();
+        formField["material"].clear();
+        formField["serie"].clear();
+        formField["aleacion"].clear();
+        formField["temple"].clear();
+        formField["acabado"].clear();
+        formField["diametroMinBarra"].clear();
+        formField["diametroMaxBarra"].clear();
+        formField["largoMinBarra"].clear();
+        formField["largoMaxBarra"].clear();
+        formField["anchoBobina"].clear();
+        formField["espesorMinBobina"].clear();
+        formField["espesorMaxBobina"].clear();
+        formField["diametroIntBobina"].clear();
+        formField["tipoChapa"].clear();
+        formField["espesorMinChapa"].clear();
+        formField["espesorMaxChapa"].clear();
+        formField["diametroMinDisco"].clear();
+        formField["diametroMaxDisco"].clear();
+        formField["espesorMinDisco"].clear();
+        formField["espesorMaxDisco"].clear();
+        formField["diametroIntMinTubo"].clear();
+        formField["diametroIntMaxTubo"].clear();
+        formField["diametroExtMinTubo"].clear();
+        formField["diametroExtMaxTubo"].clear();
+        formField["largoMinTubo"].clear();
+        formField["largoMaxTubo"].clear();
+
 
         //Clear form values using JavaScript
         emit clearFormFields(tab);

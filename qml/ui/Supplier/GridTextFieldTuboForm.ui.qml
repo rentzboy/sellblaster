@@ -15,7 +15,6 @@ GridLayout {
     property alias textFieldDiametroIntMaxTubo: textFieldDiametroIntMaxTubo
     property alias textFieldDiametroExtMaxTubo: textFieldDiametroExtMaxTubo
     property alias textFieldLargoMaxTubo: textFieldLargoMaxTubo
-    property alias gridTextFieldTubo: gridTextFieldTubo
 
     Layout.topMargin: 10
     columnSpacing: 15
@@ -91,6 +90,9 @@ GridLayout {
         Layout.fillWidth: true
     }
 }
+
+
+
 
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}

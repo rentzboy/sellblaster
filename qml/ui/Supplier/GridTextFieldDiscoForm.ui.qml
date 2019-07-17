@@ -13,7 +13,6 @@ GridLayout {
     property alias textFieldDiametroMaxDisco: textFieldDiametroMaxDisco
     property alias textFieldEspesorMinDisco: textFieldEspesorMinDisco
     property alias textFieldEspesorMaxDisco: textFieldEspesorMaxDisco
-    property alias gridTextFieldDisco: gridTextFieldDisco
 
     Layout.topMargin: 10
     columnSpacing: 15
@@ -81,6 +80,8 @@ GridLayout {
         Layout.fillWidth: true
     }
 }
+
+
 
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}

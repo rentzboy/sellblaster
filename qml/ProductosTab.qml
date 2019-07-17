@@ -11,9 +11,54 @@ import "../js/supplier.js" as Supplier
 ProductosTabForm {
     id: form
     objectName: "ProductosTabForm"
+    property int counter: 0
+
+    //TextFields
+
+    //ComboBoxes
+    comboBoxTipo.onDisplayTextChanged: onTipoComboBoxChanged()
+
+    comboBoxTipo.model: SupplierType.tipoList
+    comboBoxMaterial.model: SupplierType.materialList
+    comboBoxSerie.model: SupplierType.serieList
+    comboBoxAleacion.model: SupplierType.aleacionList
+    comboBoxTemple.model: SupplierType.templeList
+    comboBoxAcabado.model: SupplierType.acabadoList
+
+    gridTextFieldBobina.comboBoxAnchoBobina.model: SupplierType.formatoList
+    gridTextFieldBobina.comboBoxDiametroIntBobina.model: SupplierType.idBobinaList
+    gridTextFieldChapa.comboBoxFormatoChapa.model: SupplierType.formatoList
+
+    //Buttons
+    buttonAceptar.onClicked: SupplierType.onAceptarButton("productos")
+    buttonCancelar.onClicked: SupplierType.onCancelarButton()
+    buttonGuardar.onClicked: SupplierType.onGuardarButton("productos")
 
     //States
     states: [
+        State {
+            name: "reset"
+            PropertyChanges {
+                target: gridTextFieldChapa
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldBobina
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldBarra
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldTubo
+                visible: false
+            }
+            PropertyChanges {
+                target: gridTextFieldDisco
+                visible: false
+            }
+        },
         State {
             name: "bobina"
             PropertyChanges {
@@ -131,30 +176,23 @@ ProductosTabForm {
         }
     ]
 
-    //TextFields
-
-    //ComboBoxes
-    comboBoxTipo.onDisplayTextChanged: onTipoComboBoxChanged()
-
-    comboBoxTipo.model: SupplierType.tipoList
-    comboBoxMaterial.model: SupplierType.materialList
-    comboBoxSerie.model: SupplierType.serieList
-    comboBoxAleacion.model: SupplierType.aleacionList
-    comboBoxTemple.model: SupplierType.templeList
-    comboBoxAcabado.model: SupplierType.acabadoList
-
-    //Buttons
-    buttonAceptar.onClicked: SupplierType.onAceptarButton("productos")
-    buttonCancelar.onClicked: SupplierType.onCancelarButton()
-    buttonGuardar.onClicked: SupplierType.onGuardarButton("productos")
-
     //JS
     function onTipoComboBoxChanged() {
         console.log("currentText: " + comboBoxTipo.displayText
                     + ", currentIndex: " + comboBoxTipo.currentIndex)
 
+        //Para que se muestre el state=reset al cargar la 1era vez ProductosTab
+        counter++
+        if(counter === 2) {
+            state = "reset"
+            return
+        }
+
         //Customization
         switch (comboBoxTipo.displayText) {
+        case "Inicio":
+            state = "reset"
+            break
         case "Bobina":
             state = "bobina"
             break
@@ -182,15 +220,29 @@ ProductosTabForm {
     }
 
     //SLOTS
-    function onClearProductosFields(tab) {
+    function onClearFormFields(tab) {
         //hay que definirla para cada pestaña; se llama desde C++
         console.log("Se ha llamado a la función onClearProductosFields(" + tab + ")")
         //PENDING -no se que campos borrar todavía-
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:1000}D{i:18;autoSize:true;height:480;width:1000}
+    D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
-
