@@ -2,12 +2,29 @@
 .import  SupplierClass 1.0 as Supplier
 
 //JS FUNCTIONS
-function textValueToBackEnd(fieldName, value) {
+function textValueToBackEnd(fieldName, value) { 
+    if(value) //sanitation check
     Supplier.SupplierType.textValueToBackEnd(fieldName, value)
 }
 
+function checkingCheckBoxes(fieldName, text, checked) {
+    if(text) //sanitation check
+    Supplier.SupplierType.textListToBackEnd(fieldName, text, checked)
+}
+
+function initializationComboBoxIndex() {
+    /*Los comboBox se inician a -1 (no muestran valores) pero al cargar el model,
+    automáticamente coge el primer valor, en este caso el index 0, por lo que
+    muestra un valor aunque el usuario no haya seleccionado nada.
+   La función initializationComboBoxIndex permite que no se muestre ningún
+   valor en el comboBox hasta que el usuario no seleccione uno, por lo
+   que hay que asignarla a onModelChanged.*/
+    currentIndex = -1
+}
+
+//Deprecated
 function comboBoxIndexToBackEnd(fieldName, index) {
-    //console.log("Se ha llamado a comboBoxIndexToBackEnd: (" + fieldName + ", " + index + ")")
+    console.log("Se ha llamado a comboBoxIndexToBackEnd: (" + fieldName + ", " + index + ")")
     if (index === -1)
         return
     var txt
@@ -64,15 +81,5 @@ function comboBoxIndexToBackEnd(fieldName, index) {
 }
 
 function onComboBoxCompleted() {
-    //console.log("Componente cargado: " + objectName + " con el modelo: " + model)
-}
-
-function initializationComboBoxIndex() {
-    /*Los comboBox se inician a -1 (no muestran valores) pero al cargar el model,
-    automáticamente coge el primer valor, en este caso el index 0, por lo que
-    muestra un valor aunque el usuario no haya seleccionado nada.
-   La función initializationComboBoxIndex permite que no se muestre ningún
-   valor en el comboBox hasta que el usuario no seleccione uno, por lo
-   que hay que asignarla a onModelChanged.*/
-    currentIndex = -1
+    console.log("Componente cargado: " + objectName + " con el modelo: " + model)
 }

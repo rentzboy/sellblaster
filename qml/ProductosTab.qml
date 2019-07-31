@@ -4,8 +4,8 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
-import "components"
 import SupplierClass 1.0
+import "components"
 import "../js/supplier.js" as Supplier
 
 ProductosTabForm {
@@ -226,20 +226,6 @@ ProductosTabForm {
         //PENDING -no se que campos borrar todavía-
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*##^## Designer {

@@ -25,7 +25,7 @@ GridLayout {
         text: qsTr("Formato:")
         Layout.minimumWidth: 135
     }
-    ComboBox1 {
+    ComboBox11 {
         id: comboBoxFormatoChapa
         objectName: "tipoChapa"
         width: comboBoxTipo.width
@@ -60,6 +60,9 @@ GridLayout {
         Layout.fillWidth: true
     }
 }
+
+
+
 
 /*##^## Designer {
     D{i:0;height:600;width:1000}

@@ -11,12 +11,12 @@ import "../../js/supplier.js" as Supplier
   un objectName pues se necesitan para las funciones de JS
 */
 ComboBox {
-    id: comboBox
     Layout.minimumWidth: 150
     Layout.fillWidth: true
     Layout.preferredHeight: 40
 
     onModelChanged: Supplier.initializationComboBoxIndex()
-    onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(objectName, currentIndex)
-    Component.onCompleted: Supplier.onComboBoxCompleted()
+    onDisplayTextChanged: Supplier.textValueToBackEnd(objectName, displayText)
+    //onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(objectName, currentIndex)
+    //Component.onCompleted: Supplier.onComboBoxCompleted()
 }

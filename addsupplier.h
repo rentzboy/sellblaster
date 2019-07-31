@@ -36,14 +36,16 @@ public:
     AddSupplier operator=(const AddSupplier &other) = delete;
     ~AddSupplier();
     static void createComponent(void);
-    Q_INVOKABLE void textValueToBackEnd(QString key, QString value);
+    Q_INVOKABLE void textValueToBackEnd(QString fieldName, QString text);
+    Q_INVOKABLE void textListToBackEnd(QString fieldName, QString text, bool value);
     Q_INVOKABLE void fillComboBoxesFromDb(QString tab);
-    Q_INVOKABLE void fillDependentComboBoxFromDb(QString comboBox, QString value);
+    Q_INVOKABLE void fillDependentComboBoxFromDb(QString comboBox);
+    Q_INVOKABLE void fillDependentComboCheckBoxFromDb(QString comboBox);
 public slots:
     bool onAceptarButton(QString tab);
     void onCancelarButton(void);
     void onGuardarButton(QString tab);
-    void onFormFieldUpdated(QString field, QString value);
+    void onFormFieldUpdated(QString fieldName);
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 private:
@@ -64,10 +66,14 @@ private:
     QStringList tipoList;
     QStringList materialList;
     QStringList serieList;
-    QStringList aleacionList;
-    QStringList templeList;
-    QStringList acabadoList;
     QStringList serieListFija;
+    QStringList serieIndexList;
+    QStringList serieSelectionList;
+    QStringList aleacionList;
+    QStringList aleacionSelectionList;
+    QStringList templeList;
+    QStringList templeSelectionList;
+    QStringList acabadoList;
     QStringList formatoList;
     QStringList idBobinaList;
 
@@ -83,7 +89,7 @@ signals:
     void clearFormFields(QVariant tab);
     void clearFormFields(QString tab);
     //Notify signals
-    void formFieldUpdated(QString field, QString value);
+    void formFieldUpdated(QString fieldName);
     void actividadListChanged(void);
     void paisListChanged(void);
     void formaPagoListChanged(void);

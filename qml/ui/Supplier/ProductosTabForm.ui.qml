@@ -113,7 +113,7 @@ Item {
                             text: qsTr("Serie:")
                             Layout.minimumWidth: 135
                         }
-                        ComboBox1 {
+                        ComboBox11 {
                             id: comboBoxSerie
                             objectName: "serie"
                         }
@@ -125,7 +125,7 @@ Item {
                             id: labelAleacion
                             text: qsTr("Aleación:")
                         }
-                        ComboBox1 {
+                        ComboBox11 {
                             id: comboBoxAleacion
                             objectName: "aleacion"
                         }
@@ -136,7 +136,7 @@ Item {
                             id: labelTemple
                             text: qsTr("Temple:")
                         }
-                        ComboBox1 {
+                        ComboBox11 {
                             id: comboBoxTemple
                             objectName: "temple"
                         }
@@ -147,7 +147,7 @@ Item {
                             id: labelAcabado
                             text: qsTr("Acabado:")
                         }
-                        ComboBox1 {
+                        ComboBox11 {
                             id: comboBoxAcabado
                             objectName: "acabado"
                         }
@@ -200,6 +200,6 @@ Item {
 
 
 /*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
+    D{i:0;autoSize:true;height:480;width:1200}
 }
  ##^##*/

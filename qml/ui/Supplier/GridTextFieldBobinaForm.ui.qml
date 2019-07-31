@@ -28,12 +28,10 @@ GridLayout {
         text: qsTr("Ancho:")
         Layout.minimumWidth: 135
     }
-    ComboBox1 {
+    ComboBox11 {
         id: comboBoxAnchoBobina
         objectName: "anchoBobina"
         width: comboBoxTipo.width
-        model: ListModel {
-        }
     }
     SpacerH_20 {
     }
@@ -79,3 +77,8 @@ GridLayout {
     SpacerH_20 {
     }
 }
+
+/*##^## Designer {
+    D{i:0;height:600;width:1000}
+}
+ ##^##*/
