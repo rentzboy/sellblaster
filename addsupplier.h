@@ -63,19 +63,27 @@ private:
     QStringList formaPagoList;
     QStringList areaList;
     QStringList puestoList;
-    QStringList tipoList;
-    QStringList materialList;
+    QStringList tipoList; //bobina, chapa, plancha, tubo, ....
+    QStringList materialList; //aluminio, inox, titanio, ....
     QStringList serieList;
-    QStringList serieListFija;
+    QStringList serieListCompleta;
     QStringList serieIndexList;
     QStringList serieSelectionList;
     QStringList aleacionList;
+    QStringList aleacionListCompleta;
     QStringList aleacionSelectionList;
     QStringList templeList;
+    QStringList templeListCompleta;
     QStringList templeSelectionList;
     QStringList acabadoList;
-    QStringList formatoList;
+    QStringList acabadoListCompleta;
+    QStringList acabadoSelectionList;
+    QStringList formatoList; //Formatos chapas/planchas y anchos bobinas
+    QStringList formatoListCompleta;
+    QStringList formatoChapaSelectionList;
+    QStringList formatoBobinaSelectionList;
     QStringList idBobinaList;
+    QStringList idBobinaSelectionList;
 
     QMap <QString, QString> formField;
     QErrorMessage *errorMessage = Q_NULLPTR;

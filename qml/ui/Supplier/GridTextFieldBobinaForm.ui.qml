@@ -43,7 +43,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldEspesorMinBobina
-        objectName: "espesorMinBobina"
+        objectName: "espesorMin"
         x: comboBoxMaterial.x
         width: comboBoxTipo.width
     }
@@ -57,7 +57,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldEspesorMaxBobina
-        objectName: "espesorMaxBobina"
+        objectName: "espesorMax"
         x: comboBoxSerie.x
         width: comboBoxTipo.width
     }
@@ -69,7 +69,7 @@ GridLayout {
         id: labelDiametroIntBobina
         text: qsTr("ID:")
     }
-    ComboBox1 {
+    ComboBox11 {
         id: comboBoxDiametroIntBobina
         objectName: "diametroIntBobina"
         width: comboBoxTipo.width
@@ -77,6 +77,9 @@ GridLayout {
     SpacerH_20 {
     }
 }
+
+
+
 
 /*##^## Designer {
     D{i:0;height:600;width:1000}

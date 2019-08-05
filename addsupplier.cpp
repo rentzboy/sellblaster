@@ -51,7 +51,10 @@ void AddSupplier::textValueToBackEnd(QString fieldName, QString text)
     PRINT_FUNCTION_NAME
 
     //Guarda los valores de los comboBoxes sin checkboxes y textFields
-    formField.insert(fieldName, text); //no puede haber 2 key iguales en el QMap
+    if(text == "reset")
+        formField.remove(fieldName); //resetear el valor pasado al cargar el modelo del comboBox
+    else
+        formField.insert(fieldName, text); //no puede haber 2 key iguales en el QMap
 
     //Cargar los comboBoxes relacionados
     if(fieldName == "tipo" || fieldName == "material")
@@ -79,6 +82,26 @@ void AddSupplier::textListToBackEnd(QString fieldName, QString text, bool value)
         if(value) templeSelectionList.append(text);
         else templeSelectionList.removeOne(text);
     }
+    else if(fieldName == "acabado")
+    {
+        if(value) acabadoSelectionList.append(text);
+        else acabadoSelectionList.removeOne(text);
+    }
+    else if(fieldName == "formatoChapa")
+    {
+        if(value) formatoChapaSelectionList.append(text);
+        else formatoChapaSelectionList.removeOne(text);
+    }
+    else if(fieldName == "anchoBobina")
+    {
+        if(value) formatoBobinaSelectionList.append(text);
+        else formatoBobinaSelectionList.removeOne(text);
+    }
+    else if(fieldName == "diametroIntBobina")
+    {
+        if(value) idBobinaSelectionList.append(text);
+        else idBobinaSelectionList.removeOne(text);
+    }
 }
 AddSupplier::~AddSupplier()
 {
@@ -105,9 +128,10 @@ void AddSupplier::registerSingleton(void)
         return uniqueInstance;
             });
 }
-void AddSupplier::fillDependentComboCheckBoxFromDb(QString comboBox)
+void AddSupplier::fillDependentComboCheckBoxFromDb(QString)
 {
-    qDebug() << "Se ha llamado a la función onFormFieldUpdated. " << "FIELD: " << comboBox;
+    //Ahora mismo solo cumple esta condición el comboBox Aleación
+    //por lo que el parámetero de la función NO es necesario.
 
     QSqlQuery result;
     QString sqlQuery;
@@ -115,28 +139,33 @@ void AddSupplier::fillDependentComboCheckBoxFromDb(QString comboBox)
     //Aleación
     aleacionList.clear();
     serieIndexList.clear();
-    for (auto itr : serieSelectionList)
+    if(serieSelectionList.isEmpty())
     {
-        serieIndexList.append(QString::number(serieListFija.indexOf(itr) + 1)); //+1 from comboBox index to idTableName
+        aleacionList = aleacionListCompleta;
     }
-    QString str = serieIndexList.join(", ");
-    qDebug() << "serieIndexList: " << serieIndexList;
-
-    sqlQuery = "CALL get_SerieDropDownMenu(";
-    sqlQuery.append("'alloy', 'aisi', 'id_serie', '").append(str).append("');");
-    qDebug() << sqlQuery;
-    MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-    while(result.next())
+    else
     {
-        aleacionList.append(result.value(0).toString());
+        for (auto itr : serieSelectionList)
+        {
+            serieIndexList.append(QString::number(serieListCompleta.indexOf(itr) + 1)); //+1 from comboBox index to idTableName
+        }
+        QString str = serieIndexList.join(", ");
+        //qDebug() << "serieIndexList: " << serieIndexList;
+
+        sqlQuery = "CALL get_SerieDropDownMenu(";
+        sqlQuery.append("'alloy', 'aisi', 'id_serie', '").append(str).append("');");
+        //qDebug() << sqlQuery;
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            aleacionList.append(result.value(0).toString());
+        }
     }
     emit aleacionListChanged();
-    qDebug() << "aleacionList: " << aleacionList;
+    //qDebug() << "aleacionList: " << aleacionList;
 }
 void AddSupplier::fillDependentComboBoxFromDb(QString comboBox)
-{
-    qDebug() << "\nSe ha llamado a la función onFormFieldUpdated. " << "FIELD: " << comboBox;
-
+{   
     QString value;
     QSqlQuery result;
     QString sqlQuery;
@@ -148,7 +177,7 @@ void AddSupplier::fillDependentComboBoxFromDb(QString comboBox)
 
         if(value == "Bobina" || value == "Chapa" || value == "Plancha")
         {
-            //Recuperar Formatos -anchos- bobina
+            //Formato Chapa-Planch / Ancho Bobina (comparten el mismo)
             formatoList.clear();
             idType = QString::number(tipoList.indexOf(value) + 1);
             sqlQuery = "CALL get_DependentDropDownMenu(";
@@ -211,22 +240,6 @@ void AddSupplier::fillDependentComboBoxFromDb(QString comboBox)
         emit acabadoListChanged();
         qDebug() << "acabadoList: " << acabadoList;
     }
-    else if(comboBox == "serie") //IMPORTANTE: se utiliza en su lugar => fillDependentComboCheckBoxFromDb()
-    {
-        value = formField.value("serie");
-        //Aleación
-        aleacionList.clear();
-        QString idSerie = QString::number(serieListFija.indexOf(value) + 1); //tiene que ser de la Lista completa, no del comboBox!!
-        sqlQuery = "CALL get_DependentDropDownMenu(";
-        sqlQuery.append("'alloy', 'aisi', 'id_serie', ").append(idSerie).append(");");
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            aleacionList.append(result.value(0).toString());
-        }
-        emit aleacionListChanged();
-        qDebug() << "aleacionList: " << aleacionList;
-    }
 }
 void AddSupplier::fillComboBoxesFromDb(QString tab)
 {
@@ -244,7 +257,7 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
         {
             paisList.append(result.value(0).toString());
         }
-        qDebug() << "paisList: " << paisList;
+        emit paisListChanged(); //Para "empresa" no hace falta pues al crearse el comboBox ya tenemos listo el modelo con los datos
         ////////////////////////////////////////////////////////////////
         sqlQuery = "CALL get_DropDownMenu('activity', 'activity')";
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
@@ -300,10 +313,38 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
-            serieListFija.append(result.value(0).toString());
+            serieListCompleta.append(result.value(0).toString());
         }
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('inner_diameter', 'inner_diameter')"; //Se utiliza como apoyo
+        sqlQuery = "CALL get_DropDownMenu('alloy', 'aisi')"; //Se utiliza como apoyo
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            aleacionListCompleta.append(result.value(0).toString());
+        }
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('temper', 'temper')"; //Se utiliza como apoyo
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            templeListCompleta.append(result.value(0).toString());
+        }
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('finition', 'finition')"; //Se utiliza como apoyo
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            acabadoListCompleta.append(result.value(0).toString());
+        }
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('format', 'format')"; //Se utiliza como apoyo
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            formatoListCompleta.append(result.value(0).toString());
+        }
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('inner_diameter', 'inner_diameter')"; //I.D.
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
@@ -324,7 +365,7 @@ bool AddSupplier::sanitationCheck(QString tab)
             formField.value("pais").isEmpty())
             return EXIT_FAILURE;
     }
-    else if (tab == "contacto")
+    else if (tab == "contactos")
     {
         //Checking key fields & numeric fields are not empty
         if(formField.value("empresa").isEmpty() || //Hay que controlarlo en todas las tabs
@@ -333,6 +374,111 @@ bool AddSupplier::sanitationCheck(QString tab)
             formField.value("area").isEmpty()       ||
             formField.value("puesto").isEmpty())
             return EXIT_FAILURE;
+    }
+    else if (tab == "productos")
+    {
+        if(formField.value("empresa").isEmpty() || //Hay que controlarlo en todas las tabs
+            formField.value("tipo").isEmpty()  ||
+            formField.value("material").isEmpty() ||
+            aleacionSelectionList.isEmpty() ||
+            templeSelectionList.isEmpty() ||
+            acabadoSelectionList.isEmpty())
+            return EXIT_FAILURE;
+        if(formField.value("tipo") == "Bobina")
+        {
+            if(formatoBobinaSelectionList.isEmpty() || idBobinaSelectionList.isEmpty())
+                return EXIT_FAILURE;
+            else
+            {
+                //Prepare fields before SQL Query
+                if(formField.value("espesorMin").isEmpty())
+                    formField.insert("espesorMin",  "NULL");
+                if(formField.value("espesorMax").isEmpty())
+                    formField.insert("espesorMax",  "NULL");
+                formField.insert("diametroMin",  "NULL");
+                formField.insert("diametroMax",  "NULL");
+                formField.insert("largoMin",  "NULL");
+                formField.insert("largoMax",  "NULL");
+                formField.insert("diametroIntMin",  "NULL");
+                formField.insert("diametroIntMax",  "NULL");
+                formField.insert("diametroExtMin",  "NULL");
+                formField.insert("diametroExtMax",  "NULL");
+            }
+        }
+        else if(formField.value("tipo") == "Chapa" || formField.value("tipo") == "Plancha")
+        {
+            if(formatoChapaSelectionList.isEmpty())
+                return EXIT_FAILURE;
+            else
+            {
+                //Prepare fields before SQL Query
+                if(formField.value("espesorMin").isEmpty())
+                    formField.insert("espesorMin",  "NULL");
+                if(formField.value("espesorMax").isEmpty())
+                    formField.insert("espesorMax",  "NULL");
+                formField.insert("diametroMin",  "NULL");
+                formField.insert("diametroMax",  "NULL");
+                formField.insert("largoMin",  "NULL");
+                formField.insert("largoMax",  "NULL");
+                formField.insert("diametroIntMin",  "NULL");
+                formField.insert("diametroIntMax",  "NULL");
+                formField.insert("diametroExtMin",  "NULL");
+                formField.insert("diametroExtMax",  "NULL");
+            }
+        }
+        else if(formField.value("tipo") == "Barra")
+        {
+            if(formField.value("diametroMin").isEmpty())
+                formField.insert("diametroMin",  "NULL");
+            if(formField.value("diametroMax").isEmpty())
+                formField.insert("diametroMax",  "NULL");
+            if(formField.value("largoMin").isEmpty())
+                formField.insert("largoMin",  "NULL");
+            if(formField.value("largoMax").isEmpty())
+                formField.insert("largoMax",  "NULL");
+            formField.insert("espesorMin",  "NULL");
+            formField.insert("espesorMax",  "NULL");
+            formField.insert("diametroIntMin",  "NULL");
+            formField.insert("diametroIntMax",  "NULL");
+            formField.insert("diametroExtMin",  "NULL");
+            formField.insert("diametroExtMax",  "NULL");
+        }
+        else if(formField.value("tipo") == "Tubo")
+        {
+            formField.insert("espesorMin",  "NULL");
+            formField.insert("espesorMax",  "NULL");
+            formField.insert("diametroMin",  "NULL");
+            formField.insert("diametroMax",  "NULL");
+            if(formField.value("largoMin").isEmpty())
+                formField.insert("largoMin",  "NULL");
+            if(formField.value("largoMax").isEmpty())
+                formField.insert("largoMax",  "NULL");
+            if(formField.value("diametroIntMin").isEmpty())
+                formField.insert("diametroIntMin",  "NULL");
+            if(formField.value("diametroIntMax").isEmpty())
+                formField.insert("diametroIntMax",  "NULL");
+            if(formField.value("diametroExtMin").isEmpty())
+                formField.insert("diametroExtMin",  "NULL");
+            if(formField.value("diametroExtMax").isEmpty())
+                formField.insert("diametroExtMax",  "NULL");
+        }
+        else if(formField.value("tipo") == "Disco")
+        {
+            if(formField.value("diametroMin").isEmpty())
+                formField.insert("diametroMin",  "NULL");
+            if(formField.value("diametroMax").isEmpty())
+                formField.insert("diametroMax",  "NULL");
+            if(formField.value("espesorMin").isEmpty())
+                formField.insert("espesorMin",  "NULL");
+            if(formField.value("espesorMax").isEmpty())
+                formField.insert("espesorMax",  "NULL");
+            formField.insert("largoMin",  "NULL");
+            formField.insert("largoMax",  "NULL");
+            formField.insert("diametroIntMin",  "NULL");
+            formField.insert("diametroIntMax",  "NULL");
+            formField.insert("diametroExtMin",  "NULL");
+            formField.insert("diametroExtMax",  "NULL");
+        }
     }
     //Sanitation check of user' input
     MainWindow::sanitationUserInput(formField);
@@ -518,7 +664,117 @@ bool AddSupplier::onAceptarButton(QString tab)
     }
     else if (tab == "productos")
     {
+        if (this->sanitationCheck(tab) == EXIT_FAILURE)
+        {
+            errorMessage = new QErrorMessage;
+            errorMessage->setAttribute(Qt::WA_DeleteOnClose);
+            errorMessage->showMessage(QObject::tr("Revise que los campos obligatorios no estén vacios!"));
+            errorMessage->resize(400,200);
+            return EXIT_FAILURE;
+        }
 
+        //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
+        QString idTipo = QString::number (tipoList.indexOf(formField.value("tipo")) + 1);
+        QString idMaterial = QString::number (materialList.indexOf(formField.value("material")) + 1);
+
+        //Retrieve id_supplier (para no tener que buscarlo en cada Query)
+        QString idSupplier;
+        QSqlQuery result; //sirve para todas las consultas
+        QString sqlQuery = "CALL get_IdFromRelatedTable('supplier', 'company', ";
+        sqlQuery.append("'").append(formField.value("empresa")).append("');");
+        qDebug() << "Stored Procedure: " << sqlQuery;
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result);
+        while(result.next())
+        {
+            idSupplier.append(result.value(0).toString()); //QString instead of QStringList pues solo puede haber 1
+        }
+        qDebug() << "idSupplier: " << idSupplier;
+
+       //Retrieve indexes from ComboCheckBoxes
+        QString idAleacion, idTemple, idAcabado, idDiametroInterior, idAncho, idLargo;
+        for (auto aleacion : aleacionSelectionList)
+            idAleacion.append(QString::number (aleacionListCompleta.indexOf(aleacion) + 1)).append(","); //la QString tiene que terminar con ','
+         for(auto temple : templeSelectionList)
+             idTemple.append(QString::number (templeListCompleta.indexOf(temple) + 1)).append(",");
+       for(auto acabado : acabadoSelectionList)
+           idAcabado.append(QString::number (acabadoListCompleta.indexOf(acabado) + 1)).append(",");
+
+       if(formField.value("tipo") == "Bobina")
+       {
+           idLargo="NULL";
+           for(auto formato : formatoBobinaSelectionList)
+               idAncho.append(formato).append(",");
+
+           for(auto diametroInterior : idBobinaSelectionList)
+                idDiametroInterior.append(QString::number (idBobinaList.indexOf(diametroInterior) + 1)).append((","));
+       }
+
+       else if (formField.value("tipo") == "Chapa" || formField.value("tipo") == "Plancha")
+       {
+           idDiametroInterior="NULL";
+           for(auto formato : formatoChapaSelectionList)
+           {
+               //Recuperar el ancho y largo del formato (1000x2000, 1250x2500,...)
+               QStringList tmp = formato.split('x');
+               idAncho.append(tmp.at(0));
+               idLargo.append(tmp.at(1));
+               idAncho.append(",");
+               idLargo.append(",");
+           }
+       }
+
+       else if (formField.value("tipo") == "Barra")
+       {
+           idAncho="NULL";
+           idLargo="NULL";
+           idDiametroInterior="NULL";
+       }
+
+       else if (formField.value("tipo") == "Tubo")
+       {
+           idAncho="NULL";
+           idLargo="NULL";
+           idDiametroInterior="NULL";
+       }
+
+       else if (formField.value("tipo") == "Disco")
+       {
+           idAncho="NULL";
+           idLargo="NULL";
+           idDiametroInterior="NULL";
+       }
+
+       //SQL Query
+        sqlQuery = "CALL insert_ProductList(";
+        sqlQuery.append(idSupplier).append(", ") //number
+        .append(idTipo).append(", ")  //number
+        .append(idMaterial).append(", ") //number
+        .append("'").append(idAleacion).append("'").append(", ") //varchar (array)
+        .append("'").append(idTemple).append("'").append(", ") //varchar (array)
+        .append("'").append(idAcabado).append("'").append(", ") //varchar (array)
+        .append("'").append(idDiametroInterior).append("'").append(", ") //varchar (array) - ⌀interior (bobinas)
+        .append("'").append(idAncho).append("'").append(", ") //varchar (array) - Ancho (chapas, bobinas)
+        .append("'").append(idLargo).append("'").append(", ")  //varchar (array) - Largo (chapas)
+        .append(formField.value("espesorMin")).append(", ") //Espesor min (chapas, bobinas, discos)
+        .append(formField.value("espesorMax")).append(", ") //Espesor max (chapas, bobinas, discos)
+        .append(formField.value("diametroMin")).append(", ") //⌀min (discos, barras)
+        .append(formField.value("diametroMax")).append(", ") //⌀max (discos, barras)
+        .append(formField.value("largoMin")).append(", ") //Largo min (tubos, barras)
+        .append(formField.value("largoMax")).append(", ") //Largo max (tubos, barras)
+        .append(formField.value("diametroIntMax")).append(", ") //⌀interior min (tubos)
+        .append(formField.value("diametroIntMax")).append(", ") //⌀interior max (tubos)
+        .append(formField.value("diametroExtMin")).append(", ") //⌀exterior min (tubos)
+        .append(formField.value("diametroExtMax")).append(");"); //⌀exterior max (tubos)
+        qDebug() << sqlQuery;
+
+        if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_FAILURE)
+        {
+            QMessageBox::information(Q_NULLPTR, "Database", "ohhhh shiiiiiiiiiiit !!!",QMessageBox::Ok);
+            return EXIT_FAILURE;
+        }
+
+        QMessageBox::information(Q_NULLPTR, "Database", "Se han añadido los registros a la Database.",QMessageBox::Ok);
+        return EXIT_SUCCESS;
     }
 }
 void AddSupplier::onCancelarButton(void)

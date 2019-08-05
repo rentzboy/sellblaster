@@ -29,9 +29,9 @@ ComboBox {
         text: modelData
         checked: false //para que asigne el valor al crearse
         //onCheckedChanged: model.checked = checked (otra manera de hacerlo)
-        onToggled: Supplier.checkingCheckBoxes(comboBox11.objectName, text, checked)
+        onToggled: Supplier.textListToBackEnd(comboBox11.objectName, text, checked)
         }
     }
-    onModelChanged: Supplier.initializationComboBoxIndex()
+    onModelChanged: Supplier.resetComboBoxIndex()
     //Component.onCompleted: Supplier.onComboBoxCompleted()
 }

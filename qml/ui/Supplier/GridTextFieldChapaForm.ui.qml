@@ -27,7 +27,7 @@ GridLayout {
     }
     ComboBox11 {
         id: comboBoxFormatoChapa
-        objectName: "tipoChapa"
+        objectName: "formatoChapa"
         width: comboBoxTipo.width
     }
     SpacerH_20 {
@@ -40,7 +40,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldEspesorMinChapa
-        objectName: "espesorMinChapa"
+        objectName: "espesorMin"
         width: comboBoxTipo.width
     }
     SpacerH_20 {
@@ -53,7 +53,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldEspesorMaxChapa
-        objectName: "espesorMaxChapa"
+        objectName: "espesorMax"
         width: comboBoxTipo.width
     }
     SpacerH_20 {

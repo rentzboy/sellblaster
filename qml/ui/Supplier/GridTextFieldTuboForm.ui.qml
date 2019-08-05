@@ -30,7 +30,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldDiametroIntMinTubo
-        objectName: "diametroIntMinTubo"
+        objectName: "diametroIntMin"
     }
     SpacerH_20 {
     }
@@ -41,7 +41,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldDiametroExtMinTubo
-        objectName: "diametroExtMinTubo"
+        objectName: "diametroExtMin"
     }
     SpacerH_20 {
     }
@@ -52,7 +52,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldLargoMinTubo
-        objectName: "largoMinTubo"
+        objectName: "largoMin"
     }
     SpacerH_20 {
         Layout.fillWidth: true
@@ -64,7 +64,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldDiametroIntMaxTubo
-        objectName: "diametroIntMaxTubo"
+        objectName: "diametroIntMax"
     }
     SpacerH_20 {
     }
@@ -74,7 +74,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldDiametroExtMaxTubo
-        objectName: "diametroExtMaxTubo"
+        objectName: "diametroExtMax"
     }
     SpacerH_20 {
     }
@@ -84,7 +84,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldLargoMaxTubo
-        objectName: "largoMaxTubo"
+        objectName: "largoMax"
     }
     SpacerH_20 {
         Layout.fillWidth: true

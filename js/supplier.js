@@ -3,23 +3,25 @@
 
 //JS FUNCTIONS
 function textValueToBackEnd(fieldName, value) { 
-    if(value) //sanitation check
-    Supplier.SupplierType.textValueToBackEnd(fieldName, value)
+        Supplier.SupplierType.textValueToBackEnd(fieldName, value)
 }
-
-function checkingCheckBoxes(fieldName, text, checked) {
-    if(text) //sanitation check
-    Supplier.SupplierType.textListToBackEnd(fieldName, text, checked)
+function textListToBackEnd(fieldName, text, checked) {
+    if(text)
+        Supplier.SupplierType.textListToBackEnd(fieldName, text, checked)
 }
-
-function initializationComboBoxIndex() {
+function resetComboBoxIndex(fieldName) {
     /*Los comboBox se inician a -1 (no muestran valores) pero al cargar el model,
     automáticamente coge el primer valor, en este caso el index 0, por lo que
     muestra un valor aunque el usuario no haya seleccionado nada.
-   La función initializationComboBoxIndex permite que no se muestre ningún
-   valor en el comboBox hasta que el usuario no seleccione uno, por lo
-   que hay que asignarla a onModelChanged.*/
+    Hay que llamar a esta función desde onModelChanged */
+
+    //console.log("Se ha llamado a initializationComboBoxIndex")
+
+    // Mostrar el comboBox en blanco hasta que el usuario seleccione uno,
     currentIndex = -1
+
+    //Para eliminar el valor que se ha pasado automáticamente a C++ al cargar el modelo
+    textValueToBackEnd(fieldName, "reset")
 }
 
 //Deprecated
@@ -79,7 +81,6 @@ function comboBoxIndexToBackEnd(fieldName, index) {
     }
     textValueToBackEnd(fieldName, txt)
 }
-
 function onComboBoxCompleted() {
     console.log("Componente cargado: " + objectName + " con el modelo: " + model)
 }

@@ -28,7 +28,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldDiametroMinBarra
-        objectName: "diametroMinBarra"
+        objectName: "diametroMin"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxTipo.x
@@ -43,7 +43,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldDiametroMaxBarra
-        objectName: "diametroMaxBarra"
+        objectName: "diametroMax"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxMaterial.x
@@ -58,7 +58,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldLargoMinBarra
-        objectName: "largoMinBarra"
+        objectName: "largoMin"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxTipo.x
@@ -72,7 +72,7 @@ GridLayout {
     }
     TextField1 {
         id: textFieldLargoMaxBarra
-        objectName: "largoMaxBarra"
+        objectName: "largoMax"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxMaterial.x
@@ -81,6 +81,9 @@ GridLayout {
         Layout.fillWidth: true
     }
 }
+
+
+
 
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}

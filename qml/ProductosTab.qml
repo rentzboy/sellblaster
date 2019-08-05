@@ -25,9 +25,9 @@ ProductosTabForm {
     comboBoxTemple.model: SupplierType.templeList
     comboBoxAcabado.model: SupplierType.acabadoList
 
-    gridTextFieldBobina.comboBoxAnchoBobina.model: SupplierType.formatoList
+    gridTextFieldBobina.comboBoxAnchoBobina.model: SupplierType.formatoList //comparten el mismo
+    gridTextFieldChapa.comboBoxFormatoChapa.model: SupplierType.formatoList //comparten el mismo
     gridTextFieldBobina.comboBoxDiametroIntBobina.model: SupplierType.idBobinaList
-    gridTextFieldChapa.comboBoxFormatoChapa.model: SupplierType.formatoList
 
     //Buttons
     buttonAceptar.onClicked: SupplierType.onAceptarButton("productos")
