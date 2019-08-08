@@ -32,6 +32,10 @@ GridLayout {
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxTipo.x
+        validator: IntValidator {
+            bottom: 00
+            top: 999
+        }
     }
     SpacerH_20 {
     }
@@ -47,6 +51,10 @@ GridLayout {
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxMaterial.x
+        validator: IntValidator {
+            bottom: 00
+            top: 999
+        }
     }
     SpacerH_20 {
         Layout.fillWidth: true
@@ -62,6 +70,10 @@ GridLayout {
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxTipo.x
+        validator: IntValidator {
+            bottom: 00
+            top: 9999
+        }
     }
     SpacerH_20 {
     }
@@ -76,6 +88,10 @@ GridLayout {
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxMaterial.x
+        validator: IntValidator {
+            bottom: 00
+            top: 9999
+        }
     }
     SpacerH_20 {
         Layout.fillWidth: true

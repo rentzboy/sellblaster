@@ -10,6 +10,7 @@ import "../../components"
 GridLayout {
     id: gridTextFieldChapa
     property alias comboBoxFormatoChapa: comboBoxFormatoChapa
+    property alias comboBoxFormatoChapaToogleAll: comboBoxFormatoChapa.toogleAllValues
     property alias textFieldEspesorMinChapa: textFieldEspesorMinChapa
     property alias textFieldEspesorMaxChapa: textFieldEspesorMaxChapa
 
@@ -29,6 +30,7 @@ GridLayout {
         id: comboBoxFormatoChapa
         objectName: "formatoChapa"
         width: comboBoxTipo.width
+        property bool toogleAllValues: false
     }
     SpacerH_20 {
     }
@@ -42,6 +44,10 @@ GridLayout {
         id: textFieldEspesorMinChapa
         objectName: "espesorMin"
         width: comboBoxTipo.width
+        validator: IntValidator {
+            bottom: 00
+            top: 99
+        }
     }
     SpacerH_20 {
     }
@@ -55,6 +61,10 @@ GridLayout {
         id: textFieldEspesorMaxChapa
         objectName: "espesorMax"
         width: comboBoxTipo.width
+        validator: IntValidator {
+            bottom: 00
+            top: 999
+        }
     }
     SpacerH_20 {
         Layout.fillWidth: true

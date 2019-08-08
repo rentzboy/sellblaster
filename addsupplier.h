@@ -29,7 +29,8 @@ class AddSupplier : public QObject
     Q_PROPERTY(QStringList acabadoList MEMBER acabadoList NOTIFY acabadoListChanged)
     Q_PROPERTY(QStringList formatoList MEMBER formatoList NOTIFY formatoListChanged)
     Q_PROPERTY(QStringList idBobinaList MEMBER idBobinaList NOTIFY idBobinaListChanged)
-
+    Q_PROPERTY(QVector <bool> checkedValue MEMBER checkedValue NOTIFY checkedValueChanged)
+    //Q_PROPERTY(QVariantMap toogleValue MEMBER toogleValue NOTIFY toogleValueChanged) => no he sabido
 
 public:
     AddSupplier(const AddSupplier &other) = delete;
@@ -38,14 +39,16 @@ public:
     static void createComponent(void);
     Q_INVOKABLE void textValueToBackEnd(QString fieldName, QString text);
     Q_INVOKABLE void textListToBackEnd(QString fieldName, QString text, bool value);
+    void uncheckAllValues(QString comboBox);
+    Q_INVOKABLE void toogleAllValues(QString comboBox);
     Q_INVOKABLE void fillComboBoxesFromDb(QString tab);
-    Q_INVOKABLE void fillDependentComboBoxFromDb(QString comboBox);
-    Q_INVOKABLE void fillDependentComboCheckBoxFromDb(QString comboBox);
+    void fillRelatedComboBoxFromDb(QString comboBox);
+    void fillRelatedComboCheckBoxFromDb(QString comboBox);
 public slots:
     bool onAceptarButton(QString tab);
     void onCancelarButton(void);
     void onGuardarButton(QString tab);
-    void onFormFieldUpdated(QString fieldName);
+    void onRelatedFieldUpdated(QString fieldName);
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 private:
@@ -58,6 +61,11 @@ private:
     static QQmlApplicationEngine *engine;
     static AddSupplier *uniqueInstance;
     static int typeId;
+    QVariantMap toogleValue = {{"serie", true}, {"aleacion", true}, {"temple", true}, {"acabado", true},
+                                                    {"anchoBobina", true}, {"diametroIntBobina", true}, {"formatoChapa", true}}; //NO se utiliza
+    //Lo hago con el vector pues con QVariantMap no me aclaro como utilizarlo en QML
+    QVector <bool> checkedValue = {false, false, false, false, false, false, false}; //[0] = serie, [1]=aleación, ....tal como en toogleValue
+
     QStringList paisList;
     QStringList actividadList;
     QStringList formaPagoList;
@@ -84,20 +92,17 @@ private:
     QStringList formatoBobinaSelectionList;
     QStringList idBobinaList;
     QStringList idBobinaSelectionList;
+    QString aleacionRadioButton = "aisi"; //valor inicial
 
     QMap <QString, QString> formField;
     QErrorMessage *errorMessage = Q_NULLPTR;
-
-    QStandardItemModel *modelo = Q_NULLPTR;
-    QStandardItem *iItem1 = Q_NULLPTR;
-    QStandardItem *iItem2 = Q_NULLPTR;
 
 signals:
     void closeQmlInstance(void);
     void clearFormFields(QVariant tab);
     void clearFormFields(QString tab);
     //Notify signals
-    void formFieldUpdated(QString fieldName);
+    void relatedFieldUpdated(QString fieldName);
     void actividadListChanged(void);
     void paisListChanged(void);
     void formaPagoListChanged(void);
@@ -111,6 +116,8 @@ signals:
     void acabadoListChanged(void);
     void formatoListChanged(void);
     void idBobinaListChanged(void);
+    void checkedValueChanged(void);
+    //void toogleValueChanged(void);
 };
 
 #endif // ADDSUPPLIER_H

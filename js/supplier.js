@@ -15,7 +15,7 @@ function resetComboBoxIndex(fieldName) {
     muestra un valor aunque el usuario no haya seleccionado nada.
     Hay que llamar a esta función desde onModelChanged */
 
-    //console.log("Se ha llamado a initializationComboBoxIndex")
+    console.log("Se ha llamado a resetComboBoxIndex (" + fieldName + ")")
 
     // Mostrar el comboBox en blanco hasta que el usuario seleccione uno,
     currentIndex = -1

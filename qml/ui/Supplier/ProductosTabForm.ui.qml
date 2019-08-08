@@ -23,6 +23,12 @@ Item {
     property alias gridTextFieldBarra: gridTextFieldBarra
     property alias gridTextFieldTubo: gridTextFieldTubo
     property alias gridTextFieldDisco: gridTextFieldDisco
+    property alias radioButtonAisi: radioButtonAisi
+    property alias radioButtonWerkstoff: radioButtonWerkstoff
+    property alias comboBoxSerieToogleAll: comboBoxSerie.toogleAllValues
+    property alias comboBoxAleacionToogleAll: comboBoxAleacion.toogleAllValues
+    property alias comboBoxTempleToogleAll: comboBoxTemple.toogleAllValues
+    property alias comboBoxAcabadoToogleAll: comboBoxAcabado.toogleAllValues
 
     visible: true
     Rectangle {
@@ -43,6 +49,7 @@ Item {
         RowLayout {
             id: rowButtons
             spacing: 15
+            Layout.rightMargin: 20
             Button {
                 id: buttonAceptar
                 text: qsTr("Aceptar")
@@ -54,6 +61,20 @@ Item {
             Button {
                 id: buttonGuardar
                 text: qsTr("Guardar")
+            }
+            Pane {
+                Layout.fillWidth: true
+            }
+            RadioButton {
+                id: radioButtonAisi
+                objectName: "aisi"
+                checked: true
+                text: qsTr("AISI")
+            }
+            RadioButton {
+                id: radioButtonWerkstoff
+                objectName: "werkstoff"
+                text: qsTr("Werkstoff")
             }
         }
         RowLayout {
@@ -116,6 +137,7 @@ Item {
                         ComboBox11 {
                             id: comboBoxSerie
                             objectName: "serie"
+                            property bool toogleAllValues: false
                         }
                         SpacerH_20 {
                             Layout.fillWidth: true
@@ -128,6 +150,7 @@ Item {
                         ComboBox11 {
                             id: comboBoxAleacion
                             objectName: "aleacion"
+                            property bool toogleAllValues: false
                         }
                         SpacerH_20 {
                         }
@@ -139,6 +162,7 @@ Item {
                         ComboBox11 {
                             id: comboBoxTemple
                             objectName: "temple"
+                            property bool toogleAllValues: false
                         }
                         SpacerH_20 {
                         }
@@ -150,6 +174,7 @@ Item {
                         ComboBox11 {
                             id: comboBoxAcabado
                             objectName: "acabado"
+                            property bool toogleAllValues: false
                         }
                         SpacerH_20 {
                             Layout.fillWidth: true

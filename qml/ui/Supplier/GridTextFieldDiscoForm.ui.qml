@@ -32,6 +32,10 @@ GridLayout {
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxTipo.x
+        validator: IntValidator {
+            bottom: 00
+            top: 99
+        }
     }
     SpacerH_20 {
     }
@@ -46,6 +50,10 @@ GridLayout {
         objectName: "diametroMax"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
+        validator: IntValidator {
+            bottom: 00
+            top: 999
+        }
     }
 
     SpacerH_20 {
@@ -62,6 +70,10 @@ GridLayout {
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxTipo.x
+        validator: IntValidator {
+            bottom: 00
+            top: 99
+        }
     }
     SpacerH_20 {
     }
@@ -75,6 +87,10 @@ GridLayout {
         objectName: "espesorMax"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
+        validator: IntValidator {
+            bottom: 00
+            top: 999
+        }
     }
     SpacerH_20 {
         Layout.fillWidth: true

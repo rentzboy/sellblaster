@@ -11,9 +11,11 @@ import "../../components"
 GridLayout {
     id: gridTextFieldBobina
     property alias comboBoxAnchoBobina: comboBoxAnchoBobina
+    property alias comboBoxAnchoBobinaToogleAll: comboBoxAnchoBobina.toogleAllValues
     property alias textFieldEspesorMinBobina: textFieldEspesorMinBobina
     property alias textFieldEspesorMaxBobina: textFieldEspesorMaxBobina
     property alias comboBoxDiametroIntBobina: comboBoxDiametroIntBobina
+    property alias comboBoxDiametroIntToogleAll: comboBoxDiametroIntBobina.toogleAllValues
 
     Layout.topMargin: 10
     Layout.fillWidth: true
@@ -32,6 +34,7 @@ GridLayout {
         id: comboBoxAnchoBobina
         objectName: "anchoBobina"
         width: comboBoxTipo.width
+        property bool toogleAllValues: false
     }
     SpacerH_20 {
     }
@@ -46,6 +49,10 @@ GridLayout {
         objectName: "espesorMin"
         x: comboBoxMaterial.x
         width: comboBoxTipo.width
+        validator: IntValidator {
+            bottom: 00
+            top: 99
+        }
     }
     SpacerH_20 {
     }
@@ -60,6 +67,10 @@ GridLayout {
         objectName: "espesorMax"
         x: comboBoxSerie.x
         width: comboBoxTipo.width
+        validator: IntValidator {
+            bottom: 00
+            top: 999
+        }
     }
     SpacerH_20 {
         Layout.fillWidth: true
@@ -73,6 +84,7 @@ GridLayout {
         id: comboBoxDiametroIntBobina
         objectName: "diametroIntBobina"
         width: comboBoxTipo.width
+        property bool toogleAllValues: false
     }
     SpacerH_20 {
     }

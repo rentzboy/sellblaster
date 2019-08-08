@@ -12,7 +12,9 @@ import "../../components"
 Item {
     id: newProveedorFormWindow
     property alias bar: bar
-    property int comboBoxAreaCurrentIndex: comboBoxAreaCurrentIndex
+    property alias empresaTab: empresa
+    property alias contactosTab: contactos
+    property alias productosTab: productos
     visible: true
 
     Pane {

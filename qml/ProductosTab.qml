@@ -15,8 +15,20 @@ ProductosTabForm {
 
     //TextFields
 
+    //RadioButtons
+    radioButtonAisi.onClicked: onRadioButtonClicked(radioButtonAisi.objectName)
+    radioButtonWerkstoff.onClicked: onRadioButtonClicked(radioButtonWerkstoff.objectName)
+
     //ComboBoxes
     comboBoxTipo.onDisplayTextChanged: onTipoComboBoxChanged()
+
+    comboBoxSerieToogleAll: SupplierType.checkedValue[0]
+    comboBoxAleacionToogleAll: SupplierType.checkedValue[1]
+    comboBoxTempleToogleAll: SupplierType.checkedValue[2]
+    comboBoxAcabadoToogleAll: SupplierType.checkedValue[3]
+    gridTextFieldBobina.comboBoxAnchoBobinaToogleAll: SupplierType.checkedValue[4]
+    gridTextFieldBobina.comboBoxDiametroIntToogleAll: SupplierType.checkedValue[5]
+    gridTextFieldChapa.comboBoxFormatoChapaToogleAll: SupplierType.checkedValue[6]
 
     comboBoxTipo.model: SupplierType.tipoList
     comboBoxMaterial.model: SupplierType.materialList
@@ -178,8 +190,7 @@ ProductosTabForm {
 
     //JS
     function onTipoComboBoxChanged() {
-        console.log("currentText: " + comboBoxTipo.displayText
-                    + ", currentIndex: " + comboBoxTipo.currentIndex)
+        //console.log("currentText: " + comboBoxTipo.displayText + ", currentIndex: " + comboBoxTipo.currentIndex)
 
         //Para que se muestre el state=reset al cargar la 1era vez ProductosTab
         counter++
@@ -217,6 +228,10 @@ ProductosTabForm {
         default:
 
         }
+    }
+    function onRadioButtonClicked(objectName) {
+        //console.log("onRadioButtonClicked: (" + objectName + ")")
+        SupplierType.onRelatedFieldUpdated(objectName);
     }
 
     //SLOTS

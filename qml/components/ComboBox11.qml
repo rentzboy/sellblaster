@@ -24,14 +24,32 @@ ComboBox {
         implicitHeight: checkDelegate.implicitHeight
 
         CheckDelegate {
-        id: checkDelegate
-        width: parent.width
-        text: modelData
-        checked: false //para que asigne el valor al crearse
-        //onCheckedChanged: model.checked = checked (otra manera de hacerlo)
-        onToggled: Supplier.textListToBackEnd(comboBox11.objectName, text, checked)
+            id: checkDelegate
+            width: parent.width
+            text: modelData
+            checked: toogleAllValues
+            //onCheckedChanged: model.checked = checked (otra manera de hacerlo)
+            onToggled: Supplier.textListToBackEnd(comboBox11.objectName, text, checked, index) //OJO: checked es el valor de property
         }
     }
-    onModelChanged: Supplier.resetComboBoxIndex()
+    onModelChanged: Supplier.resetComboBoxIndex(objectName)
     //Component.onCompleted: Supplier.onComboBoxCompleted()
 }
+
+     /*DEPRECATED: No funciona pues NO utilizamos un ListModel
+    onToggled: toogleCheckValues(comboBox11.objectName, modelData, text, checked, index) //index=>view ListModel
+    function toogleCheckValues(objectName, model, textValue, checkedValue, index) {
+        console.log("model.count=" + model.count)
+        if(index === 0) {
+            var i = 0;
+            while(i <model.count) {
+                console.log("i=" + i)
+                model.setProperty(i, "checked", !checkedValue)
+                i++
+            //checked = SupplierType.toogleAllValues(objectName)
+            }
+        }
+        else Supplier.textListToBackEnd(objectName, textValue, checkedValue, modelIndex)
+    } */
+
+

@@ -183,9 +183,13 @@ Item {
                     TextField1 {
                         id: textFieldPostcode
                         objectName: "postcode"
+                        validator: IntValidator {
+                            bottom: 00001
+                            top: 99999
+                        } //mucho mejor
                         inputMethodHints: Qt.ImhDigitsOnly
-                        maximumLength: 5
-                        inputMask: "99999"
+                        //maximumLength: 5
+                        //inputMask: "99999"
                     }
                     SpacerH_20 {
                         Layout.fillWidth: true
@@ -197,8 +201,12 @@ Item {
                     TextField1 {
                         id: textFieldMoq
                         objectName: "moq"
-                        inputMethodHints: Qt.ImhDigitsOnly
-                        inputMask: "00"
+                        validator: IntValidator {
+                            bottom: 00
+                            top: 99
+                        }
+                        //inputMethodHints: Qt.ImhDigitsOnly
+                        //inputMask: "00"
                     }
                     SpacerH_20 {
                     }
@@ -264,8 +272,10 @@ Item {
     }
 }
 
+
+
+
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:1000}
 }
  ##^##*/
-

@@ -21,7 +21,7 @@ void AddSupplier::createComponent(void)
         engine = new QQmlApplicationEngine;
         engine->load(QUrl(QStringLiteral("qrc:/qml/NewProveedor.qml")));
 
-        connect(uniqueInstance, &AddSupplier::formFieldUpdated, uniqueInstance, &AddSupplier::onFormFieldUpdated);
+        connect(uniqueInstance, &AddSupplier::relatedFieldUpdated, uniqueInstance, &AddSupplier::onRelatedFieldUpdated);
 
         /* DEPRECATED:
          * Hemos encontrado otras maneras + sencillas, pero lo dejo pues explica como conectar los signals/slots
@@ -48,7 +48,7 @@ void AddSupplier::createComponent(void)
 }
 void AddSupplier::textValueToBackEnd(QString fieldName, QString text)
 {
-    PRINT_FUNCTION_NAME
+    //PRINT_FUNCTION_NAME
 
     //Guarda los valores de los comboBoxes sin checkboxes y textFields
     if(text == "reset")
@@ -58,7 +58,7 @@ void AddSupplier::textValueToBackEnd(QString fieldName, QString text)
 
     //Cargar los comboBoxes relacionados
     if(fieldName == "tipo" || fieldName == "material")
-        emit formFieldUpdated(fieldName);
+        emit relatedFieldUpdated(fieldName);
 }
 void AddSupplier::textListToBackEnd(QString fieldName, QString text, bool value)
 {
@@ -70,7 +70,7 @@ void AddSupplier::textListToBackEnd(QString fieldName, QString text, bool value)
     {
         if(value) serieSelectionList.append(text);
         else serieSelectionList.removeOne(text);
-        emit formFieldUpdated(fieldName);
+        emit relatedFieldUpdated(fieldName);
     }
     else if(fieldName == "aleacion")
     {
@@ -103,6 +103,49 @@ void AddSupplier::textListToBackEnd(QString fieldName, QString text, bool value)
         else idBobinaSelectionList.removeOne(text);
     }
 }
+void AddSupplier::uncheckAllValues(QString comboBox)
+{
+    if(comboBox == "serie" && checkedValue[0])
+         checkedValue[0] = !checkedValue[0];
+    else if(comboBox == "aleacion" && checkedValue[1])
+        checkedValue[1] = !checkedValue[1];
+    else if(comboBox == "temple" && checkedValue[2])
+        checkedValue[2] = !checkedValue[2];
+    else if(comboBox == "acabado" && checkedValue[3])
+        checkedValue[3] = !checkedValue[3];
+    else if(comboBox == "anchoBobina" && checkedValue[4])
+        checkedValue[4] = !checkedValue[4];
+    else if(comboBox == "diametroIntBobina" && checkedValue[5])
+        checkedValue[5] = !checkedValue[5];
+    else if(comboBox == "formatoChapa" && checkedValue[6])
+        checkedValue[6] = !checkedValue[6];
+    emit checkedValueChanged();
+}
+void AddSupplier::toogleAllValues(QString comboBox)
+{
+    //Toogle all checkboxes from ComboBoxes -se activa mediante la key F12-
+    if(comboBox == "serie")
+        checkedValue[0] = !checkedValue[0];
+    else if(comboBox == "aleacion")
+        checkedValue[1] = !checkedValue[1];
+    else if(comboBox == "temple")
+        checkedValue[2] = !checkedValue[2];
+    else if(comboBox == "acabado")
+        checkedValue[3] = !checkedValue[3];
+    else if(comboBox == "anchoBobina")
+        checkedValue[4] = !checkedValue[4];
+    else if(comboBox == "diametroIntBobina")
+        checkedValue[5] = !checkedValue[5];
+    else if(comboBox == "formatoChapa")
+        checkedValue[6] = !checkedValue[6];
+
+    emit checkedValueChanged();
+
+    /* Mejora: utilizar toogleValue en lugar de checkedValue
+    bool tmp = toogleValue.value(comboBox).toBool();
+    toogleValue.insert(comboBox, !tmp);
+    emit toogleValueChanged(); */
+}
 AddSupplier::~AddSupplier()
 {
     PRINT_FUNCTION_NAME
@@ -128,9 +171,10 @@ void AddSupplier::registerSingleton(void)
         return uniqueInstance;
             });
 }
-void AddSupplier::fillDependentComboCheckBoxFromDb(QString)
+void AddSupplier::fillRelatedComboCheckBoxFromDb(QString)
 {
-    //Ahora mismo solo cumple esta condición el comboBox Aleación
+    //Unicamente se llama al modificar el comboBox SERIE
+    //El comboBox dependiente es el de ALEACION
     //por lo que el parámetero de la función NO es necesario.
 
     QSqlQuery result;
@@ -149,11 +193,11 @@ void AddSupplier::fillDependentComboCheckBoxFromDb(QString)
         {
             serieIndexList.append(QString::number(serieListCompleta.indexOf(itr) + 1)); //+1 from comboBox index to idTableName
         }
-        QString str = serieIndexList.join(", ");
+        QString indexList = serieIndexList.join(", ");
         //qDebug() << "serieIndexList: " << serieIndexList;
 
-        sqlQuery = "CALL get_SerieDropDownMenu(";
-        sqlQuery.append("'alloy', 'aisi', 'id_serie', '").append(str).append("');");
+        sqlQuery = "CALL get_AlloyDropDownMenu(";
+        sqlQuery.append("'alloy', '").append(aleacionRadioButton).append("', 'id_serie', '").append(indexList).append("');");
         //qDebug() << sqlQuery;
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
@@ -164,12 +208,13 @@ void AddSupplier::fillDependentComboCheckBoxFromDb(QString)
     emit aleacionListChanged();
     //qDebug() << "aleacionList: " << aleacionList;
 }
-void AddSupplier::fillDependentComboBoxFromDb(QString comboBox)
+void AddSupplier::fillRelatedComboBoxFromDb(QString comboBox)
 {   
+    //Actualiza los comboBoxes dependientes
     QString value;
     QSqlQuery result;
     QString sqlQuery;
-    QString idType, idMetal;
+    QString idType, idMaterial;
 
     if(comboBox == "tipo")
     {
@@ -177,7 +222,7 @@ void AddSupplier::fillDependentComboBoxFromDb(QString comboBox)
 
         if(value == "Bobina" || value == "Chapa" || value == "Plancha")
         {
-            //Formato Chapa-Planch / Ancho Bobina (comparten el mismo)
+            //Formato Chapa-Plancha / Ancho-Bobina (comparten el mismo)
             formatoList.clear();
             idType = QString::number(tipoList.indexOf(value) + 1);
             sqlQuery = "CALL get_DependentDropDownMenu(";
@@ -188,64 +233,68 @@ void AddSupplier::fillDependentComboBoxFromDb(QString comboBox)
                 formatoList.append(result.value(0).toString());
             }
             emit formatoListChanged();
-            qDebug() << "formatoList: " << formatoList;
+            //qDebug() << "formatoList: " << formatoList;
         }
     }
     else if(comboBox == "material")
     {
         value = formField.value("material");
-        idMetal = QString::number(materialList.indexOf(value) + 1);
-        //Serie
+        idMaterial = QString::number(materialList.indexOf(value) + 1);
+
+        //SERIE
         serieList.clear();
         sqlQuery = "CALL get_DependentDropDownMenu(";
-        sqlQuery.append("'serie', 'serie', 'id_metal', ").append(idMetal).append(");");
+        sqlQuery.append("'serie', 'serie', 'id_metal', ").append(idMaterial).append(");");
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
             serieList.append(result.value(0).toString());
         }
         emit serieListChanged();
-        qDebug() << "serieList: " << serieList;
-        //Aleación
+        //qDebug() << "serieList: " << serieList;
+
+        //ALEACION
         aleacionList.clear();
-        sqlQuery = "CALL get_DependentDropDownMenu(";
-        sqlQuery.append("'alloy', 'aisi', 'id_metal', ").append(idMetal).append(");");
+        sqlQuery = "CALL get_DependentDropDownMenu('alloy', '";
+        sqlQuery.append(aleacionRadioButton).append("', 'id_metal', ").append(idMaterial).append(");");
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
             aleacionList.append(result.value(0).toString());
         }
         emit aleacionListChanged();
-        qDebug() << "aleacionList: " << aleacionList;
-        //Temple
+        //qDebug() << "aleacionList: " << aleacionList;
+
+        //TEMPLE
         templeList.clear();
         sqlQuery = "CALL get_DependentDropDownMenu(";
-        sqlQuery.append("'temper', 'temper', 'id_metal', ").append(idMetal).append(");");
+        sqlQuery.append("'temper', 'temper', 'id_metal', ").append(idMaterial).append(");");
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
             templeList.append(result.value(0).toString());
         }
         emit templeListChanged();
-        qDebug() << "templeList: " << templeList;
-        //Acabado
+        //qDebug() << "templeList: " << templeList;
+
+        //ACABADO
         acabadoList.clear();
         sqlQuery = "CALL get_DependentDropDownMenu(";
-        sqlQuery.append("'finition', 'finition', 'id_metal', ").append(idMetal).append(");");
+        sqlQuery.append("'finition', 'finition', 'id_metal', ").append(idMaterial).append(");");
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
             acabadoList.append(result.value(0).toString());
         }
         emit acabadoListChanged();
-        qDebug() << "acabadoList: " << acabadoList;
+        //qDebug() << "acabadoList: " << acabadoList;
     }
 }
 void AddSupplier::fillComboBoxesFromDb(QString tab)
 {
     //Unicamente se llama una vez para cada pestaña -empresa, contactos, productos-
     //Los resultados NO se actualizan en f(selección usuario)
-    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
+    //qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
 
     QSqlQuery result; //sirve para todas las consultas
 
@@ -796,11 +845,35 @@ void AddSupplier::onGuardarButton(QString tab)
     if(this->onAceptarButton(tab) == EXIT_SUCCESS)
         this->onCancelarButton();
 }
-void AddSupplier::onFormFieldUpdated(QString fieldName)
+void AddSupplier::onRelatedFieldUpdated(QString fieldName)
 {
+    //PRINT_FUNCTION_NAME
+    //qDebug() << "fieldName: " << fieldName;
+
     if(fieldName == "tipo" || fieldName == "material")
-        fillDependentComboBoxFromDb(fieldName);
-    else fillDependentComboCheckBoxFromDb(fieldName); //serie
+        fillRelatedComboBoxFromDb(fieldName);
+    else if(fieldName == "aisi" || fieldName == "werkstoff") //RadioButton
+    {
+        aleacionListCompleta.clear();
+        aleacionSelectionList.clear();
+        aleacionRadioButton = fieldName;
+
+        QSqlQuery result;
+        QString sqlQuery = "CALL get_DropDownMenu('alloy', '";
+        sqlQuery.append(fieldName).append("')"); //Se utiliza como apoyo
+        //qDebug() << sqlQuery;
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            aleacionListCompleta.append(result.value(0).toString());
+        }
+        aleacionList = aleacionListCompleta;
+        emit aleacionListChanged();
+        //Si tb queremos resetear el comboBox Serie
+        serieSelectionList.clear();
+        this->uncheckAllValues("serie");
+    }
+    else fillRelatedComboCheckBoxFromDb(fieldName); //serie
 }
 
 //SETTERS & GETTERS

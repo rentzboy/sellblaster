@@ -72,6 +72,38 @@ Window {
         }
 
         Keys.onPressed: {
+            //Select / Unselect all checkBoxes
+            if(event.key === Qt.Key_F12) {
+                if(productosTab.comboBoxSerie.activeFocus) {
+                SupplierType.toogleAllValues("serie")
+                event.accepted = true
+                }
+                else if(productosTab.comboBoxAleacion.activeFocus) {
+                    SupplierType.toogleAllValues("aleacion")
+                    event.accepted = true
+                    }
+                else if(productosTab.comboBoxTemple.activeFocus) {
+                    SupplierType.toogleAllValues("temple")
+                    event.accepted = true
+                    }
+                else if(productosTab.comboBoxAcabado.activeFocus) {
+                    SupplierType.toogleAllValues("acabado")
+                    event.accepted = true
+                    }
+                else if(productosTab.gridTextFieldBobina.comboBoxAnchoBobina.activeFocus) {
+                    SupplierType.toogleAllValues("anchoBobina")
+                    event.accepted = true
+                    }
+                else if(productosTab.gridTextFieldBobina.comboBoxDiametroIntBobina.activeFocus) {
+                    SupplierType.toogleAllValues("diametroIntBobina")
+                    event.accepted = true
+                    }
+                else if(productosTab.gridTextFieldChapa.comboBoxFormatoChapa.activeFocus) {
+                    SupplierType.toogleAllValues("formatoChapa")
+                    event.accepted = true
+                    }
+            }
+            //Moverse entre las pestañas Empresa / Contactos / Productos / ....
             if (event.key === Qt.Key_PageUp) {
                 if (bar.currentIndex === 0) {
                     event.accepted = true
@@ -102,8 +134,5 @@ Window {
     }
 }
 
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/
+
 
