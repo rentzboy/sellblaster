@@ -29,8 +29,7 @@ class AddSupplier : public QObject
     Q_PROPERTY(QStringList acabadoList MEMBER acabadoList NOTIFY acabadoListChanged)
     Q_PROPERTY(QStringList formatoList MEMBER formatoList NOTIFY formatoListChanged)
     Q_PROPERTY(QStringList idBobinaList MEMBER idBobinaList NOTIFY idBobinaListChanged)
-    Q_PROPERTY(QVector <bool> checkedValue MEMBER checkedValue NOTIFY checkedValueChanged)
-    //Q_PROPERTY(QVariantMap toogleValue MEMBER toogleValue NOTIFY toogleValueChanged) => no he sabido
+    Q_PROPERTY(QVariantMap toogleValue MEMBER toogleValue NOTIFY toogleValueChanged)
 
 public:
     AddSupplier(const AddSupplier &other) = delete;
@@ -61,18 +60,15 @@ private:
     static QQmlApplicationEngine *engine;
     static AddSupplier *uniqueInstance;
     static int typeId;
-    QVariantMap toogleValue = {{"serie", true}, {"aleacion", true}, {"temple", true}, {"acabado", true},
-                                                    {"anchoBobina", true}, {"diametroIntBobina", true}, {"formatoChapa", true}}; //NO se utiliza
-    //Lo hago con el vector pues con QVariantMap no me aclaro como utilizarlo en QML
-    QVector <bool> checkedValue = {false, false, false, false, false, false, false}; //[0] = serie, [1]=aleación, ....tal como en toogleValue
-
+    QVariantMap toogleValue = {{"serie", false}, {"aleacion", false}, {"temple", false}, {"acabado", false},
+                                                    {"anchoBobina", false}, {"diametroIntBobina", false}, {"formatoChapa", false}};
     QStringList paisList;
     QStringList actividadList;
     QStringList formaPagoList;
     QStringList areaList;
     QStringList puestoList;
-    QStringList tipoList; //bobina, chapa, plancha, tubo, ....
-    QStringList materialList; //aluminio, inox, titanio, ....
+    QStringList tipoList;
+    QStringList materialList;
     QStringList serieList;
     QStringList serieListCompleta;
     QStringList serieIndexList;
@@ -86,7 +82,7 @@ private:
     QStringList acabadoList;
     QStringList acabadoListCompleta;
     QStringList acabadoSelectionList;
-    QStringList formatoList; //Formatos chapas/planchas y anchos bobinas
+    QStringList formatoList; //Compartido por los comboBoxes "Formato" (chapas/planchas) y "Ancho" (bobinas)
     QStringList formatoListCompleta;
     QStringList formatoChapaSelectionList;
     QStringList formatoBobinaSelectionList;
@@ -116,8 +112,7 @@ signals:
     void acabadoListChanged(void);
     void formatoListChanged(void);
     void idBobinaListChanged(void);
-    void checkedValueChanged(void);
-    //void toogleValueChanged(void);
+    void toogleValueChanged(void);
 };
 
 #endif // ADDSUPPLIER_H

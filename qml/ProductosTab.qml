@@ -22,13 +22,13 @@ ProductosTabForm {
     //ComboBoxes
     comboBoxTipo.onDisplayTextChanged: onTipoComboBoxChanged()
 
-    comboBoxSerieToogleAll: SupplierType.checkedValue[0]
-    comboBoxAleacionToogleAll: SupplierType.checkedValue[1]
-    comboBoxTempleToogleAll: SupplierType.checkedValue[2]
-    comboBoxAcabadoToogleAll: SupplierType.checkedValue[3]
-    gridTextFieldBobina.comboBoxAnchoBobinaToogleAll: SupplierType.checkedValue[4]
-    gridTextFieldBobina.comboBoxDiametroIntToogleAll: SupplierType.checkedValue[5]
-    gridTextFieldChapa.comboBoxFormatoChapaToogleAll: SupplierType.checkedValue[6]
+    comboBoxSerieToogleAll: SupplierType.toogleValue.serie
+    comboBoxAleacionToogleAll: SupplierType.toogleValue.aleacion
+    comboBoxTempleToogleAll: SupplierType.toogleValue.temple
+    comboBoxAcabadoToogleAll: SupplierType.toogleValue.acabado
+    gridTextFieldBobina.comboBoxAnchoBobinaToogleAll: SupplierType.toogleValue.anchoBobina
+    gridTextFieldBobina.comboBoxDiametroIntToogleAll: SupplierType.toogleValue.diametroIntBobina
+    gridTextFieldChapa.comboBoxFormatoChapaToogleAll: SupplierType.toogleValue.formatoChapa
 
     comboBoxTipo.model: SupplierType.tipoList
     comboBoxMaterial.model: SupplierType.materialList

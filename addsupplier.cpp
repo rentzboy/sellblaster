@@ -105,46 +105,85 @@ void AddSupplier::textListToBackEnd(QString fieldName, QString text, bool value)
 }
 void AddSupplier::uncheckAllValues(QString comboBox)
 {
-    if(comboBox == "serie" && checkedValue[0])
-         checkedValue[0] = !checkedValue[0];
-    else if(comboBox == "aleacion" && checkedValue[1])
-        checkedValue[1] = !checkedValue[1];
-    else if(comboBox == "temple" && checkedValue[2])
-        checkedValue[2] = !checkedValue[2];
-    else if(comboBox == "acabado" && checkedValue[3])
-        checkedValue[3] = !checkedValue[3];
-    else if(comboBox == "anchoBobina" && checkedValue[4])
-        checkedValue[4] = !checkedValue[4];
-    else if(comboBox == "diametroIntBobina" && checkedValue[5])
-        checkedValue[5] = !checkedValue[5];
-    else if(comboBox == "formatoChapa" && checkedValue[6])
-        checkedValue[6] = !checkedValue[6];
-    emit checkedValueChanged();
+    //Se llama despues de añadir un registro a la DB y al modificar los comboBoxes Tipo, Material y Serie
+    //Hay que emitir 2 veces la señal pues solo se actualiza el valor en QML si el valor realmente ha cambiado
+    toogleValue.insert(comboBox, true);
+    emit toogleValueChanged();
+    toogleValue.insert(comboBox, false);
+    emit toogleValueChanged();
+
+    //Si tuvieramos los selectionList en un QMap<QString, QStringList>
+    //no habria que ir con los ifs ...........
+    if(comboBox == "serie")
+         serieSelectionList.clear();
+    else if(comboBox == "aleacion")
+        aleacionSelectionList.clear();
+    else if(comboBox == "temple")
+        templeSelectionList.clear();
+    else if(comboBox == "acabado")
+        acabadoSelectionList.clear();
+    else if(comboBox == "anchoBobina")
+        formatoBobinaSelectionList.clear();
+    else if(comboBox == "diametroIntBobina")
+        idBobinaSelectionList.clear();
+    else if(comboBox == "formatoChapa")
+        formatoChapaSelectionList.clear();
 }
 void AddSupplier::toogleAllValues(QString comboBox)
 {
-    //Toogle all checkboxes from ComboBoxes -se activa mediante la key F12-
-    if(comboBox == "serie")
-        checkedValue[0] = !checkedValue[0];
-    else if(comboBox == "aleacion")
-        checkedValue[1] = !checkedValue[1];
-    else if(comboBox == "temple")
-        checkedValue[2] = !checkedValue[2];
-    else if(comboBox == "acabado")
-        checkedValue[3] = !checkedValue[3];
-    else if(comboBox == "anchoBobina")
-        checkedValue[4] = !checkedValue[4];
-    else if(comboBox == "diametroIntBobina")
-        checkedValue[5] = !checkedValue[5];
-    else if(comboBox == "formatoChapa")
-        checkedValue[6] = !checkedValue[6];
-
-    emit checkedValueChanged();
-
-    /* Mejora: utilizar toogleValue en lugar de checkedValue
+    //Toogle all checkboxes for the ComboBox's parameter -se activa mediante la key F12-
     bool tmp = toogleValue.value(comboBox).toBool();
     toogleValue.insert(comboBox, !tmp);
-    emit toogleValueChanged(); */
+    emit toogleValueChanged();
+
+    if(comboBox == "serie")
+    {
+        if(tmp) //all checked --> change to unchecked
+            serieSelectionList.clear();
+        else
+            serieSelectionList = serieList;
+    }
+    else if(comboBox == "aleacion")
+    {        if(tmp) //all checked
+            aleacionSelectionList.clear();
+        else
+            aleacionSelectionList = aleacionList;
+    }
+    else if(comboBox == "temple")
+    {
+        if(tmp) //all checked
+            templeSelectionList.clear();
+        else
+            templeSelectionList = templeList;
+    }
+    else if(comboBox == "acabado")
+    {
+        if(tmp) //all checked
+            acabadoSelectionList.clear();
+        else
+            acabadoSelectionList = acabadoList;
+    }
+    else if(comboBox == "anchoBobina")
+    {
+        if(tmp) //all checked
+            formatoBobinaSelectionList.clear();
+        else
+            formatoBobinaSelectionList = formatoList;
+    }
+    else if(comboBox == "diametroIntBobina")
+    {
+        if(tmp) //all checked
+            idBobinaSelectionList.clear();
+        else
+            idBobinaSelectionList = idBobinaList;
+    }
+    else if(comboBox == "formatoChapa")
+    {
+        if(tmp) //all checked
+            formatoChapaSelectionList.clear();
+        else
+            formatoChapaSelectionList = formatoList;
+    }
 }
 AddSupplier::~AddSupplier()
 {
@@ -847,15 +886,26 @@ void AddSupplier::onGuardarButton(QString tab)
 }
 void AddSupplier::onRelatedFieldUpdated(QString fieldName)
 {
-    //PRINT_FUNCTION_NAME
-    //qDebug() << "fieldName: " << fieldName;
-
-    if(fieldName == "tipo" || fieldName == "material")
+    //Se llama desde QML (onRadioButtonClicked) y al modificicar los comboBoxes Tipo, Material y Serie
+    if(fieldName == "tipo")
+    {
+        this->uncheckAllValues("anchoBobina");
+        this->uncheckAllValues("diametroIntBobina");
+        this->uncheckAllValues("formatoChapa");
         fillRelatedComboBoxFromDb(fieldName);
+    }
+    else if(fieldName == "material")
+    {
+        //Al cambiar el material cambian los models de los comboBoxes pero NO los selectionList
+        //Serie, aleación, temple y acabado => reset selectionList
+        this->uncheckAllValues("aleacion");
+        this->uncheckAllValues("temple");
+        this->uncheckAllValues("acabado");
+        fillRelatedComboBoxFromDb(fieldName);
+    }
     else if(fieldName == "aisi" || fieldName == "werkstoff") //RadioButton
     {
         aleacionListCompleta.clear();
-        aleacionSelectionList.clear();
         aleacionRadioButton = fieldName;
 
         QSqlQuery result;
@@ -867,13 +917,14 @@ void AddSupplier::onRelatedFieldUpdated(QString fieldName)
         {
             aleacionListCompleta.append(result.value(0).toString());
         }
-        aleacionList = aleacionListCompleta;
+        aleacionList = aleacionListCompleta; //aleacionListCompleta se guarda para luego recuperar los ids sin consultar la DB
         emit aleacionListChanged();
-        //Si tb queremos resetear el comboBox Serie
-        serieSelectionList.clear();
+        //Resetear la selección en los comboBoxes Serie y Aleación
         this->uncheckAllValues("serie");
+        this->uncheckAllValues("aleacion");
     }
-    else fillRelatedComboCheckBoxFromDb(fieldName); //serie
+    else if(fieldName == "serie")
+        fillRelatedComboCheckBoxFromDb(fieldName); //serie
 }
 
 //SETTERS & GETTERS
