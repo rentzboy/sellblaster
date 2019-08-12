@@ -57,6 +57,7 @@ public slots:
     void onCancelarButton(void);
     void onGuardarButton(QString tab);
     void onRelatedFieldUpdated(QString fieldName);
+    void onCloseQmlInstance(void);
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 private:
@@ -109,11 +110,10 @@ private:
     QErrorMessage *errorMessage = Q_NULLPTR;
 
 signals:
+    //Connect signals
     void closeQmlInstance(void);
-    void clearFormFields(QVariant tab);
-    void clearFormFields(QString tab);
-    //Notify signals
     void relatedFieldUpdated(QString fieldName);
+    //Notify signals
     void actividadListChanged(void);
     void paisListChanged(void);
     void formaPagoListChanged(void);

@@ -20,15 +20,6 @@ Window {
     BackgroundZ1 {
     }
 
-    //QML handler for C++ signal
-    Connections {
-        target: LoginType
-        onCloseQmlInstance: function onCloseQmlInstance() {
-            console.log("Se ha llamado a onCloseQmlInstance() desde Login.qml")
-            close()
-        }
-    }
-
     LoginForm {
         id: form
 

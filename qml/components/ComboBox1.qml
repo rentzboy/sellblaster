@@ -19,6 +19,5 @@ ComboBox {
 
     onModelChanged: Supplier.resetComboBoxIndex(supplierTab, objectName)
     onDisplayTextChanged: Supplier.textValueToBackEnd(supplierTab, objectName, displayText)
-    //onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(objectName, currentIndex)
     //Component.onCompleted: Supplier.onComboBoxCompleted()
 }

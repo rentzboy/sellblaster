@@ -15,7 +15,7 @@ class LoginDialog : public QObject
 public:
     LoginDialog(const LoginDialog &other) = delete;
     LoginDialog operator=(const LoginDialog &other) = delete;
-    ~LoginDialog() = default;
+    ~LoginDialog();
     static void createComponent(void);
 
 private:
@@ -35,6 +35,7 @@ signals:
     void closeQmlInstance();
 
 private:
+    static QQmlApplicationEngine *engine;
     QString userName;
     QString password;
     QString errorMsg;

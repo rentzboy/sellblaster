@@ -32,11 +32,6 @@ EmpresaTabForm {
     buttonAceptar.onClicked: SupplierType.onAceptarButton("empresa")
     buttonCancelar.onClicked: SupplierType.onCancelarButton()
     buttonGuardar.onClicked: SupplierType.onGuardarButton("empresa")
-
-    Connections {
-        target: SupplierType
-        onClearFormFields: onClearFormFields(tab)
-    }
 }
 
 

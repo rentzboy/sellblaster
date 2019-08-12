@@ -22,6 +22,8 @@ void AddSupplier::createComponent(void)
         engine->load(QUrl(QStringLiteral("qrc:/qml/NewProveedor.qml")));
 
         connect(uniqueInstance, &AddSupplier::relatedFieldUpdated, uniqueInstance, &AddSupplier::onRelatedFieldUpdated);
+        connect(engine->rootObjects().value(AddSupplier::typeId), SIGNAL(closeQmlInstance()), uniqueInstance, SLOT(onCloseQmlInstance()));
+
 
         /* DEPRECATED:
          * Hemos encontrado otras maneras + sencillas, pero lo dejo pues explica como conectar los signals/slots
@@ -592,9 +594,33 @@ void AddSupplier::resetFields(QString tab)
     if(tab == "empresa")
         this->setEmpresaTabField("clearAll", ""); //No se utiliza pues borrariamos el textField "Empresa"
     else if(tab == "contactos")
+    {
+        //Delete textFields
         this->setContactoTabField("clearAll", "");
+        //Reset comboBoxes
+        QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("area");
+        QQmlProperty::write(object, "currentIndex", -1);
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("puesto");
+        QQmlProperty::write(object, "currentIndex", -1);
+    }
     else if(tab == "productos")
+    {
+        //Delete textFields
         this->setProductoTabField("clearAll", "");
+        //Reset comboBoxes
+        QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("tipo");
+        QQmlProperty::write(object, "currentIndex", -1);
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("area");
+        QQmlProperty::write(object, "currentIndex", -1);
+
+        this->uncheckAllValues("serie");
+        this->uncheckAllValues("aleacion");
+        this->uncheckAllValues("temple");
+        this->uncheckAllValues("acabado");
+        this->uncheckAllValues("anchoBobina");
+        this->uncheckAllValues("diametroIntBobina");
+        this->uncheckAllValues("formatoChapa");
+    }
 }
 
 //PUBLIC SLOTS
@@ -689,8 +715,8 @@ bool AddSupplier::onAceptarButton(QString tab)
         .append(idArea).append(", ") //number, sin ' '
         .append(idPuesto).append(", '") //number, sin ' '
         .append(contactoTabField.value("notasContacto").toString()).append("');");
-
         qDebug() << "Stored Procedure: " << sqlQuery;
+
         if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
         {
             resetFields(tab);
@@ -712,19 +738,6 @@ bool AddSupplier::onAceptarButton(QString tab)
         //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
         QString idTipo = QString::number (tipoList.indexOf(productoTabField.value("tipo").toString()) + 1);
         QString idMaterial = QString::number (materialList.indexOf(productoTabField.value("material").toString()) + 1);
-
-        //Retrieve id_supplier (para no tener que buscarlo en cada Query)
-        QString idSupplier;
-        QSqlQuery result; //sirve para todas las consultas
-        QString sqlQuery = "CALL get_IdFromRelatedTable('supplier', 'company', ";
-        sqlQuery.append("'").append(empresaTabField.value("empresa").toString()).append("');");
-        qDebug() << "Stored Procedure: " << sqlQuery;
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result);
-        while(result.next())
-        {
-            idSupplier.append(result.value(0).toString()); //QString instead of QStringList pues solo puede haber 1
-        }
-        qDebug() << "idSupplier: " << idSupplier;
 
        //Retrieve indexes from ComboCheckBoxes
         QString idAleacion, idTemple, idAcabado, idDiametroInterior, idAncho, idLargo;
@@ -781,8 +794,9 @@ bool AddSupplier::onAceptarButton(QString tab)
        }
 
        //SQL Query
-        sqlQuery = "CALL insert_ProductList(";
-        sqlQuery.append(idSupplier).append(", ") //number
+       QSqlQuery result;
+        QString sqlQuery = "CALL insert_ProductList(";
+        sqlQuery.append("'").append(empresaTabField.value("empresa").toString()).append("', ")
         .append(idTipo).append(", ")  //number
         .append(idMaterial).append(", ") //number
         .append("'").append(idAleacion).append("'").append(", ") //varchar (array)
@@ -803,14 +817,12 @@ bool AddSupplier::onAceptarButton(QString tab)
         .append(productoTabField.value("diametroExtMax").toString()).append(");"); //⌀exterior max (tubos)
         qDebug() << sqlQuery;
 
-        if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_FAILURE)
+        if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
         {
-            QMessageBox::information(Q_NULLPTR, "Database", "ohhhh shiiiiiiiiiiit !!!",QMessageBox::Ok);
-            return EXIT_FAILURE;
+            resetFields(tab);
+            return EXIT_SUCCESS;
         }
-
-        QMessageBox::information(Q_NULLPTR, "Database", "Se han añadido los registros a la Database.",QMessageBox::Ok);
-        return EXIT_SUCCESS;
+        return EXIT_FAILURE;
     }
 }
 void AddSupplier::onCancelarButton(void)
@@ -873,6 +885,10 @@ void AddSupplier::onRelatedFieldUpdated(QString fieldName)
         this->uncheckAllValues("serie");
         this->uncheckAllValues("aleacion");
     }
+}
+void AddSupplier::onCloseQmlInstance()
+{
+    this->onCancelarButton();
 }
 
 //SETTERS & GETTERS

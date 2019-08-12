@@ -15,16 +15,21 @@ Window {
     minimumHeight: 600 //menow que MainWindow
     title: qsTr("Nuevo proveedor")
 
+
+
     BackgroundZ1 {
     }
 
-    onClosing: onCloseQmlInstance()
+    //Opcion #1: CAlling C++ signal connect()
+    signal closeQmlInstance()
+    onClosing: closeQmlInstance()
 
-    //QML handler for C++ signal
+    /* Opcion #2: Calling C++ signal from QML
+    En este caso NO funciona por que hay un bug en Qt con el signal onClosing de Window
     Connections {
         target: SupplierType
-        onCloseQmlInstance: onCloseQmlInstance()
-    }
+        onClosing: onCloseQmlInstance()
+    } */
 
     //JS
     function onCloseQmlInstance() {

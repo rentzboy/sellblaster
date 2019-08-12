@@ -38,8 +38,6 @@ ProductosTabForm {
     radioButtonWerkstoff.onClicked: Supplier.onRadioButtonClicked(radioButtonWerkstoff.objectName)
 
     //ComboBoxes
-    comboBoxTipo.onCurrentTextChanged: Supplier.onTipoComboBoxChanged(comboBoxTipo.currentText) //Update States
-
     comboBoxSerieToogleAll: SupplierType.toogleValue.serie
     comboBoxAleacionToogleAll: SupplierType.toogleValue.aleacion
     comboBoxTempleToogleAll: SupplierType.toogleValue.temple

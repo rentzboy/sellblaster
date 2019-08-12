@@ -4,6 +4,7 @@
 #include <QQuickWindow>
 
 //static initialization
+QQmlApplicationEngine* LoginDialog::engine = Q_NULLPTR;
 LoginDialog* LoginDialog::uniqueInstance = Q_NULLPTR;
 int LoginDialog::typeId = 0;
 
@@ -52,13 +53,20 @@ void LoginDialog::createComponent(void)
         MainWindow::createInterDbConnection();
 
         //Load QML component
-        auto *engine = new QQmlApplicationEngine;
+        engine = new QQmlApplicationEngine;
         engine->load(QUrl(QStringLiteral("qrc:/qml/Login.qml")));
 
         //Connect Signals(C++) to Slots(QML)
         //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
         //connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
     }
+}
+LoginDialog::~LoginDialog()
+{
+    PRINT_FUNCTION_NAME
+
+    delete uniqueInstance;
+    uniqueInstance = Q_NULLPTR;
 }
 
 //PUBLIC SLOTS
@@ -104,7 +112,10 @@ void LoginDialog::onAceptarClicked(void)
         }
         else
         {
-            emit this->closeQmlInstance();
+            //Close Login.qml
+            QObject *object = engine->rootObjects().value(LoginDialog::typeId);
+            QMetaObject::invokeMethod(object, "close");
+            //Load MainWindow.qml
             MainWindow::createComponent();
         }
     }

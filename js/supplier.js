@@ -3,7 +3,10 @@
 
 //JS FUNCTIONS
 function textValueToBackEnd(tab, fieldName, value) {
-        Supplier.SupplierType.textValueToBackEnd(tab, fieldName, value)
+    //console.log("Call to textValueToBackEnd() " + "tab: " + tab + " fieldName: " + fieldName + " displayText: " + value)
+    Supplier.SupplierType.textValueToBackEnd(tab, fieldName, value)
+    if(fieldName === "tipo")
+        onTipoComboBoxChanged(value)
 }
 function textListToBackEnd(fieldName, text, checked) {
     if(text)
@@ -11,7 +14,7 @@ function textListToBackEnd(fieldName, text, checked) {
 }
 function onRadioButtonClicked(objectName) {
     //console.log("onRadioButtonClicked: (" + objectName + ")")
-    SupplierType.onRelatedFieldUpdated(objectName);
+    Supplier.SupplierType.onRelatedFieldUpdated(objectName);
 }
 function resetComboBoxIndex(tab, fieldName) {
     /*Los comboBox se inician a -1 (no muestran valores) pero al cargar el model,
@@ -27,46 +30,48 @@ function resetComboBoxIndex(tab, fieldName) {
     //Para eliminar el valor que se ha pasado automáticamente a C++ al cargar el modelo
     textValueToBackEnd(tab, fieldName, "reset")
 }
-function onTipoComboBoxChanged(currentText) {
-    //console.log("currentText: " + comboBoxTipo.currentText + ", currentIndex: " + comboBoxTipo.currentIndex)
+function onTipoComboBoxChanged(displayText) {
+    //console.log("displayText: " + displayText + ", currentText: " + comboBoxTipo.currentText)
 
     //Para que se muestre el state=reset al cargar la 1era vez ProductosTab
-    counter++
-    if(counter === 2) {
-        state = "reset"
+    //Sino se muestra por defecto state=bobina
+    productosTab.counter++
+    if(productosTab.counter === 2) {
+        productosTab.state = "reset"
         return
     }
 
     //Customization
-    switch (currentText) {
+    switch (displayText) {
     case "Inicio":
-        state = "reset"
+        productosTab.state = "reset"
         break
     case "Bobina":
-        state = "bobina"
+        productosTab.state = "bobina"
         break
     case "Chapa":
-        state = "chapa"
+        productosTab.state = "chapa"
         break
     case "Barra":
-        state = "barra"
+        productosTab.state = "barra"
         break
     case "Tubo":
-        state = "tubo"
+        productosTab.state = "tubo"
         break
     case "Plancha":
-        state = "chapa"
+        productosTab.state = "chapa"
         break
     case "Disco":
-        state = "disco"
+        productosTab.state = "disco"
         break
     case "Pletina":
-        state = "pletina"
+        productosTab.state = "pletina"
         break
     default:
 
     }
 }
+
 //Deprecated
 function onComboBoxCompleted() {
     console.log("Componente cargado: " + objectName + " con el modelo: " + model)
