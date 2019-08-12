@@ -29,6 +29,7 @@ GridLayout {
     TextField1 {
         id: textFieldDiametroMinDisco
         objectName: "diametroMin"
+        supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxTipo.x
@@ -48,6 +49,7 @@ GridLayout {
     TextField1 {
         id: textFieldDiametroMaxDisco
         objectName: "diametroMax"
+        supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         validator: IntValidator {
@@ -67,6 +69,7 @@ GridLayout {
     TextField1 {
         id: textFieldEspesorMinDisco
         objectName: "espesorMin"
+        supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxTipo.x
@@ -85,6 +88,7 @@ GridLayout {
     TextField1 {
         id: textFieldEspesorMaxDisco
         objectName: "espesorMax"
+        supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         validator: IntValidator {

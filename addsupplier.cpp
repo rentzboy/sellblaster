@@ -25,7 +25,7 @@ void AddSupplier::createComponent(void)
 
         /* DEPRECATED:
          * Hemos encontrado otras maneras + sencillas, pero lo dejo pues explica como conectar los signals/slots
-        Connect C++ to QML Signals / Slots
+        1- Connect C++ to QML Signals / Slots
         engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funciona)
         Solo funciona para SLOTS definidos en archivo .qml que cargamos mediante engine->load
         QObject *contactosTabObject = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("ContactosTabForm");
@@ -33,7 +33,7 @@ void AddSupplier::createComponent(void)
         QObject *productosTabObject = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("ProductosTabForm");
         connect(uniqueInstance, SIGNAL(clearFormFields(QVariant)), productosTabObject, SLOT(onClearProductosFields(QVariant)));
 
-        Connect QML to C++ Signals/Slots
+        2- Connect QML to C++ Signals/Slots
         connect(engine->rootObjects().value(AddSupplier::typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(closeEvent(QCloseEvent*)));
         connect(engine->rootObjects().value(AddSupplier::typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(onCloseEventCaller())); */
 
@@ -46,30 +46,35 @@ void AddSupplier::createComponent(void)
         engine->load(QUrl(QStringLiteral("qrc:/qml/NewProveedor.qml")));
     }
 }
-void AddSupplier::textValueToBackEnd(QString fieldName, QString text)
+void AddSupplier::textValueToBackEnd(QString tab, QString fieldName, QString text)
 {
-    //PRINT_FUNCTION_NAME
+//    PRINT_FUNCTION_NAME
+//    qDebug() << "tab:" << tab <<"fieldName:" << fieldName << ", " << "tex: " << text;
 
-    //Guarda los valores de los comboBoxes sin checkboxes y textFields
-    if(text == "reset")
-        formField.remove(fieldName); //resetear el valor pasado al cargar el modelo del comboBox
-    else
-        formField.insert(fieldName, text); //no puede haber 2 key iguales en el QMap
+    if(tab == "empresa")
+        setEmpresaTabField(fieldName, text);
+    else if(tab == "contacto")
+        setContactoTabField(fieldName, text);
+    else if(tab == "producto")
+    {
+        setProductoTabField(fieldName, text);
 
-    //Cargar los comboBoxes relacionados
-    if(fieldName == "tipo" || fieldName == "material")
-        emit relatedFieldUpdated(fieldName);
+        //Cargar los comboBoxes relacionados
+        if(fieldName == "tipo" || fieldName == "material")
+            emit relatedFieldUpdated(fieldName);
+    }
 }
 void AddSupplier::textListToBackEnd(QString fieldName, QString text, bool value)
 {
     PRINT_FUNCTION_NAME
-
     qDebug() << "fieldName: " << fieldName << ", text: " << text << ", value: " << value;
 
     if(fieldName == "serie")
     {
-        if(value) serieSelectionList.append(text);
-        else serieSelectionList.removeOne(text);
+        if(value) //checked=true
+            serieSelectionList.append(text);
+        else
+            serieSelectionList.removeOne(text);
         emit relatedFieldUpdated(fieldName);
     }
     else if(fieldName == "aleacion")
@@ -257,7 +262,7 @@ void AddSupplier::fillRelatedComboBoxFromDb(QString comboBox)
 
     if(comboBox == "tipo")
     {
-        value = formField.value("tipo");
+        value = productoTabField.value("tipo").toString();
 
         if(value == "Bobina" || value == "Chapa" || value == "Plancha")
         {
@@ -277,7 +282,7 @@ void AddSupplier::fillRelatedComboBoxFromDb(QString comboBox)
     }
     else if(comboBox == "material")
     {
-        value = formField.value("material");
+        value = productoTabField.value("material").toString();
         idMaterial = QString::number(materialList.indexOf(value) + 1);
 
         //SERIE
@@ -397,35 +402,35 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
         }
         emit materialListChanged();
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('serie', 'serie')"; //Se utiliza como apoyo
+        sqlQuery = "CALL get_DropDownMenu('serie', 'serie')"; //Serie -se utiliza como apoyo-
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
             serieListCompleta.append(result.value(0).toString());
         }
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('alloy', 'aisi')"; //Se utiliza como apoyo
+        sqlQuery = "CALL get_DropDownMenu('alloy', 'aisi')"; //AISI -se utiliza como apoyo-
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
             aleacionListCompleta.append(result.value(0).toString());
         }
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('temper', 'temper')"; //Se utiliza como apoyo
+        sqlQuery = "CALL get_DropDownMenu('temper', 'temper')"; //Temple -se utiliza como apoyo-
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
             templeListCompleta.append(result.value(0).toString());
         }
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('finition', 'finition')"; //Se utiliza como apoyo
+        sqlQuery = "CALL get_DropDownMenu('finition', 'finition')"; //Acabado -se utiliza como apoyo-
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
             acabadoListCompleta.append(result.value(0).toString());
         }
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('format', 'format')"; //Se utiliza como apoyo
+        sqlQuery = "CALL get_DropDownMenu('format', 'format')"; //Formato -se utiliza como apoyo-
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
@@ -446,211 +451,155 @@ bool AddSupplier::sanitationCheck(QString tab)
     if(tab == "empresa")
     {
         //Checking key fields & numeric fields are not empty
-        if(formField.value("empresa").isEmpty()     ||
-            formField.value("ciudad").isEmpty()        ||
-            formField.value("actividad").isEmpty()    ||
-            formField.value("formaPago").isEmpty() ||
-            formField.value("pais").isEmpty())
+        if(empresaTabField.value("empresa").toString().isEmpty()     ||
+            empresaTabField.value("ciudad").toString().isEmpty()        ||
+            empresaTabField.value("actividad").toString().isEmpty()    ||
+            empresaTabField.value("formaPago").toString().isEmpty() ||
+            empresaTabField.value("pais").toString().isEmpty())
             return EXIT_FAILURE;
+        else
+        {
+            MainWindow::sanitationUserInput(empresaTabField);
+            return EXIT_SUCCESS;
+        }
     }
     else if (tab == "contactos")
     {
         //Checking key fields & numeric fields are not empty
-        if(formField.value("empresa").isEmpty() || //Hay que controlarlo en todas las tabs
-            formField.value("nombre").isEmpty()     ||
-            formField.value("email").isEmpty()     ||
-            formField.value("area").isEmpty()       ||
-            formField.value("puesto").isEmpty())
+        if(empresaTabField.value("empresa").toString().isEmpty()     || //Hay que controlarlo en todas las tabs
+            contactoTabField.value("nombre").toString().isEmpty()      ||
+            contactoTabField.value("email").toString().isEmpty()         ||
+            contactoTabField.value("area").toString().isEmpty()           ||
+            contactoTabField.value("puesto").toString().isEmpty())
             return EXIT_FAILURE;
+        else
+        {
+            MainWindow::sanitationUserInput(contactoTabField);
+            return EXIT_SUCCESS;
+        }
     }
     else if (tab == "productos")
     {
-        if(formField.value("empresa").isEmpty() || //Hay que controlarlo en todas las tabs
-            formField.value("tipo").isEmpty()  ||
-            formField.value("material").isEmpty() ||
+        if(empresaTabField.value("empresa").toString().isEmpty()     || //Hay que controlarlo en todas las tabs
+            productoTabField.value("tipo").toString().isEmpty()           ||
+            productoTabField.value("material").toString().isEmpty()    ||
             aleacionSelectionList.isEmpty() ||
             templeSelectionList.isEmpty() ||
             acabadoSelectionList.isEmpty())
             return EXIT_FAILURE;
-        if(formField.value("tipo") == "Bobina")
+        else
+            MainWindow::sanitationUserInput(productoTabField);
+
+        //Prepare fields before SQL Query
+        if(productoTabField.value("tipo") == "Bobina")
         {
             if(formatoBobinaSelectionList.isEmpty() || idBobinaSelectionList.isEmpty())
                 return EXIT_FAILURE;
             else
             {
-                //Prepare fields before SQL Query
-                if(formField.value("espesorMin").isEmpty())
-                    formField.insert("espesorMin",  "NULL");
-                if(formField.value("espesorMax").isEmpty())
-                    formField.insert("espesorMax",  "NULL");
-                formField.insert("diametroMin",  "NULL");
-                formField.insert("diametroMax",  "NULL");
-                formField.insert("largoMin",  "NULL");
-                formField.insert("largoMax",  "NULL");
-                formField.insert("diametroIntMin",  "NULL");
-                formField.insert("diametroIntMax",  "NULL");
-                formField.insert("diametroExtMin",  "NULL");
-                formField.insert("diametroExtMax",  "NULL");
+                if(productoTabField.value("espesorMin").toString().isEmpty())
+                    productoTabField.insert("espesorMin",  "NULL");
+                if(productoTabField.value("espesorMax").toString().isEmpty())
+                    productoTabField.insert("espesorMax",  "NULL");
+                productoTabField.insert("diametroMin",  "NULL");
+                productoTabField.insert("diametroMax",  "NULL");
+                productoTabField.insert("largoMin",  "NULL");
+                productoTabField.insert("largoMax",  "NULL");
+                productoTabField.insert("diametroIntMin",  "NULL");
+                productoTabField.insert("diametroIntMax",  "NULL");
+                productoTabField.insert("diametroExtMin",  "NULL");
+                productoTabField.insert("diametroExtMax",  "NULL");
             }
         }
-        else if(formField.value("tipo") == "Chapa" || formField.value("tipo") == "Plancha")
+        else if(productoTabField.value("tipo").toString() == "Chapa" || productoTabField.value("tipo").toString() == "Plancha")
         {
             if(formatoChapaSelectionList.isEmpty())
                 return EXIT_FAILURE;
             else
             {
-                //Prepare fields before SQL Query
-                if(formField.value("espesorMin").isEmpty())
-                    formField.insert("espesorMin",  "NULL");
-                if(formField.value("espesorMax").isEmpty())
-                    formField.insert("espesorMax",  "NULL");
-                formField.insert("diametroMin",  "NULL");
-                formField.insert("diametroMax",  "NULL");
-                formField.insert("largoMin",  "NULL");
-                formField.insert("largoMax",  "NULL");
-                formField.insert("diametroIntMin",  "NULL");
-                formField.insert("diametroIntMax",  "NULL");
-                formField.insert("diametroExtMin",  "NULL");
-                formField.insert("diametroExtMax",  "NULL");
+                if(productoTabField.value("espesorMin").toString().isEmpty())
+                    productoTabField.insert("espesorMin",  "NULL");
+                if(productoTabField.value("espesorMax").toString().isEmpty())
+                    productoTabField.insert("espesorMax",  "NULL");
+                productoTabField.insert("diametroMin",  "NULL");
+                productoTabField.insert("diametroMax",  "NULL");
+                productoTabField.insert("largoMin",  "NULL");
+                productoTabField.insert("largoMax",  "NULL");
+                productoTabField.insert("diametroIntMin",  "NULL");
+                productoTabField.insert("diametroIntMax",  "NULL");
+                productoTabField.insert("diametroExtMin",  "NULL");
+                productoTabField.insert("diametroExtMax",  "NULL");
             }
         }
-        else if(formField.value("tipo") == "Barra")
+        else if(productoTabField.value("tipo").toString() == "Barra")
         {
-            if(formField.value("diametroMin").isEmpty())
-                formField.insert("diametroMin",  "NULL");
-            if(formField.value("diametroMax").isEmpty())
-                formField.insert("diametroMax",  "NULL");
-            if(formField.value("largoMin").isEmpty())
-                formField.insert("largoMin",  "NULL");
-            if(formField.value("largoMax").isEmpty())
-                formField.insert("largoMax",  "NULL");
-            formField.insert("espesorMin",  "NULL");
-            formField.insert("espesorMax",  "NULL");
-            formField.insert("diametroIntMin",  "NULL");
-            formField.insert("diametroIntMax",  "NULL");
-            formField.insert("diametroExtMin",  "NULL");
-            formField.insert("diametroExtMax",  "NULL");
+            if(productoTabField.value("diametroMin").toString().isEmpty())
+                productoTabField.insert("diametroMin",  "NULL");
+            if(productoTabField.value("diametroMax").toString().isEmpty())
+                productoTabField.insert("diametroMax",  "NULL");
+            if(productoTabField.value("largoMin").toString().isEmpty())
+                productoTabField.insert("largoMin",  "NULL");
+            if(productoTabField.value("largoMax").toString().isEmpty())
+                productoTabField.insert("largoMax",  "NULL");
+            productoTabField.insert("espesorMin",  "NULL");
+            productoTabField.insert("espesorMax",  "NULL");
+            productoTabField.insert("diametroIntMin",  "NULL");
+            productoTabField.insert("diametroIntMax",  "NULL");
+            productoTabField.insert("diametroExtMin",  "NULL");
+            productoTabField.insert("diametroExtMax",  "NULL");
         }
-        else if(formField.value("tipo") == "Tubo")
+        else if(productoTabField.value("tipo").toString() == "Tubo")
         {
-            formField.insert("espesorMin",  "NULL");
-            formField.insert("espesorMax",  "NULL");
-            formField.insert("diametroMin",  "NULL");
-            formField.insert("diametroMax",  "NULL");
-            if(formField.value("largoMin").isEmpty())
-                formField.insert("largoMin",  "NULL");
-            if(formField.value("largoMax").isEmpty())
-                formField.insert("largoMax",  "NULL");
-            if(formField.value("diametroIntMin").isEmpty())
-                formField.insert("diametroIntMin",  "NULL");
-            if(formField.value("diametroIntMax").isEmpty())
-                formField.insert("diametroIntMax",  "NULL");
-            if(formField.value("diametroExtMin").isEmpty())
-                formField.insert("diametroExtMin",  "NULL");
-            if(formField.value("diametroExtMax").isEmpty())
-                formField.insert("diametroExtMax",  "NULL");
+            productoTabField.insert("espesorMin",  "NULL");
+            productoTabField.insert("espesorMax",  "NULL");
+            productoTabField.insert("diametroMin",  "NULL");
+            productoTabField.insert("diametroMax",  "NULL");
+            if(productoTabField.value("largoMin").toString().isEmpty())
+                productoTabField.insert("largoMin",  "NULL");
+            if(productoTabField.value("largoMax").toString().isEmpty())
+                productoTabField.insert("largoMax",  "NULL");
+            if(productoTabField.value("diametroIntMin").toString().isEmpty())
+                productoTabField.insert("diametroIntMin",  "NULL");
+            if(productoTabField.value("diametroIntMax").toString().isEmpty())
+                productoTabField.insert("diametroIntMax",  "NULL");
+            if(productoTabField.value("diametroExtMin").toString().isEmpty())
+                productoTabField.insert("diametroExtMin",  "NULL");
+            if(productoTabField.value("diametroExtMax").toString().isEmpty())
+                productoTabField.insert("diametroExtMax",  "NULL");
         }
-        else if(formField.value("tipo") == "Disco")
+        else if(productoTabField.value("tipo").toString() == "Disco")
         {
-            if(formField.value("diametroMin").isEmpty())
-                formField.insert("diametroMin",  "NULL");
-            if(formField.value("diametroMax").isEmpty())
-                formField.insert("diametroMax",  "NULL");
-            if(formField.value("espesorMin").isEmpty())
-                formField.insert("espesorMin",  "NULL");
-            if(formField.value("espesorMax").isEmpty())
-                formField.insert("espesorMax",  "NULL");
-            formField.insert("largoMin",  "NULL");
-            formField.insert("largoMax",  "NULL");
-            formField.insert("diametroIntMin",  "NULL");
-            formField.insert("diametroIntMax",  "NULL");
-            formField.insert("diametroExtMin",  "NULL");
-            formField.insert("diametroExtMax",  "NULL");
+            if(productoTabField.value("diametroMin").toString().isEmpty())
+                productoTabField.insert("diametroMin",  "NULL");
+            if(productoTabField.value("diametroMax").toString().isEmpty())
+                productoTabField.insert("diametroMax",  "NULL");
+            if(productoTabField.value("espesorMin").toString().isEmpty())
+                productoTabField.insert("espesorMin",  "NULL");
+            if(productoTabField.value("espesorMax").toString().isEmpty())
+                productoTabField.insert("espesorMax",  "NULL");
+            productoTabField.insert("largoMin",  "NULL");
+            productoTabField.insert("largoMax",  "NULL");
+            productoTabField.insert("diametroIntMin",  "NULL");
+            productoTabField.insert("diametroIntMax",  "NULL");
+            productoTabField.insert("diametroExtMin",  "NULL");
+            productoTabField.insert("diametroExtMax",  "NULL");
         }
+        return EXIT_SUCCESS;
     }
-    //Sanitation check of user' input
-    MainWindow::sanitationUserInput(formField);
-    return EXIT_SUCCESS;
 }
 void AddSupplier::resetFields(QString tab)
 {
     if(tab == "empresa")
-    {
-        //Clear QMap values
-        formField["empresa"].clear();
-        formField["holding"].clear();
-        formField["actividad"].clear();
-        formField["web"].clear();
-        formField["panjiba"].clear();
-        formField["maps"].clear();
-        formField["pais"].clear();
-        formField["ciudad"].clear();
-        formField["postcode"].clear();
-        formField["moq"].clear();
-        formField["notasEmpresa"].clear();
-        formField["formaPago"].clear();
-
-        //Clear form values using JavaScript
-        emit clearFormFields(tab);
-    }
+        this->setEmpresaTabField("clearAll", ""); //No se utiliza pues borrariamos el textField "Empresa"
     else if(tab == "contactos")
-    {
-        //Clear QMap values
-        formField["nombre"].clear();
-        formField["apellido"].clear();
-        formField["email"].clear();
-        formField["telefono"].clear();
-        formField["movil"].clear();
-        formField["notasContacto"].clear();
-        formField["area"].clear();
-        formField["puesto"].clear();
-
-        //Clear form values using JavaScript
-        emit clearFormFields(tab);
-    }
+        this->setContactoTabField("clearAll", "");
     else if(tab == "productos")
-    {
-        //Clear QMap values
-        formField["tipo"].clear();
-        formField["material"].clear();
-        formField["serie"].clear();
-        formField["aleacion"].clear();
-        formField["temple"].clear();
-        formField["acabado"].clear();
-        formField["diametroMinBarra"].clear();
-        formField["diametroMaxBarra"].clear();
-        formField["largoMinBarra"].clear();
-        formField["largoMaxBarra"].clear();
-        formField["anchoBobina"].clear();
-        formField["espesorMinBobina"].clear();
-        formField["espesorMaxBobina"].clear();
-        formField["diametroIntBobina"].clear();
-        formField["tipoChapa"].clear();
-        formField["espesorMinChapa"].clear();
-        formField["espesorMaxChapa"].clear();
-        formField["diametroMinDisco"].clear();
-        formField["diametroMaxDisco"].clear();
-        formField["espesorMinDisco"].clear();
-        formField["espesorMaxDisco"].clear();
-        formField["diametroIntMinTubo"].clear();
-        formField["diametroIntMaxTubo"].clear();
-        formField["diametroExtMinTubo"].clear();
-        formField["diametroExtMaxTubo"].clear();
-        formField["largoMinTubo"].clear();
-        formField["largoMaxTubo"].clear();
-
-
-        //Clear form values using JavaScript
-        emit clearFormFields(tab);
-    }
+        this->setProductoTabField("clearAll", "");
 }
 
 //PUBLIC SLOTS
 bool AddSupplier::onAceptarButton(QString tab)
 {
-    PRINT_FUNCTION_NAME
-    qDebug() << "TAB: " << tab << " ---- <QMAPS> " << formField;
-
     if(tab == "empresa")
     {
         if (this->sanitationCheck(tab) == EXIT_FAILURE)
@@ -664,23 +613,23 @@ bool AddSupplier::onAceptarButton(QString tab)
 
         //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
         //El index de xxxList empieza en 0, pero los registros de la DB en 1 => +1
-        QString idActividad = QString::number (actividadList.indexOf(formField.value("actividad")) +1);
-        QString idPais = QString::number (paisList.indexOf(formField.value("pais")) +1);
-        QString idFormaPago = QString::number (formaPagoList.indexOf(formField.value("formaPago")) +1);
+        QString idActividad = QString::number (actividadList.indexOf(empresaTabField.value("actividad").toString()) +1);
+        QString idPais = QString::number (paisList.indexOf(empresaTabField.value("pais").toString()) +1);
+        QString idFormaPago = QString::number (formaPagoList.indexOf(empresaTabField.value("formaPago").toString()) +1);
 
         //OPTION #1: Stored Procedures
         QString sqlQuery = "CALL insert_Supplier(";
-        sqlQuery.append("'").append(formField.value("empresa")).append("', '")
-        .append(formField.value("holding")).append("', ")
+        sqlQuery.append("'").append(empresaTabField.value("empresa").toString()).append("', '")
+        .append(empresaTabField.value("holding").toString()).append("', ")
         .append(idActividad).append(", '") //number, sin ' '
-        .append(formField.value("web")).append("', '")
-        .append(formField.value("panjiba")).append("', '")
-        .append(formField.value("maps")).append("', ")
+        .append(empresaTabField.value("web").toString()).append("', '")
+        .append(empresaTabField.value("panjiba").toString()).append("', '")
+        .append(empresaTabField.value("maps").toString()).append("', ")
         .append(idPais).append(", '")//number, sin ' '
-        .append(formField.value("ciudad")).append("', '")
-        .append(formField.value("postcode")).append("', '") //varchar
-        .append(formField.value("moq")).append("', '")  //varchar
-        .append(formField.value("notasEmpresa")).append("', ")
+        .append(empresaTabField.value("ciudad").toString()).append("', '")
+        .append(empresaTabField.value("postcode").toString()).append("', '") //varchar
+        .append(empresaTabField.value("moq").toString()).append("', '")  //varchar
+        .append(empresaTabField.value("notasEmpresa").toString()).append("', ")
         .append(idFormaPago).append(");"); //number, sin ' '
         qDebug() << "Stored Procedure: " << sqlQuery;
 
@@ -726,26 +675,25 @@ bool AddSupplier::onAceptarButton(QString tab)
         }
 
         //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
-        QString idArea = QString::number (areaList.indexOf(formField.value("area")) + 1);
-        QString idPuesto = QString::number (puestoList.indexOf(formField.value("puesto")) + 1);
+        QString idArea = QString::number (areaList.indexOf(contactoTabField.value("area").toString()) + 1);
+        QString idPuesto = QString::number (puestoList.indexOf(contactoTabField.value("puesto").toString()) + 1);
 
         //OPTION #1: Stored Procedures
         QString sqlQuery = "CALL insert_Contact(";
-        sqlQuery.append("'").append(formField.value("empresa")).append("', '")
-        .append(formField.value("nombre")).append("', '")
-        .append(formField.value("apellido")).append("', '")
-        .append(formField.value("email")).append("', '")
-        .append(formField.value("telefono")).append("', '")
-        .append(formField.value("movil")).append("', ")
+        sqlQuery.append("'").append(empresaTabField.value("empresa").toString()).append("', '")
+        .append(contactoTabField.value("nombre").toString()).append("', '")
+        .append(contactoTabField.value("apellido").toString()).append("', '")
+        .append(contactoTabField.value("email").toString()).append("', '")
+        .append(contactoTabField.value("telefono").toString()).append("', '")
+        .append(contactoTabField.value("movil").toString()).append("', ")
         .append(idArea).append(", ") //number, sin ' '
         .append(idPuesto).append(", '") //number, sin ' '
-        .append(formField.value("notasContacto")).append("');");
+        .append(contactoTabField.value("notasContacto").toString()).append("');");
 
         qDebug() << "Stored Procedure: " << sqlQuery;
         if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
         {
             resetFields(tab);
-            qDebug() << "Maps values: " << formField;
             return EXIT_SUCCESS;
         }
         return EXIT_FAILURE;
@@ -762,14 +710,14 @@ bool AddSupplier::onAceptarButton(QString tab)
         }
 
         //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
-        QString idTipo = QString::number (tipoList.indexOf(formField.value("tipo")) + 1);
-        QString idMaterial = QString::number (materialList.indexOf(formField.value("material")) + 1);
+        QString idTipo = QString::number (tipoList.indexOf(productoTabField.value("tipo").toString()) + 1);
+        QString idMaterial = QString::number (materialList.indexOf(productoTabField.value("material").toString()) + 1);
 
         //Retrieve id_supplier (para no tener que buscarlo en cada Query)
         QString idSupplier;
         QSqlQuery result; //sirve para todas las consultas
         QString sqlQuery = "CALL get_IdFromRelatedTable('supplier', 'company', ";
-        sqlQuery.append("'").append(formField.value("empresa")).append("');");
+        sqlQuery.append("'").append(empresaTabField.value("empresa").toString()).append("');");
         qDebug() << "Stored Procedure: " << sqlQuery;
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result);
         while(result.next())
@@ -787,7 +735,7 @@ bool AddSupplier::onAceptarButton(QString tab)
        for(auto acabado : acabadoSelectionList)
            idAcabado.append(QString::number (acabadoListCompleta.indexOf(acabado) + 1)).append(",");
 
-       if(formField.value("tipo") == "Bobina")
+       if(productoTabField.value("tipo").toString() == "Bobina")
        {
            idLargo="NULL";
            for(auto formato : formatoBobinaSelectionList)
@@ -797,7 +745,7 @@ bool AddSupplier::onAceptarButton(QString tab)
                 idDiametroInterior.append(QString::number (idBobinaList.indexOf(diametroInterior) + 1)).append((","));
        }
 
-       else if (formField.value("tipo") == "Chapa" || formField.value("tipo") == "Plancha")
+       else if (productoTabField.value("tipo").toString() == "Chapa" || productoTabField.value("tipo").toString() == "Plancha")
        {
            idDiametroInterior="NULL";
            for(auto formato : formatoChapaSelectionList)
@@ -811,21 +759,21 @@ bool AddSupplier::onAceptarButton(QString tab)
            }
        }
 
-       else if (formField.value("tipo") == "Barra")
+       else if (productoTabField.value("tipo").toString() == "Barra")
        {
            idAncho="NULL";
            idLargo="NULL";
            idDiametroInterior="NULL";
        }
 
-       else if (formField.value("tipo") == "Tubo")
+       else if (productoTabField.value("tipo").toString() == "Tubo")
        {
            idAncho="NULL";
            idLargo="NULL";
            idDiametroInterior="NULL";
        }
 
-       else if (formField.value("tipo") == "Disco")
+       else if (productoTabField.value("tipo").toString() == "Disco")
        {
            idAncho="NULL";
            idLargo="NULL";
@@ -843,16 +791,16 @@ bool AddSupplier::onAceptarButton(QString tab)
         .append("'").append(idDiametroInterior).append("'").append(", ") //varchar (array) - ⌀interior (bobinas)
         .append("'").append(idAncho).append("'").append(", ") //varchar (array) - Ancho (chapas, bobinas)
         .append("'").append(idLargo).append("'").append(", ")  //varchar (array) - Largo (chapas)
-        .append(formField.value("espesorMin")).append(", ") //Espesor min (chapas, bobinas, discos)
-        .append(formField.value("espesorMax")).append(", ") //Espesor max (chapas, bobinas, discos)
-        .append(formField.value("diametroMin")).append(", ") //⌀min (discos, barras)
-        .append(formField.value("diametroMax")).append(", ") //⌀max (discos, barras)
-        .append(formField.value("largoMin")).append(", ") //Largo min (tubos, barras)
-        .append(formField.value("largoMax")).append(", ") //Largo max (tubos, barras)
-        .append(formField.value("diametroIntMax")).append(", ") //⌀interior min (tubos)
-        .append(formField.value("diametroIntMax")).append(", ") //⌀interior max (tubos)
-        .append(formField.value("diametroExtMin")).append(", ") //⌀exterior min (tubos)
-        .append(formField.value("diametroExtMax")).append(");"); //⌀exterior max (tubos)
+        .append(productoTabField.value("espesorMin").toString()).append(", ") //Espesor min (chapas, bobinas, discos)
+        .append(productoTabField.value("espesorMax").toString()).append(", ") //Espesor max (chapas, bobinas, discos)
+        .append(productoTabField.value("diametroMin").toString()).append(", ") //⌀min (discos, barras)
+        .append(productoTabField.value("diametroMax").toString()).append(", ") //⌀max (discos, barras)
+        .append(productoTabField.value("largoMin").toString()).append(", ") //Largo min (tubos, barras)
+        .append(productoTabField.value("largoMax").toString()).append(", ") //Largo max (tubos, barras)
+        .append(productoTabField.value("diametroIntMax").toString()).append(", ") //⌀interior min (tubos)
+        .append(productoTabField.value("diametroIntMax").toString()).append(", ") //⌀interior max (tubos)
+        .append(productoTabField.value("diametroExtMin").toString()).append(", ") //⌀exterior min (tubos)
+        .append(productoTabField.value("diametroExtMax").toString()).append(");"); //⌀exterior max (tubos)
         qDebug() << sqlQuery;
 
         if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_FAILURE)
@@ -886,7 +834,7 @@ void AddSupplier::onGuardarButton(QString tab)
 }
 void AddSupplier::onRelatedFieldUpdated(QString fieldName)
 {
-    //Se llama desde QML (onRadioButtonClicked) y al modificicar los comboBoxes Tipo, Material y Serie
+    //Se llama desde QML (onRadioButtonClicked) y desde textValueToBackEnd() en C++
     if(fieldName == "tipo")
     {
         this->uncheckAllValues("anchoBobina");
@@ -903,6 +851,8 @@ void AddSupplier::onRelatedFieldUpdated(QString fieldName)
         this->uncheckAllValues("acabado");
         fillRelatedComboBoxFromDb(fieldName);
     }
+    else if(fieldName == "serie")
+        fillRelatedComboCheckBoxFromDb(fieldName);
     else if(fieldName == "aisi" || fieldName == "werkstoff") //RadioButton
     {
         aleacionListCompleta.clear();
@@ -923,9 +873,43 @@ void AddSupplier::onRelatedFieldUpdated(QString fieldName)
         this->uncheckAllValues("serie");
         this->uncheckAllValues("aleacion");
     }
-    else if(fieldName == "serie")
-        fillRelatedComboCheckBoxFromDb(fieldName); //serie
 }
 
 //SETTERS & GETTERS
+void AddSupplier::setEmpresaTabField(const QString key, const QString value)
+{
+    if(key != "clearAll")
+        empresaTabField.insert(key, QVariant(value));
+    else
+    {
+        QMap<QString, QVariant>::iterator itr;
+        for(itr = empresaTabField.begin(); itr != empresaTabField.end(); ++itr)
+            empresaTabField.insert(itr.key(), "");
+    }
+    emit empresaTabFieldChanged();
+}
+void AddSupplier::setContactoTabField(const QString key, const QString value)
+{
+    if(key != "clearAll")
+        contactoTabField.insert(key, QVariant(value));
+    else
+    {
+        QMap<QString, QVariant>::iterator itr;
+        for(itr = contactoTabField.begin(); itr != contactoTabField.end(); ++itr)
+            contactoTabField.insert(itr.key(), "");
+    }
+    emit contactoTabFieldChanged();
+}
+void AddSupplier::setProductoTabField(const QString key, const QString value)
+{
+    if(key != "clearAll")
+        productoTabField.insert(key, QVariant(value));
+    else
+    {
+        QMap<QString, QVariant>::iterator itr;
+        for(itr = productoTabField.begin(); itr != productoTabField.end(); ++itr)
+            productoTabField.insert(itr.key(), "");
+    }
+    emit productoTabFieldChanged();
+}
 

@@ -29,6 +29,7 @@ GridLayout {
     TextField1 {
         id: textFieldDiametroMinBarra
         objectName: "diametroMin"
+        supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxTipo.x
@@ -48,6 +49,7 @@ GridLayout {
     TextField1 {
         id: textFieldDiametroMaxBarra
         objectName: "diametroMax"
+        supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxMaterial.x
@@ -67,6 +69,7 @@ GridLayout {
     TextField1 {
         id: textFieldLargoMinBarra
         objectName: "largoMin"
+        supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxTipo.x
@@ -85,6 +88,7 @@ GridLayout {
     TextField1 {
         id: textFieldLargoMaxBarra
         objectName: "largoMax"
+        supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxMaterial.x

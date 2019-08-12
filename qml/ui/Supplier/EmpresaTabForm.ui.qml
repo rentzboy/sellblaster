@@ -88,6 +88,7 @@ Item {
                     TextField1 {
                         id: textFieldEmpresa
                         objectName: "empresa"
+                        supplierTab: "empresa"
                         Layout.fillWidth: true
                         maximumLength: 100
                     }
@@ -100,6 +101,7 @@ Item {
                     TextField1 {
                         id: textFieldHolding
                         objectName: "holding"
+                        supplierTab: "empresa"
                         maximumLength: 100
                     }
                     SpacerH_20 {
@@ -111,6 +113,7 @@ Item {
                     ComboBox1 {
                         id: comboBoxActividad
                         objectName: "actividad"
+                        supplierTab: "empresa"
                     }
                     SpacerH_20 {
                         Layout.fillWidth: true
@@ -123,6 +126,7 @@ Item {
                     TextField1 {
                         id: textFieldWeb
                         objectName: "web"
+                        supplierTab: "empresa"
                         inputMethodHints: Qt.ImhUrlCharactersOnly
                         maximumLength: 100
                     }
@@ -136,6 +140,7 @@ Item {
                     TextField1 {
                         id: textFieldPanjiba
                         objectName: "panjiba"
+                        supplierTab: "empresa"
                         inputMethodHints: Qt.ImhUrlCharactersOnly
                         maximumLength: 200
                     }
@@ -148,6 +153,7 @@ Item {
                     TextField1 {
                         id: textFieldMaps
                         objectName: "maps"
+                        supplierTab: "empresa"
                         inputMethodHints: Qt.ImhUrlCharactersOnly
                         maximumLength: 200
                     }
@@ -162,6 +168,7 @@ Item {
                     ComboBox1 {
                         id: comboBoxPais
                         objectName: "pais"
+                        supplierTab: "empresa"
                     }
                     SpacerH_20 {
                     }
@@ -172,6 +179,7 @@ Item {
                     TextField1 {
                         id: textFieldCiudad
                         objectName: "ciudad"
+                        supplierTab: "empresa"
                         maximumLength: 100
                     }
                     SpacerH_20 {
@@ -183,6 +191,7 @@ Item {
                     TextField1 {
                         id: textFieldPostcode
                         objectName: "postcode"
+                        supplierTab: "empresa"
                         validator: IntValidator {
                             bottom: 00001
                             top: 99999
@@ -201,6 +210,7 @@ Item {
                     TextField1 {
                         id: textFieldMoq
                         objectName: "moq"
+                        supplierTab: "empresa"
                         validator: IntValidator {
                             bottom: 00
                             top: 99
@@ -218,6 +228,7 @@ Item {
                     TextArea1 {
                         id: textAreaNotasEmpresa
                         objectName: "notasEmpresa"
+                        supplierTab: "empresa"
                         wrapMode: Text.WordWrap
                         Layout.fillHeight: false
                         Layout.columnSpan: 4
@@ -261,6 +272,7 @@ Item {
                     ComboBox1 {
                         id: comboBoxFormaPago
                         objectName: "formaPago"
+                        supplierTab: "empresa"
                     }
                     Item {
                         width: 5

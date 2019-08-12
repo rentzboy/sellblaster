@@ -113,6 +113,7 @@ Item {
                         ComboBox1 {
                             id: comboBoxTipo
                             objectName: "tipo"
+                            supplierTab: "producto"
                         }
                         SpacerH_20 {
                         }
@@ -125,6 +126,7 @@ Item {
                         ComboBox1 {
                             id: comboBoxMaterial
                             objectName: "material"
+                            supplierTab: "producto"
                         }
                         SpacerH_20 {
                         }
@@ -137,7 +139,8 @@ Item {
                         ComboBox11 {
                             id: comboBoxSerie
                             objectName: "serie"
-                            property bool toogleAllValues: false
+                            supplierTab: "producto"
+                            toogleAllValues: false
                         }
                         SpacerH_20 {
                             Layout.fillWidth: true
@@ -150,7 +153,8 @@ Item {
                         ComboBox11 {
                             id: comboBoxAleacion
                             objectName: "aleacion"
-                            property bool toogleAllValues: false
+                            supplierTab: "producto"
+                            toogleAllValues: false
                         }
                         SpacerH_20 {
                         }
@@ -162,7 +166,8 @@ Item {
                         ComboBox11 {
                             id: comboBoxTemple
                             objectName: "temple"
-                            property bool toogleAllValues: false
+                            supplierTab: "producto"
+                            toogleAllValues: false
                         }
                         SpacerH_20 {
                         }
@@ -174,7 +179,8 @@ Item {
                         ComboBox11 {
                             id: comboBoxAcabado
                             objectName: "acabado"
-                            property bool toogleAllValues: false
+                            supplierTab: "producto"
+                            toogleAllValues: false
                         }
                         SpacerH_20 {
                             Layout.fillWidth: true

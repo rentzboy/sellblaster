@@ -12,6 +12,8 @@ import "../../js/supplier.js" as Supplier
 */
 ComboBox {
     id: comboBox11
+    property string supplierTab
+    property bool toogleAllValues
     Layout.minimumWidth: 150
     Layout.fillWidth: true
     Layout.preferredHeight: 40
@@ -29,10 +31,10 @@ ComboBox {
             text: modelData
             checked: toogleAllValues
             //onCheckedChanged: model.checked = checked (otra manera de hacerlo)
-            onToggled: Supplier.textListToBackEnd(comboBox11.objectName, text, checked, index) //OJO: checked es el valor de property
+            onToggled: Supplier.textListToBackEnd(comboBox11.objectName, text, checked) //OJO: checked es el valor de property
         }
     }
-    onModelChanged: Supplier.resetComboBoxIndex(objectName)
+    onModelChanged: Supplier.resetComboBoxIndex(supplierTab, objectName)
     //Component.onCompleted: Supplier.onComboBoxCompleted()
 }
 

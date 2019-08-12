@@ -11,12 +11,14 @@ import "../../js/supplier.js" as Supplier
   un objectName pues se necesitan para las funciones de JS
 */
 ComboBox {
+    id: comboBox
+    property string supplierTab
     Layout.minimumWidth: 150
     Layout.fillWidth: true
     Layout.preferredHeight: 40
 
-    onModelChanged: Supplier.resetComboBoxIndex(objectName)
-    onDisplayTextChanged: Supplier.textValueToBackEnd(objectName, displayText)
+    onModelChanged: Supplier.resetComboBoxIndex(supplierTab, objectName)
+    onDisplayTextChanged: Supplier.textValueToBackEnd(supplierTab, objectName, displayText)
     //onCurrentIndexChanged: Supplier.comboBoxIndexToBackEnd(objectName, currentIndex)
     //Component.onCompleted: Supplier.onComboBoxCompleted()
 }

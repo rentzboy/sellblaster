@@ -27,7 +27,7 @@ public:
     static bool executeForwardSqlWithReturn(const QString &sqlQuery, const QString &connectionName, QSqlQuery &query);
     static bool createExternDbConnection(const QMap <QString, QString> connectionDetails);
     static void createInterDbConnection(void);
-    static void sanitationUserInput(QMap<QString, QString>&userFields);
+    static void sanitationUserInput(QMap<QString, QVariant> &userFields);
 
 private:
     explicit MainWindow(QQuickView *parent = Q_NULLPTR); //Private construstror (Singleton class)

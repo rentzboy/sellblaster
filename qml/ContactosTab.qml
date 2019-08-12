@@ -12,9 +12,18 @@ ContactosTabForm {
     id: contactosForm
     objectName: "ContactosTabForm"
 
-    //TextFields (ver TextField1.qml)
+    //TextFields & textArea
+    textFieldNombre.text: SupplierType.contactoTabField.nombre
+    textFieldApellido.text: SupplierType.contactoTabField.apellido
+    textFieldEmail.text: SupplierType.contactoTabField.email
+    textFieldTelefono.text: SupplierType.contactoTabField.telefono
+    textFieldMovil.text:SupplierType.contactoTabField.movil
+    textAreaNotasContacto.text:SupplierType.contactoTabField.notasContacto
 
     //ComboBoxes (ver ComboBox1.qml)
+    comboBoxArea.onDisplayTextChanged: SupplierType.contactoTabField.area = comboBoxArea.displayText
+    comboBoxPuesto.onDisplayTextChanged: SupplierType.contactoTabField.puesto = comboBoxArea.displayText
+
     comboBoxArea.model: SupplierType.areaList
     comboBoxPuesto.model: SupplierType.puestoList
 
@@ -22,29 +31,6 @@ ContactosTabForm {
     buttonAceptar.onClicked: SupplierType.onAceptarButton("contactos")
     buttonCancelar.onClicked: SupplierType.onCancelarButton()
     buttonGuardar.onClicked: SupplierType.onGuardarButton("contactos")
-
-    Connections {
-        target: SupplierType
-        onClearFormFields: onClearFormFields(tab)
-    }
-
-    //SLOTS
-    function onClearFormFields(tab) {
-        //hay que definirla para cada pestaña; se llama desde C++
-        //Borra los valores de los campos pero no resetea las variables de la clase C++
-        console.log("Se ha llamado a la función onClearFormFields(" + tab
-                    + ") desde ContactosTab.qml")
-        if (tab === "contactos") {
-            textFieldNombre.clear()
-            textFieldApellido.clear()
-            textFieldEmail.clear()
-            textFieldTelefono.clear()
-            textFieldMovil.clear()
-            textAreaNotasContacto.clear()
-            comboBoxArea.currentIndex = -1
-            comboBoxPuesto.currentIndex = -1
-        }
-    }
 }
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}

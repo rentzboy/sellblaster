@@ -33,8 +33,9 @@ GridLayout {
     ComboBox11 {
         id: comboBoxAnchoBobina
         objectName: "anchoBobina"
+        supplierTab: "producto"
+        toogleAllValues: false
         width: comboBoxTipo.width
-        property bool toogleAllValues: false
     }
     SpacerH_20 {
     }
@@ -47,6 +48,7 @@ GridLayout {
     TextField1 {
         id: textFieldEspesorMinBobina
         objectName: "espesorMin"
+        supplierTab: "producto"
         x: comboBoxMaterial.x
         width: comboBoxTipo.width
         validator: IntValidator {
@@ -65,6 +67,7 @@ GridLayout {
     TextField1 {
         id: textFieldEspesorMaxBobina
         objectName: "espesorMax"
+        supplierTab: "producto"
         x: comboBoxSerie.x
         width: comboBoxTipo.width
         validator: IntValidator {
@@ -83,12 +86,15 @@ GridLayout {
     ComboBox11 {
         id: comboBoxDiametroIntBobina
         objectName: "diametroIntBobina"
+        supplierTab: "producto"
+        toogleAllValues: false
         width: comboBoxTipo.width
-        property bool toogleAllValues: false
     }
     SpacerH_20 {
     }
 }
+
+
 
 
 

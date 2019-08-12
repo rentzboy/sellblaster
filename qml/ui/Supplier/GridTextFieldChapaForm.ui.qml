@@ -29,8 +29,9 @@ GridLayout {
     ComboBox11 {
         id: comboBoxFormatoChapa
         objectName: "formatoChapa"
+        supplierTab: "producto"
+        toogleAllValues: false
         width: comboBoxTipo.width
-        property bool toogleAllValues: false
     }
     SpacerH_20 {
     }
@@ -43,6 +44,7 @@ GridLayout {
     TextField1 {
         id: textFieldEspesorMinChapa
         objectName: "espesorMin"
+        supplierTab: "producto"
         width: comboBoxTipo.width
         validator: IntValidator {
             bottom: 00
@@ -60,6 +62,7 @@ GridLayout {
     TextField1 {
         id: textFieldEspesorMaxChapa
         objectName: "espesorMax"
+        supplierTab: "producto"
         width: comboBoxTipo.width
         validator: IntValidator {
             bottom: 00

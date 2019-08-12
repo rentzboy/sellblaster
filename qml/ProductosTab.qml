@@ -14,13 +14,31 @@ ProductosTabForm {
     property int counter: 0
 
     //TextFields
+    gridTextFieldBobina.textFieldEspesorMinBobina.text: SupplierType.productoTabField.espesorMin
+    gridTextFieldBobina.textFieldEspesorMaxBobina.text: SupplierType.productoTabField.espesorMax
+    gridTextFieldChapa.textFieldEspesorMinChapa.text: SupplierType.productoTabField.espesorMin
+    gridTextFieldChapa.textFieldEspesorMaxChapa.text: SupplierType.productoTabField.espesorMax
+    gridTextFieldBarra.textFieldDiametroMinBarra.text: SupplierType.productoTabField.diametroMin
+    gridTextFieldBarra.textFieldDiametroMaxBarra.text: SupplierType.productoTabField.diametroMax
+    gridTextFieldBarra.textFieldLargoMinBarra.text: SupplierType.productoTabField.largoMin
+    gridTextFieldBarra.textFieldLargoMaxBarra.text: SupplierType.productoTabField.largoMax
+    gridTextFieldTubo.textFieldDiametroIntMinTubo.text: SupplierType.productoTabField.diametroIntMin
+    gridTextFieldTubo.textFieldDiametroIntMaxTubo.text: SupplierType.productoTabField.diametroIntMax
+    gridTextFieldTubo.textFieldDiametroExtMinTubo.text: SupplierType.productoTabField.diametroExtMin
+    gridTextFieldTubo.textFieldDiametroExtMaxTubo.text: SupplierType.productoTabField.diametroExtMax
+    gridTextFieldTubo.textFieldLargoMinTubo.text: SupplierType.productoTabField.largoMin
+    gridTextFieldTubo.textFieldLargoMaxTubo.text: SupplierType.productoTabField.largoMax
+    gridTextFieldDisco.textFieldEspesorMinDisco.text: SupplierType.productoTabField.espesorMin
+    gridTextFieldDisco.textFieldEspesorMaxDisco.text: SupplierType.productoTabField.espesorMax
+    gridTextFieldDisco.textFieldDiametroMinDisco.text: SupplierType.productoTabField.diametroMin
+    gridTextFieldDisco.textFieldDiametroMaxDisco.text: SupplierType.productoTabField.diametroMax
 
     //RadioButtons
-    radioButtonAisi.onClicked: onRadioButtonClicked(radioButtonAisi.objectName)
-    radioButtonWerkstoff.onClicked: onRadioButtonClicked(radioButtonWerkstoff.objectName)
+    radioButtonAisi.onClicked: Supplier.onRadioButtonClicked(radioButtonAisi.objectName)
+    radioButtonWerkstoff.onClicked: Supplier.onRadioButtonClicked(radioButtonWerkstoff.objectName)
 
     //ComboBoxes
-    comboBoxTipo.onDisplayTextChanged: onTipoComboBoxChanged()
+    comboBoxTipo.onCurrentTextChanged: Supplier.onTipoComboBoxChanged(comboBoxTipo.currentText) //Update States
 
     comboBoxSerieToogleAll: SupplierType.toogleValue.serie
     comboBoxAleacionToogleAll: SupplierType.toogleValue.aleacion
@@ -187,59 +205,6 @@ ProductosTabForm {
             }
         }
     ]
-
-    //JS
-    function onTipoComboBoxChanged() {
-        //console.log("currentText: " + comboBoxTipo.displayText + ", currentIndex: " + comboBoxTipo.currentIndex)
-
-        //Para que se muestre el state=reset al cargar la 1era vez ProductosTab
-        counter++
-        if(counter === 2) {
-            state = "reset"
-            return
-        }
-
-        //Customization
-        switch (comboBoxTipo.displayText) {
-        case "Inicio":
-            state = "reset"
-            break
-        case "Bobina":
-            state = "bobina"
-            break
-        case "Chapa":
-            state = "chapa"
-            break
-        case "Barra":
-            state = "barra"
-            break
-        case "Tubo":
-            state = "tubo"
-            break
-        case "Plancha":
-            state = "chapa"
-            break
-        case "Disco":
-            state = "disco"
-            break
-        case "Pletina":
-            state = "pletina"
-            break
-        default:
-
-        }
-    }
-    function onRadioButtonClicked(objectName) {
-        //console.log("onRadioButtonClicked: (" + objectName + ")")
-        SupplierType.onRelatedFieldUpdated(objectName);
-    }
-
-    //SLOTS
-    function onClearFormFields(tab) {
-        //hay que definirla para cada pestaña; se llama desde C++
-        console.log("Se ha llamado a la función onClearProductosFields(" + tab + ")")
-        //PENDING -no se que campos borrar todavía-
-    }
 }
 
 

@@ -12,15 +12,18 @@
 class AddSupplier : public QObject
 {
     Q_OBJECT
-    Q_CLASSINFO("name", "newSupplierObject")
+    Q_CLASSINFO("name", "newSupplierObject") 
     ///////////////////////EMPRESA////////////////////////////////////
+    Q_PROPERTY(QVariantMap empresaTabField MEMBER empresaTabField NOTIFY empresaTabFieldChanged)
     Q_PROPERTY(QStringList actividadList MEMBER actividadList NOTIFY actividadListChanged)
     Q_PROPERTY(QStringList paisList MEMBER paisList NOTIFY paisListChanged)
     Q_PROPERTY(QStringList formaPagoList MEMBER formaPagoList NOTIFY formaPagoListChanged)
     ///////////////////////CONTACTOS////////////////////////////////////
+    Q_PROPERTY(QVariantMap contactoTabField MEMBER contactoTabField NOTIFY contactoTabFieldChanged)
     Q_PROPERTY(QStringList areaList MEMBER areaList NOTIFY areaListChanged)
     Q_PROPERTY(QStringList puestoList MEMBER puestoList NOTIFY puestoListChanged)
     ///////////////////////PRODUCTOS////////////////////////////////////
+    Q_PROPERTY(QVariantMap productoTabField MEMBER productoTabField NOTIFY productoTabFieldChanged)
     Q_PROPERTY(QStringList tipoList MEMBER tipoList NOTIFY tipoListChanged)
     Q_PROPERTY(QStringList materialList MEMBER materialList NOTIFY materialListChanged)
     Q_PROPERTY(QStringList serieList MEMBER serieList NOTIFY serieListChanged)
@@ -36,13 +39,19 @@ public:
     AddSupplier operator=(const AddSupplier &other) = delete;
     ~AddSupplier();
     static void createComponent(void);
-    Q_INVOKABLE void textValueToBackEnd(QString fieldName, QString text);
+
+    Q_INVOKABLE void textValueToBackEnd(QString tab, QString fieldName, QString text);
     Q_INVOKABLE void textListToBackEnd(QString fieldName, QString text, bool value);
     void uncheckAllValues(QString comboBox);
     Q_INVOKABLE void toogleAllValues(QString comboBox);
     Q_INVOKABLE void fillComboBoxesFromDb(QString tab);
     void fillRelatedComboBoxFromDb(QString comboBox);
     void fillRelatedComboCheckBoxFromDb(QString comboBox);
+
+    void setEmpresaTabField(const QString key, const QString value);
+    void setContactoTabField(const QString key, const QString value);
+    void setProductoTabField(const QString key, const QString value);
+
 public slots:
     bool onAceptarButton(QString tab);
     void onCancelarButton(void);
@@ -60,6 +69,14 @@ private:
     static QQmlApplicationEngine *engine;
     static AddSupplier *uniqueInstance;
     static int typeId;
+    QMap <QString, QVariant> empresaTabField = {{"empresa", ""}, {"holding", ""}, {"web", ""}, {"panjiba", ""},
+                                                 {"maps", ""}, {"ciudad", ""}, {"postcode", ""}, {"moq", ""}, {"notasEmpresa", ""},
+                                                 {"pais", "España"}, {"actividad", ""}, {"formaPago", ""}};
+    QMap <QString, QVariant> contactoTabField = {{"nombre", ""}, {"apellido", ""},{"email", ""}, {"telefono", ""},
+                                                 {"movil", ""}, {"notasContacto", ""}, {"area", ""}, {"puesto", ""}};
+    QMap <QString, QVariant> productoTabField = {{"tipo", ""}, {"material", ""}, {"espesorMin", ""}, {"espesorMax", ""},
+                                                 {"diametroMin", ""}, {"diametroMax", ""}, {"largoMin", ""}, {"largoMax", ""},
+                                                 {"diametroIntMin", ""}, {"diametroIntMax", ""}, {"diametroExtMin", ""}, {"diametroExtMax", ""}};
     QVariantMap toogleValue = {{"serie", false}, {"aleacion", false}, {"temple", false}, {"acabado", false},
                                                     {"anchoBobina", false}, {"diametroIntBobina", false}, {"formatoChapa", false}};
     QStringList paisList;
@@ -89,8 +106,6 @@ private:
     QStringList idBobinaList;
     QStringList idBobinaSelectionList;
     QString aleacionRadioButton = "aisi"; //valor inicial
-
-    QMap <QString, QString> formField;
     QErrorMessage *errorMessage = Q_NULLPTR;
 
 signals:
@@ -113,6 +128,9 @@ signals:
     void formatoListChanged(void);
     void idBobinaListChanged(void);
     void toogleValueChanged(void);
+    void empresaTabFieldChanged(void);
+    void contactoTabFieldChanged(void);
+    void productoTabFieldChanged(void);
 };
 
 #endif // ADDSUPPLIER_H

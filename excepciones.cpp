@@ -179,7 +179,7 @@ bool Excepciones::saveToDb(const QString& dbConnectionName)
         qDebug() << "Se ha llamado a: " << __FUNCTION__ <<"(" << dbConnectionName << ")";
 
         //Sanitation check
-        QMap <QString, QString> exceptionFields;
+        QMap <QString, QVariant> exceptionFields;
         exceptionFields.insert("hostname",this->hostName);
         exceptionFields.insert("operativesystem", this->operativeSystem);
         exceptionFields.insert("file", this->fileName);
@@ -192,13 +192,13 @@ bool Excepciones::saveToDb(const QString& dbConnectionName)
         {
             QString sqlQuery = "CALL insert_Exception(";
             sqlQuery.append("'").append(this->userName).append("', '")
-            .append(exceptionFields.value("hostname")).append("', '")
-            .append(exceptionFields.value("operativesystem")).append("', '")
-            .append(exceptionFields.value("file")).append("', '")
-            .append(exceptionFields.value("function")).append("', ")
+            .append(exceptionFields.value("hostname").toString()).append("', '")
+            .append(exceptionFields.value("operativesystem").toString()).append("', '")
+            .append(exceptionFields.value("file").toString()).append("', '")
+            .append(exceptionFields.value("function").toString()).append("', ")
             .append(this->fileLine).append(", '")
-            .append(exceptionFields.value("time")).append("', '")
-            .append(exceptionFields.value("description")).append("');");
+            .append(exceptionFields.value("time").toString()).append("', '")
+            .append(exceptionFields.value("description").toString()).append("');");
             qDebug() << "Stored procedure: " << sqlQuery;
             return MainWindow::executeForwardSqlException(sqlQuery, MAIN_DB_CONNECTION_NAME);
         }

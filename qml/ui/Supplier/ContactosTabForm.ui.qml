@@ -85,6 +85,7 @@ Item {
                     TextField1 {
                         id: textFieldNombre
                         objectName: "nombre"
+                        supplierTab: "contacto"
                         maximumLength: 100
                     }
                     SpacerH_20 {
@@ -96,6 +97,7 @@ Item {
                     TextField1 {
                         id: textFieldApellido
                         objectName: "apellido"
+                        supplierTab: "contacto"
                         maximumLength: 100
                     }
                     SpacerH_20 {
@@ -107,6 +109,7 @@ Item {
                     TextField1 {
                         id: textFieldEmail
                         objectName: "email"
+                        supplierTab: "contacto"
                         inputMethodHints: Qt.ImhEmailCharactersOnly
                     }
                     SpacerH_20 {
@@ -120,6 +123,7 @@ Item {
                     TextField1 {
                         id: textFieldTelefono
                         objectName: "telefono"
+                        supplierTab: "contacto"
                         inputMethodHints: Qt.ImhDialableCharactersOnly
                     }
                     SpacerH_20 {
@@ -131,6 +135,7 @@ Item {
                     TextField1 {
                         id: textFieldMovil
                         objectName: "movil"
+                        supplierTab: "contacto"
                         inputMethodHints: Qt.ImhDialableCharactersOnly
                     }
                     SpacerH_20 {
@@ -142,6 +147,7 @@ Item {
                     TextArea1 {
                         id: textAreaNotasContacto
                         objectName: "notasContacto"
+                        supplierTab: "contacto"
                         wrapMode: Text.WordWrap
                         Layout.fillHeight: false
                         KeyNavigation.tab: comboBoxArea
@@ -158,6 +164,7 @@ Item {
                     ComboBox1 {
                         id: comboBoxArea
                         objectName: "area"
+                        supplierTab: "contacto"
                     }
                     SpacerH_20 {
                     }
@@ -168,6 +175,7 @@ Item {
                     ComboBox1 {
                         id: comboBoxPuesto
                         objectName: "puesto"
+                        supplierTab: "contacto"
                     }
                     SpacerH_20 {
                         Layout.fillWidth: true
@@ -208,6 +216,7 @@ Item {
                     TextField1 {
                         id: textFieldGarbage
                         objectName: "garbage"
+                        supplierTab: "contacto"
                     }
                     Item {
                         width: 5

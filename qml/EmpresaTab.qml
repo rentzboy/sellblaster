@@ -12,7 +12,16 @@ EmpresaTabForm {
     id: form
     objectName: "EmpresaTabForm"
 
-    //TextFields (ver TextField1.qml)
+    //TextFields & TextArea
+    textFieldEmpresa.text: SupplierType.empresaTabField.empresa
+    textFieldHolding.text: SupplierType.empresaTabField.holding
+    textFieldWeb.text: SupplierType.empresaTabField.web
+    textFieldPanjiba.text: SupplierType.empresaTabField.panjiba
+    textFieldMaps.text:SupplierType.empresaTabField.maps
+    textFieldCiudad.text: SupplierType.empresaTabField.ciudad
+    textFieldPostcode.text: SupplierType.empresaTabField.postcode
+    textFieldMoq.text: SupplierType.empresaTabField.moq
+    textAreaNotasEmpresa.text: SupplierType.empresaTabField.notasEmpresa
 
     //ComboBoxes
     comboBoxPais.model: SupplierType.paisList
@@ -28,31 +37,12 @@ EmpresaTabForm {
         target: SupplierType
         onClearFormFields: onClearFormFields(tab)
     }
-
-    //SLOTS
-    function onClearFormFields(tab) {
-        //hay que definirla para cada pestaña; se llama desde C++
-        console.log("Se ha llamado a la función onClearFormFields(" + tab
-                    + ") desde EmpresaTab.qml")
-        if (tab === "empresa") {
-            textFieldEmpresa.clear()
-            textFieldHolding.clear()
-            textFieldWeb.clear()
-            textFieldPanjiba.clear()
-            textFieldMaps.clear()
-            textFieldCiudad.clear()
-            textFieldPostcode.clear()
-            textFieldMoq.clear()
-            textAreaNotasEmpresa.clear()
-            comboBoxActividad.currentIndex = -1
-            comboBoxPais.currentIndex = -1
-            comboBoxFormaPago.currentIndex = -1
-        }
-    }
 }
+
+
+
 
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
-

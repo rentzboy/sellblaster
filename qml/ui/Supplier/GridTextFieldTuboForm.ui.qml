@@ -31,6 +31,7 @@ GridLayout {
     TextField1 {
         id: textFieldDiametroIntMinTubo
         objectName: "diametroIntMin"
+        supplierTab: "producto"
         validator: IntValidator {
             bottom: 00
             top: 999
@@ -46,6 +47,7 @@ GridLayout {
     TextField1 {
         id: textFieldDiametroExtMinTubo
         objectName: "diametroExtMin"
+        supplierTab: "producto"
         validator: IntValidator {
             bottom: 00
             top: 999
@@ -61,6 +63,7 @@ GridLayout {
     TextField1 {
         id: textFieldLargoMinTubo
         objectName: "largoMin"
+        supplierTab: "producto"
         validator: IntValidator {
             bottom: 00
             top: 9999
@@ -77,6 +80,7 @@ GridLayout {
     TextField1 {
         id: textFieldDiametroIntMaxTubo
         objectName: "diametroIntMax"
+        supplierTab: "producto"
         validator: IntValidator {
             bottom: 00
             top: 999
@@ -105,6 +109,7 @@ GridLayout {
     TextField1 {
         id: textFieldLargoMaxTubo
         objectName: "largoMax"
+        supplierTab: "producto"
         validator: IntValidator {
             bottom: 00
             top: 9999

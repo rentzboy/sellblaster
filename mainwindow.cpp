@@ -140,13 +140,13 @@ bool MainWindow::createExternDbConnection(const QMap<QString, QString> connectio
         return EXIT_FAILURE;
     }
 }
-void MainWindow::sanitationUserInput(QMap<QString, QString>&userFields)
+void MainWindow::sanitationUserInput(QMap<QString, QVariant>&userFields)
 {
     //Comprobar que el usuario no haya escrito simbolos que puedan romper la consulta SQL
     for (auto &itr : userFields ) //pasar x referencia si vamos a modificar los valores del rango
     {
-        itr.remove(QChar('\"'));
-        itr.remove(QChar('\''));
+        itr.toString().remove(QChar('\"'));
+        itr.toString().remove(QChar('\''));
     }
     /*DEPRECATED
     for (QMap<QString, QString>::iterator itr = userFields.begin(); itr != userFields.end(); ++itr)
