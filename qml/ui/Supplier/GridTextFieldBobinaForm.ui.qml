@@ -17,14 +17,6 @@ GridLayout {
     property alias comboBoxDiametroIntBobina: comboBoxDiametroIntBobina
     property alias comboBoxDiametroIntToogleAll: comboBoxDiametroIntBobina.toogleAllValues
 
-    Layout.topMargin: 10
-    Layout.fillWidth: true
-    columnSpacing: 15
-    rowSpacing: 15
-    columns: 9
-    clip: true
-    visible: false
-
     Label {
         id: labelAnchoBobina
         text: qsTr("Ancho:")
@@ -35,7 +27,6 @@ GridLayout {
         objectName: "anchoBobina"
         supplierTab: "producto"
         toogleAllValues: false
-        width: comboBoxTipo.width
     }
     SpacerH_20 {
     }
@@ -43,17 +34,16 @@ GridLayout {
         id: labelEspesorMinBobina
         text: qsTr("Espesor min:")
         Layout.minimumWidth: 135
-        x: labelMaterial.x
     }
     TextField1 {
         id: textFieldEspesorMinBobina
         objectName: "espesorMin"
         supplierTab: "producto"
-        x: comboBoxMaterial.x
-        width: comboBoxTipo.width
-        validator: IntValidator {
+        Layout.minimumWidth: 150
+        validator: DoubleValidator {
             bottom: 00
             top: 99
+            decimals: 2
         }
     }
     SpacerH_20 {
@@ -61,18 +51,16 @@ GridLayout {
     Label {
         id: labelEspesorMaxBobina
         text: qsTr("Espesor max:")
-        Layout.minimumWidth: 135
-        x: labelSerie.x
     }
     TextField1 {
         id: textFieldEspesorMaxBobina
         objectName: "espesorMax"
         supplierTab: "producto"
-        x: comboBoxSerie.x
-        width: comboBoxTipo.width
-        validator: IntValidator {
+        Layout.minimumWidth: 150
+        validator: DoubleValidator {
             bottom: 00
             top: 999
+            decimals: 2
         }
     }
     SpacerH_20 {
@@ -88,13 +76,10 @@ GridLayout {
         objectName: "diametroIntBobina"
         supplierTab: "producto"
         toogleAllValues: false
-        width: comboBoxTipo.width
     }
     SpacerH_20 {
     }
 }
-
-
 
 
 

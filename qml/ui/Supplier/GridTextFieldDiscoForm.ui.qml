@@ -14,13 +14,6 @@ GridLayout {
     property alias textFieldEspesorMinDisco: textFieldEspesorMinDisco
     property alias textFieldEspesorMaxDisco: textFieldEspesorMaxDisco
 
-    Layout.topMargin: 10
-    columnSpacing: 15
-    rowSpacing: 15
-    columns: 6
-    clip: true
-    visible: false
-
     Label {
         id: labelDiametroMinDisco
         text: qsTr("⌀ min:")
@@ -32,7 +25,6 @@ GridLayout {
         supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
-        x: comboBoxTipo.x
         validator: IntValidator {
             bottom: 00
             top: 99
@@ -44,7 +36,7 @@ GridLayout {
         id: labelDiametroMaxDisco
         text: qsTr("⌀ max:")
         Layout.minimumWidth: 135
-        x: labelMaterial.x
+        //x: labelMaterial.x
     }
     TextField1 {
         id: textFieldDiametroMaxDisco
@@ -57,7 +49,6 @@ GridLayout {
             top: 999
         }
     }
-
     SpacerH_20 {
         Layout.fillWidth: true
     }
@@ -72,7 +63,6 @@ GridLayout {
         supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
-        x: comboBoxTipo.x
         validator: IntValidator {
             bottom: 00
             top: 99
@@ -83,7 +73,6 @@ GridLayout {
     Label {
         id: labelEspesorMaxDisco
         text: qsTr("Espesor max:")
-        x: labelMaterial.x
     }
     TextField1 {
         id: textFieldEspesorMaxDisco
@@ -100,6 +89,10 @@ GridLayout {
         Layout.fillWidth: true
     }
 }
+
+
+
+
 
 
 

@@ -14,13 +14,6 @@ GridLayout {
     property alias textFieldEspesorMinChapa: textFieldEspesorMinChapa
     property alias textFieldEspesorMaxChapa: textFieldEspesorMaxChapa
 
-    Layout.topMargin: 10
-    columnSpacing: 15
-    rowSpacing: 15
-    columns: 9
-    clip: true
-    visible: false
-
     Label {
         id: labelFormatoChapa
         text: qsTr("Formato:")
@@ -31,7 +24,7 @@ GridLayout {
         objectName: "formatoChapa"
         supplierTab: "producto"
         toogleAllValues: false
-        width: comboBoxTipo.width
+        Layout.minimumWidth: 150
     }
     SpacerH_20 {
     }
@@ -45,10 +38,11 @@ GridLayout {
         id: textFieldEspesorMinChapa
         objectName: "espesorMin"
         supplierTab: "producto"
-        width: comboBoxTipo.width
-        validator: IntValidator {
+        Layout.minimumWidth: 150
+        validator: DoubleValidator {
             bottom: 00
             top: 99
+            decimals: 2
         }
     }
     SpacerH_20 {
@@ -63,10 +57,11 @@ GridLayout {
         id: textFieldEspesorMaxChapa
         objectName: "espesorMax"
         supplierTab: "producto"
-        width: comboBoxTipo.width
-        validator: IntValidator {
+        Layout.minimumWidth: 150
+        validator: DoubleValidator {
             bottom: 00
             top: 999
+            decimals: 2
         }
     }
     SpacerH_20 {

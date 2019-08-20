@@ -1,23 +1,38 @@
 
-# Estos no hacen falta, pues el nameType = nameType.qml
+# Estos no hacen falta darlos de alta por que estan en el mismo directorio que el archivo qmldir ?¿?¿
 TextArea1 TextArea1.qml
 TextField1 TextField1.qml
 ComboBox1 ComboBox1.qml
 SpacerH_20 SpacerH_20.qml
 
-#Necesarios pues los .ui solo están visibles para su .qml si estan en el mismo directorio
-#ui directory
-LoginForm                ../ui/LoginForm.ui.qml
-MainWindowForm    ../ui/MainWindowForm.ui.qml
+
+#Indicar la ruta desde la ubicación del archivo qmldir hasta cada archivo de la lista
+#Hay que añadir a esta lista cada QML type que demos de alta y que llamemos desde otro archivo
+
+#Además hay que añadir al inicio de cada archivo.qml "import components", que es el directorio
+#donde esta el archivo qmldir. De esta forma el interprete recupera todas las rutas de los
+#QML types que hemos creado de qmldir y no hay que añadirlas a cada archivo.
+#OJO: hay veces que el interprete se raya y no reconoce los QML types; en estos casos lo mejor
+#cerrar Qt y volver a abrirlo.
+
+#<qml directory>
+NewProveedor           ../NewProveedor.qml
 EmpresaTab               ../EmpresaTab.qml
 ContactosTab             ../ContactosTab.qml
 ProductosTab             ../ProductosTab.qml
+ServiciosTab              ../ServiciosTab.qml
 
-#ui/Supplier directory
+#<ui directory>
+#Necesarios pues los .ui solo están visibles para su .qml si estan en el mismo directorio
+LoginForm                ../ui/LoginForm.ui.qml
+MainWindowForm    ../ui/MainWindowForm.ui.qml
+
+#<ui/Supplier directory>
 NewProveedorForm   ../ui/Supplier/NewProveedorForm.ui.qml
 EmpresaTabForm       ../ui/Supplier/EmpresaTabForm.ui.qml
 ContactosTabForm     ../ui/Supplier/ContactosTabForm.ui.qml
 ProductosTabForm     ../ui/Supplier/ProductosTabForm.ui.qml
+ServiciosTabForm      ../ui/Supplier/ServiciosTabForm.ui.qml
 GridTextFieldBarraForm    ../ui/Supplier/GridTextFieldBarraForm.ui.qml
 GridTextFieldBobinaForm  ../ui/Supplier/GridTextFieldBobinaForm.ui.qml
 GridTextFieldChapaForm   ../ui/Supplier/GridTextFieldChapaForm.ui.qml

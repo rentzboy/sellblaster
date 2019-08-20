@@ -58,9 +58,9 @@ ProductosTabForm {
     gridTextFieldBobina.comboBoxDiametroIntBobina.model: SupplierType.idBobinaList
 
     //Buttons
-    buttonAceptar.onClicked: SupplierType.onAceptarButton("productos")
+    buttonAceptar.onClicked: SupplierType.onAceptarButton("producto")
     buttonCancelar.onClicked: SupplierType.onCancelarButton()
-    buttonGuardar.onClicked: SupplierType.onGuardarButton("productos")
+    buttonGuardar.onClicked: SupplierType.onGuardarButton("producto")
 
     //States
     states: [

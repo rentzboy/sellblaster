@@ -16,13 +16,6 @@ GridLayout {
     property alias textFieldDiametroExtMaxTubo: textFieldDiametroExtMaxTubo
     property alias textFieldLargoMaxTubo: textFieldLargoMaxTubo
 
-    Layout.topMargin: 10
-    columnSpacing: 15
-    rowSpacing: 15
-    columns: 9
-    clip: true
-    visible: false
-
     Label {
         id: labelDiametroIntMinTubo
         text: qsTr("⌀ int min:")
@@ -32,6 +25,7 @@ GridLayout {
         id: textFieldDiametroIntMinTubo
         objectName: "diametroIntMin"
         supplierTab: "producto"
+        Layout.minimumWidth: 150
         validator: IntValidator {
             bottom: 00
             top: 999
@@ -48,6 +42,7 @@ GridLayout {
         id: textFieldDiametroExtMinTubo
         objectName: "diametroExtMin"
         supplierTab: "producto"
+        Layout.minimumWidth: 150
         validator: IntValidator {
             bottom: 00
             top: 999
@@ -64,6 +59,7 @@ GridLayout {
         id: textFieldLargoMinTubo
         objectName: "largoMin"
         supplierTab: "producto"
+        Layout.minimumWidth: 150
         validator: IntValidator {
             bottom: 00
             top: 9999
@@ -81,6 +77,7 @@ GridLayout {
         id: textFieldDiametroIntMaxTubo
         objectName: "diametroIntMax"
         supplierTab: "producto"
+        Layout.minimumWidth: 150
         validator: IntValidator {
             bottom: 00
             top: 999
@@ -95,6 +92,7 @@ GridLayout {
     TextField1 {
         id: textFieldDiametroExtMaxTubo
         objectName: "diametroExtMax"
+        Layout.minimumWidth: 150
         validator: IntValidator {
             bottom: 00
             top: 9999
@@ -110,6 +108,7 @@ GridLayout {
         id: textFieldLargoMaxTubo
         objectName: "largoMax"
         supplierTab: "producto"
+        Layout.minimumWidth: 150
         validator: IntValidator {
             bottom: 00
             top: 9999

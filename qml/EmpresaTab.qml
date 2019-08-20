@@ -6,7 +6,6 @@ import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
 import "components"
 import SupplierClass 1.0
-import "../js/supplier.js" as Supplier
 
 EmpresaTabForm {
     id: form

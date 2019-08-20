@@ -48,6 +48,12 @@ Item {
                 width: 150
             }
             TabButton {
+                text: qsTr("Servicios")
+                objectName: "servicios"
+                display: AbstractButton.TextOnly
+                width: 150
+            }
+            TabButton {
                 text: qsTr("Certificaciones")
                 objectName: "certificaciones"
                 display: AbstractButton.TextOnly
@@ -79,6 +85,11 @@ Item {
                 Layout.fillHeight: parent
                 Layout.fillWidth: parent
             }
+            ServiciosTab {
+                id: servicios
+                Layout.fillHeight: parent
+                Layout.fillWidth: parent
+            }
             Item {
                 id: certificaciones
                 Layout.fillHeight: parent
@@ -87,6 +98,8 @@ Item {
         }
     }
 }
+
+
 
 
 

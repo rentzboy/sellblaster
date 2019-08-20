@@ -65,6 +65,8 @@ void AddSupplier::textValueToBackEnd(QString tab, QString fieldName, QString tex
         if(fieldName == "tipo" || fieldName == "material")
             emit relatedFieldUpdated(fieldName);
     }
+    else if(tab == "servicio")
+        setServicioTabField(fieldName, text);
 }
 void AddSupplier::textListToBackEnd(QString fieldName, QString text, bool value)
 {
@@ -109,6 +111,11 @@ void AddSupplier::textListToBackEnd(QString fieldName, QString text, bool value)
         if(value) idBobinaSelectionList.append(text);
         else idBobinaSelectionList.removeOne(text);
     }
+    else if(fieldName == "servicio")
+    {
+        if(value) servicioSelectionList.append(text);
+        else servicioSelectionList.removeOne(text);
+    }
 }
 void AddSupplier::uncheckAllValues(QString comboBox)
 {
@@ -121,6 +128,7 @@ void AddSupplier::uncheckAllValues(QString comboBox)
 
     //Si tuvieramos los selectionList en un QMap<QString, QStringList>
     //no habria que ir con los ifs ...........
+    /////////////////////// PRODUCTOS ///////////////////////
     if(comboBox == "serie")
          serieSelectionList.clear();
     else if(comboBox == "aleacion")
@@ -135,6 +143,9 @@ void AddSupplier::uncheckAllValues(QString comboBox)
         idBobinaSelectionList.clear();
     else if(comboBox == "formatoChapa")
         formatoChapaSelectionList.clear();
+    /////////////////////// SERVICIOS ///////////////////////
+    else if(comboBox == "servicios")
+        servicioSelectionList.clear();
 }
 void AddSupplier::toogleAllValues(QString comboBox)
 {
@@ -291,6 +302,7 @@ void AddSupplier::fillRelatedComboBoxFromDb(QString comboBox)
         serieList.clear();
         sqlQuery = "CALL get_DependentDropDownMenu(";
         sqlQuery.append("'serie', 'serie', 'id_metal', ").append(idMaterial).append(");");
+        //qDebug() << "sqlQuery for serieList" << sqlQuery;
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
@@ -447,6 +459,17 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
         }
         emit idBobinaListChanged();
     }
+    else if (tab == "servicios") //Se llama desde JS, al actualizarse el TabBar
+    {
+        QString sqlQuery = "CALL get_DropDownMenu('servicing', 'servicing')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            servicioList.append(result.value(0).toString());
+        }
+        emit servicioListChanged();
+        //qDebug() << "servicioList. " << servicioList;
+    }
 }
 bool AddSupplier::sanitationCheck(QString tab)
 {
@@ -465,7 +488,7 @@ bool AddSupplier::sanitationCheck(QString tab)
             return EXIT_SUCCESS;
         }
     }
-    else if (tab == "contactos")
+    else if (tab == "contacto")
     {
         //Checking key fields & numeric fields are not empty
         if(empresaTabField.value("empresa").toString().isEmpty()     || //Hay que controlarlo en todas las tabs
@@ -480,7 +503,7 @@ bool AddSupplier::sanitationCheck(QString tab)
             return EXIT_SUCCESS;
         }
     }
-    else if (tab == "productos")
+    else if (tab == "producto")
     {
         if(empresaTabField.value("empresa").toString().isEmpty()     || //Hay que controlarlo en todas las tabs
             productoTabField.value("tipo").toString().isEmpty()           ||
@@ -588,12 +611,52 @@ bool AddSupplier::sanitationCheck(QString tab)
         }
         return EXIT_SUCCESS;
     }
+    else if (tab == "servicio")
+    {
+        //Checking key fields & numeric fields are not empty
+        if(empresaTabField.value("empresa").toString().isEmpty()     || //Hay que controlarlo en todas las tabs
+            servicioSelectionList.isEmpty())
+            return EXIT_FAILURE;
+        else
+        {
+            if(servicioTabField.value("espesorMin1").toString().isEmpty())
+                servicioTabField.insert("espesorMin1",  "NULL");
+            if(servicioTabField.value("espesorMin2").toString().isEmpty())
+                servicioTabField.insert("espesorMin2",  "NULL");
+            if(servicioTabField.value("espesorMin3").toString().isEmpty())
+                servicioTabField.insert("espesorMin3",  "NULL");
+
+            if(servicioTabField.value("espesorMax1").toString().isEmpty())
+                servicioTabField.insert("espesorMax1",  "NULL");
+            if(servicioTabField.value("espesorMax2").toString().isEmpty())
+                servicioTabField.insert("espesorMax2",  "NULL");
+            if(servicioTabField.value("espesorMax3").toString().isEmpty())
+                servicioTabField.insert("espesorMax3",  "NULL");
+
+            if(servicioTabField.value("anchoMin1").toString().isEmpty())
+                servicioTabField.insert("anchoMin1",  "NULL");
+            if(servicioTabField.value("anchoMin2").toString().isEmpty())
+                servicioTabField.insert("anchoMin2",  "NULL");
+            if(servicioTabField.value("anchoMin3").toString().isEmpty())
+                servicioTabField.insert("anchoMin3",  "NULL");
+
+            if(servicioTabField.value("anchoMax1").toString().isEmpty())
+                servicioTabField.insert("anchoMax1",  "NULL");
+            if(servicioTabField.value("anchoMax2").toString().isEmpty())
+                servicioTabField.insert("anchoMax2",  "NULL");
+            if(servicioTabField.value("anchoMax3").toString().isEmpty())
+                servicioTabField.insert("anchoMax3",  "NULL");
+
+            MainWindow::sanitationUserInput(servicioTabField);
+            return EXIT_SUCCESS;
+        }
+    }
 }
 void AddSupplier::resetFields(QString tab)
 {
     if(tab == "empresa")
         this->setEmpresaTabField("clearAll", ""); //No se utiliza pues borrariamos el textField "Empresa"
-    else if(tab == "contactos")
+    else if(tab == "contacto")
     {
         //Delete textFields
         this->setContactoTabField("clearAll", "");
@@ -603,7 +666,7 @@ void AddSupplier::resetFields(QString tab)
         object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("puesto");
         QQmlProperty::write(object, "currentIndex", -1);
     }
-    else if(tab == "productos")
+    else if(tab == "producto")
     {
         //Delete textFields
         this->setProductoTabField("clearAll", "");
@@ -621,11 +684,20 @@ void AddSupplier::resetFields(QString tab)
         this->uncheckAllValues("diametroIntBobina");
         this->uncheckAllValues("formatoChapa");
     }
+    else if(tab == "servicio")
+    {
+        //Delete textFields
+        this->setServicioTabField("clearAll", "");
+        //Reset comboBoxes
+        this->uncheckAllValues("servicios");
+    }
 }
 
 //PUBLIC SLOTS
 bool AddSupplier::onAceptarButton(QString tab)
 {
+//    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
+
     if(tab == "empresa")
     {
         if (this->sanitationCheck(tab) == EXIT_FAILURE)
@@ -689,7 +761,7 @@ bool AddSupplier::onAceptarButton(QString tab)
              if(!query.exec())
                  throw(query.lastError()); */
     }
-    else if (tab == "contactos")
+    else if (tab == "contacto")
     {
         if (this->sanitationCheck(tab) == EXIT_FAILURE)
         {
@@ -724,7 +796,7 @@ bool AddSupplier::onAceptarButton(QString tab)
         }
         return EXIT_FAILURE;
     }
-    else if (tab == "productos")
+    else if (tab == "producto")
     {
         if (this->sanitationCheck(tab) == EXIT_FAILURE)
         {
@@ -822,6 +894,55 @@ bool AddSupplier::onAceptarButton(QString tab)
             resetFields(tab);
             return EXIT_SUCCESS;
         }
+        return EXIT_FAILURE;
+    }
+    else if (tab == "servicio")
+    {
+        if (this->sanitationCheck(tab) == EXIT_FAILURE)
+        {
+            errorMessage = new QErrorMessage;
+            errorMessage->setAttribute(Qt::WA_DeleteOnClose);
+            errorMessage->showMessage(QObject::tr("Revise que los campos obligatorios no estén vacios!"));
+            errorMessage->resize(400,200);
+            return EXIT_FAILURE;
+        }
+
+        //Retrieve indexes from ComboCheckBoxes
+         QString idServicio;
+         for (auto servicio : servicioSelectionList)
+             idServicio.append(QString::number (servicioList.indexOf(servicio) + 1)).append(","); //OJO: QString termina en ','
+
+         QString idEspesorMin = servicioTabField.value("espesorMin1").toString().append(",")
+                                          .append(servicioTabField.value("espesorMin2").toString()).append(",")
+                                          .append(servicioTabField.value("espesorMin3").toString()).append(",");
+
+         QString idEspesorMax = servicioTabField.value("espesorMax1").toString().append(",")
+                                          .append(servicioTabField.value("espesorMax2").toString()).append(",")
+                                          .append(servicioTabField.value("espesorMax3").toString()).append(",");
+
+         QString idAnchoMin = servicioTabField.value("anchoMin1").toString().append(",")
+                                          .append(servicioTabField.value("anchoMin2").toString()).append(",")
+                                          .append(servicioTabField.value("anchoMin3").toString()).append(",");
+
+         QString idAnchoMax = servicioTabField.value("anchoMax1").toString().append(",")
+                                          .append(servicioTabField.value("anchoMax2").toString()).append(",")
+                                          .append(servicioTabField.value("anchoMax3").toString()).append(",");
+
+        //OPTION #1: Stored Procedures
+        QString sqlQuery = "CALL insert_ServiceList(";
+        sqlQuery.append("'").append(empresaTabField.value("empresa").toString()).append("', '")
+        .append(idServicio).append("', '")
+        .append(idEspesorMin).append("', '")
+        .append(idEspesorMax).append("', '")
+        .append(idAnchoMin).append("', '")
+        .append(idAnchoMax).append("');");
+        qDebug() << "Stored Procedure: " << sqlQuery;
+
+//        if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
+//        {
+//            resetFields(tab);
+//            return EXIT_SUCCESS;
+//        }
         return EXIT_FAILURE;
     }
 }
@@ -927,5 +1048,17 @@ void AddSupplier::setProductoTabField(const QString key, const QString value)
             productoTabField.insert(itr.key(), "");
     }
     emit productoTabFieldChanged();
+}
+void AddSupplier::setServicioTabField(const QString key, const QString value)
+{
+    if(key != "clearAll")
+        servicioTabField.insert(key, QVariant(value));
+    else
+    {
+        QMap<QString, QVariant>::iterator itr;
+        for(itr = servicioTabField.begin(); itr != servicioTabField.end(); ++itr)
+            servicioTabField.insert(itr.key(), "");
+    }
+    emit servicioTabFieldChanged();
 }
 

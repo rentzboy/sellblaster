@@ -14,13 +14,6 @@ GridLayout {
     property alias textFieldLargoMinBarra: textFieldLargoMinBarra
     property alias textFieldLargoMaxBarra: textFieldLargoMaxBarra
 
-    Layout.topMargin: 10
-    columnSpacing: 15
-    rowSpacing: 15
-    columns: 6
-    clip: true
-    visible: false
-
     Label {
         id: labelDiametroMinBarra
         text: qsTr("⌀ min:")
@@ -72,7 +65,6 @@ GridLayout {
         supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
-        x: comboBoxTipo.x
         validator: IntValidator {
             bottom: 00
             top: 9999
@@ -83,7 +75,6 @@ GridLayout {
     Label {
         id: labelLargoMaxBarra
         text: qsTr("Largo max:")
-        x: labelMaterial.x
     }
     TextField1 {
         id: textFieldLargoMaxBarra
@@ -91,7 +82,6 @@ GridLayout {
         supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
-        x: comboBoxMaterial.x
         validator: IntValidator {
             bottom: 00
             top: 9999

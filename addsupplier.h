@@ -33,6 +33,9 @@ class AddSupplier : public QObject
     Q_PROPERTY(QStringList formatoList MEMBER formatoList NOTIFY formatoListChanged)
     Q_PROPERTY(QStringList idBobinaList MEMBER idBobinaList NOTIFY idBobinaListChanged)
     Q_PROPERTY(QVariantMap toogleValue MEMBER toogleValue NOTIFY toogleValueChanged)
+    ///////////////////////PRODUCTOS////////////////////////////////////
+    Q_PROPERTY(QStringList servicioList MEMBER servicioList NOTIFY servicioListChanged)
+    Q_PROPERTY(QVariantMap servicioTabField MEMBER servicioTabField NOTIFY servicioTabFieldChanged)
 
 public:
     AddSupplier(const AddSupplier &other) = delete;
@@ -51,6 +54,7 @@ public:
     void setEmpresaTabField(const QString key, const QString value);
     void setContactoTabField(const QString key, const QString value);
     void setProductoTabField(const QString key, const QString value);
+    void setServicioTabField(const QString key, const QString value);
 
 public slots:
     bool onAceptarButton(QString tab);
@@ -70,16 +74,19 @@ private:
     static QQmlApplicationEngine *engine;
     static AddSupplier *uniqueInstance;
     static int typeId;
-    QMap <QString, QVariant> empresaTabField = {{"empresa", ""}, {"holding", ""}, {"web", ""}, {"panjiba", ""},
-                                                 {"maps", ""}, {"ciudad", ""}, {"postcode", ""}, {"moq", ""}, {"notasEmpresa", ""},
-                                                 {"pais", "España"}, {"actividad", ""}, {"formaPago", ""}};
-    QMap <QString, QVariant> contactoTabField = {{"nombre", ""}, {"apellido", ""},{"email", ""}, {"telefono", ""},
-                                                 {"movil", ""}, {"notasContacto", ""}, {"area", ""}, {"puesto", ""}};
-    QMap <QString, QVariant> productoTabField = {{"tipo", ""}, {"material", ""}, {"espesorMin", ""}, {"espesorMax", ""},
-                                                 {"diametroMin", ""}, {"diametroMax", ""}, {"largoMin", ""}, {"largoMax", ""},
-                                                 {"diametroIntMin", ""}, {"diametroIntMax", ""}, {"diametroExtMin", ""}, {"diametroExtMax", ""}};
+    QVariantMap empresaTabField = {{"empresa", ""}, {"holding", ""}, {"web", ""}, {"panjiba", ""},
+                           {"maps", ""}, {"ciudad", ""}, {"postcode", ""}, {"moq", ""}, {"notasEmpresa", ""},
+                           {"pais", "España"}, {"actividad", ""}, {"formaPago", ""}};
+    QVariantMap contactoTabField = {{"nombre", ""}, {"apellido", ""},{"email", ""}, {"telefono", ""},
+                           {"movil", ""}, {"notasContacto", ""}, {"area", ""}, {"puesto", ""}};
+    QVariantMap productoTabField = {{"tipo", ""}, {"material", ""}, {"espesorMin", ""}, {"espesorMax", ""},
+                           {"diametroMin", ""}, {"diametroMax", ""}, {"largoMin", ""}, {"largoMax", ""},
+                           {"diametroIntMin", ""}, {"diametroIntMax", ""}, {"diametroExtMin", ""}, {"diametroExtMax", ""}};
+    QVariantMap servicioTabField = {{"espesorMin1", ""}, {"espesorMax1", ""}, {"anchoMin1", ""}, {"anchoMax1", ""},
+                           {"espesorMin2", ""}, {"espesorMax2", ""}, {"anchoMin2", ""}, {"anchoMax2", ""},
+                           {"espesorMin3", ""}, {"espesorMax3", ""}, {"anchoMin3", ""}, {"anchoMax3", ""}};
     QVariantMap toogleValue = {{"serie", false}, {"aleacion", false}, {"temple", false}, {"acabado", false},
-                                                    {"anchoBobina", false}, {"diametroIntBobina", false}, {"formatoChapa", false}};
+                           {"anchoBobina", false}, {"diametroIntBobina", false}, {"formatoChapa", false}};
     QStringList paisList;
     QStringList actividadList;
     QStringList formaPagoList;
@@ -106,6 +113,8 @@ private:
     QStringList formatoBobinaSelectionList;
     QStringList idBobinaList;
     QStringList idBobinaSelectionList;
+    QStringList servicioList;
+    QStringList servicioSelectionList;
     QString aleacionRadioButton = "aisi"; //valor inicial
     QErrorMessage *errorMessage = Q_NULLPTR;
 
@@ -128,9 +137,11 @@ signals:
     void formatoListChanged(void);
     void idBobinaListChanged(void);
     void toogleValueChanged(void);
+    void servicioListChanged(void);
     void empresaTabFieldChanged(void);
     void contactoTabFieldChanged(void);
     void productoTabFieldChanged(void);
+    void servicioTabFieldChanged(void);
 };
 
 #endif // ADDSUPPLIER_H

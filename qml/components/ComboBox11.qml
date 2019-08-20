@@ -14,7 +14,7 @@ ComboBox {
     id: comboBox11
     property string supplierTab
     property bool toogleAllValues
-    Layout.minimumWidth: 150
+    Layout.minimumWidth: 150 //si lo quito NO carga NewProveedor.qml !!
     Layout.fillWidth: true
     Layout.preferredHeight: 40
     objectName: objectName //para poder llamarlo desde checkDelegate

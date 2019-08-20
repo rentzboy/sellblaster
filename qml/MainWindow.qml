@@ -64,6 +64,7 @@ ApplicationWindow {
         console.log("Se ha llamado a onCloseQmlInstance desde MainWindow.qml")
         close()
     }
+
     MainWindowForm {
         id: form
         anchors.fill: parent
@@ -110,8 +111,12 @@ ApplicationWindow {
     }
 }
 
+
+
+
+
+
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
-

@@ -27,5 +27,7 @@
         <file>qml/ui/Supplier/GridTextFieldBobinaForm.ui.qml</file>
         <file>qml/ui/Supplier/GridTextFieldBarraForm.ui.qml</file>
         <file>qml/components/ComboBox11.qml</file>
+        <file>qml/ui/Supplier/ServiciosTabForm.ui.qml</file>
+        <file>qml/ServiciosTab.qml</file>
     </qresource>
 </RCC>

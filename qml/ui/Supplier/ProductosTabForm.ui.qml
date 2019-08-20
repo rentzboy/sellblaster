@@ -92,6 +92,7 @@ Item {
 
                 ColumnLayout {
                     id: columnProductos
+                    Layout.fillWidth: true
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.top: parent.top
@@ -189,22 +190,51 @@ Item {
 
                     GridTextFieldBobinaForm {
                         id: gridTextFieldBobina
+                        Layout.fillWidth: true
+                        Layout.topMargin: 10
+                        columnSpacing: 15
+                        rowSpacing: 15
+                        columns: 9
+                        clip: true
                     }
-
                     GridTextFieldChapaForm {
                         id: gridTextFieldChapa
+                        Layout.fillWidth: true
+                        Layout.topMargin: 10
+                        columnSpacing: 15
+                        rowSpacing: 15
+                        columns: 9
+                        clip: true
                     }
 
                     GridTextFieldBarraForm {
                         id: gridTextFieldBarra
+                        Layout.fillWidth: true
+                        Layout.topMargin: 10
+                        columnSpacing: 15
+                        rowSpacing: 15
+                        columns: 6
+                        clip: true
                     }
 
                     GridTextFieldTuboForm {
                         id: gridTextFieldTubo
+                        Layout.fillWidth: true
+                        Layout.topMargin: 10
+                        columnSpacing: 15
+                        rowSpacing: 15
+                        columns: 9
+                        clip: true
                     }
 
                     GridTextFieldDiscoForm {
                         id: gridTextFieldDisco
+                        Layout.fillWidth: true
+                        Layout.topMargin: 10
+                        columnSpacing: 15
+                        rowSpacing: 15
+                        columns: 6
+                        clip: true
                     }
                 }
             }
@@ -226,8 +256,6 @@ Item {
         }
     }
 }
-
-
 
 
 

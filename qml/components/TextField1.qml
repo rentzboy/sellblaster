@@ -9,7 +9,6 @@ import "../../js/supplier.js" as Supplier
 TextField {
     id: textField
     property string supplierTab
-    Layout.minimumWidth: 150
     Layout.fillWidth: true
     Layout.preferredHeight: 40
     //overwriteMode: true => cambia el cursor x uno bastante raro ......

@@ -60,12 +60,12 @@ Window {
         //Initial values
         property int contactosTabCounter: 1
         property int productosTabCounter: 1
+        property int serviciosTabCounter: 1
 
-        //Para cargar los comboBoxes 1 sola vez para cada pestaña
         function onBarIndexChanged(tab) {
+            //Para cargar los comboBoxes 1 sola vez para cada pestaña
             console.log("Se ha llamado a la función onBarIndexChanged(" + tab + ")")
             if (tab === "empresa") {
-
                 //Se llama desde el constructor
             } else if (contactosTabCounter === 1 && tab === "contactos") {
                 SupplierType.fillComboBoxesFromDb(tab)
@@ -73,8 +73,13 @@ Window {
             } else if (productosTabCounter === 1 && tab === "productos") {
                 SupplierType.fillComboBoxesFromDb(tab)
                 productosTabCounter--
+            } else if (serviciosTabCounter === 1 && tab === "servicios") {
+                SupplierType.fillComboBoxesFromDb(tab)
+                serviciosTabCounter--
             }
         }
+
+
 
         Keys.onPressed: {
             //Select / Unselect all checkBoxes

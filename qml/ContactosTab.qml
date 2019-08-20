@@ -6,7 +6,6 @@ import QtQuick.Controls.Imagine 2.12
 import QtQuick.Layouts 1.3
 import "components"
 import SupplierClass 1.0
-import "../js/supplier.js" as Supplier
 
 ContactosTabForm {
     id: contactosForm
@@ -28,9 +27,9 @@ ContactosTabForm {
     comboBoxPuesto.model: SupplierType.puestoList
 
     //Buttons
-    buttonAceptar.onClicked: SupplierType.onAceptarButton("contactos")
+    buttonAceptar.onClicked: SupplierType.onAceptarButton("contacto")
     buttonCancelar.onClicked: SupplierType.onCancelarButton()
-    buttonGuardar.onClicked: SupplierType.onGuardarButton("contactos")
+    buttonGuardar.onClicked: SupplierType.onGuardarButton("contacto")
 }
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
