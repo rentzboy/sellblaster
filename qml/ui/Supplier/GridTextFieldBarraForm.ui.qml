@@ -26,9 +26,8 @@ GridLayout {
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxTipo.x
-        validator: IntValidator {
-            bottom: 00
-            top: 999
+        validator: RegExpValidator {
+            regExp: /\d\d\d/
         }
     }
     SpacerH_20 {
@@ -46,9 +45,8 @@ GridLayout {
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         x: comboBoxMaterial.x
-        validator: IntValidator {
-            bottom: 00
-            top: 999
+        validator: RegExpValidator {
+            regExp: /\d\d\d\d/
         }
     }
     SpacerH_20 {
@@ -65,9 +63,8 @@ GridLayout {
         supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
-        validator: IntValidator {
-            bottom: 00
-            top: 9999
+        validator: RegExpValidator {
+            regExp: /\d\d\d\d/
         }
     }
     SpacerH_20 {
@@ -82,9 +79,8 @@ GridLayout {
         supplierTab: "producto"
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
-        validator: IntValidator {
-            bottom: 00
-            top: 9999
+        validator: RegExpValidator {
+            regExp: /\d\d\d\d/
         }
     }
     SpacerH_20 {

@@ -24,6 +24,7 @@ ServiciosTabForm {
     textFieldAnchoMax1.text: SupplierType.servicioTabField.anchoMax1
     textFieldAnchoMax2.text: SupplierType.servicioTabField.anchoMax2
     textFieldAnchoMax3.text: SupplierType.servicioTabField.anchoMax3
+    textFieldCatalogo.text: SupplierType.servicioTabField.catalogo
 
     //ComboBoxes
     comboBoxServicios.model: SupplierType.servicioList
@@ -33,12 +34,6 @@ ServiciosTabForm {
     buttonCancelar.onClicked: SupplierType.onCancelarButton()
     buttonGuardar.onClicked: SupplierType.onGuardarButton("servicio")
 }
-
-
-
-
-
-
 
 
 /*##^## Designer {

@@ -423,28 +423,28 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
             serieListCompleta.append(result.value(0).toString());
         }
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('alloy', 'aisi')"; //AISI -se utiliza como apoyo-
+        sqlQuery = "CALL get_DropDownMenuComplete('alloy', 'aisi')"; //AISI -se utiliza como apoyo-
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
             aleacionListCompleta.append(result.value(0).toString());
         }
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('temper', 'temper')"; //Temple -se utiliza como apoyo-
+        sqlQuery = "CALL get_DropDownMenuComplete('temper', 'temper')"; //Temple -se utiliza como apoyo-
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
             templeListCompleta.append(result.value(0).toString());
         }
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('finition', 'finition')"; //Acabado -se utiliza como apoyo-
+        sqlQuery = "CALL get_DropDownMenuComplete('finition', 'finition')"; //Acabado -se utiliza como apoyo-
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
             acabadoListCompleta.append(result.value(0).toString());
         }
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('format', 'format')"; //Formato -se utiliza como apoyo-
+        sqlQuery = "CALL get_DropDownMenuComplete('format', 'format')"; //Formato -se utiliza como apoyo-
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
@@ -647,6 +647,9 @@ bool AddSupplier::sanitationCheck(QString tab)
             if(servicioTabField.value("anchoMax3").toString().isEmpty())
                 servicioTabField.insert("anchoMax3",  "NULL");
 
+            if(servicioTabField.value("catalogo").toString().isEmpty())
+                servicioTabField.insert("catalogo",  "NULL");
+
             MainWindow::sanitationUserInput(servicioTabField);
             return EXIT_SUCCESS;
         }
@@ -655,7 +658,17 @@ bool AddSupplier::sanitationCheck(QString tab)
 void AddSupplier::resetFields(QString tab)
 {
     if(tab == "empresa")
-        this->setEmpresaTabField("clearAll", ""); //No se utiliza pues borrariamos el textField "Empresa"
+    {
+         //Solo se ejecuta al Cancalear/Guardar, pues borrariamos el textField "Empresa"
+        this->setEmpresaTabField("clearAll", "");
+        //Reset comboBoxes
+        QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("pais");
+        QQmlProperty::write(object, "currentIndex", -1);
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("actividad");
+        QQmlProperty::write(object, "currentIndex", -1);
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("formaPago");
+        QQmlProperty::write(object, "currentIndex", -1);
+    }
     else if(tab == "contacto")
     {
         //Delete textFields
@@ -673,7 +686,7 @@ void AddSupplier::resetFields(QString tab)
         //Reset comboBoxes
         QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("tipo");
         QQmlProperty::write(object, "currentIndex", -1);
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("area");
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("material");
         QQmlProperty::write(object, "currentIndex", -1);
 
         this->uncheckAllValues("serie");
@@ -931,6 +944,7 @@ bool AddSupplier::onAceptarButton(QString tab)
         //OPTION #1: Stored Procedures
         QString sqlQuery = "CALL insert_ServiceList(";
         sqlQuery.append("'").append(empresaTabField.value("empresa").toString()).append("', '")
+        .append(servicioTabField.value("catalogo").toString()).append("', '")
         .append(idServicio).append("', '")
         .append(idEspesorMin).append("', '")
         .append(idEspesorMax).append("', '")
@@ -938,11 +952,11 @@ bool AddSupplier::onAceptarButton(QString tab)
         .append(idAnchoMax).append("');");
         qDebug() << "Stored Procedure: " << sqlQuery;
 
-//        if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
-//        {
-//            resetFields(tab);
-//            return EXIT_SUCCESS;
-//        }
+        if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
+        {
+            resetFields(tab);
+            return EXIT_SUCCESS;
+        }
         return EXIT_FAILURE;
     }
 }
@@ -992,7 +1006,7 @@ void AddSupplier::onRelatedFieldUpdated(QString fieldName)
         aleacionRadioButton = fieldName;
 
         QSqlQuery result;
-        QString sqlQuery = "CALL get_DropDownMenu('alloy', '";
+        QString sqlQuery = "CALL get_DropDownMenuComplete('alloy', '";
         sqlQuery.append(fieldName).append("')"); //Se utiliza como apoyo
         //qDebug() << sqlQuery;
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.

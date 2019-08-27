@@ -26,9 +26,8 @@ GridLayout {
         objectName: "diametroIntMin"
         supplierTab: "producto"
         Layout.minimumWidth: 150
-        validator: IntValidator {
-            bottom: 00
-            top: 999
+        validator: RegExpValidator {
+            regExp: /\d\d\d/
         }
     }
     SpacerH_20 {
@@ -43,9 +42,8 @@ GridLayout {
         objectName: "diametroExtMin"
         supplierTab: "producto"
         Layout.minimumWidth: 150
-        validator: IntValidator {
-            bottom: 00
-            top: 999
+        validator: RegExpValidator {
+            regExp: /\d\d\d/
         }
     }
     SpacerH_20 {
@@ -60,9 +58,8 @@ GridLayout {
         objectName: "largoMin"
         supplierTab: "producto"
         Layout.minimumWidth: 150
-        validator: IntValidator {
-            bottom: 00
-            top: 9999
+        validator: RegExpValidator {
+            regExp: /\d\d\d\d/
         }
     }
     SpacerH_20 {
@@ -78,9 +75,8 @@ GridLayout {
         objectName: "diametroIntMax"
         supplierTab: "producto"
         Layout.minimumWidth: 150
-        validator: IntValidator {
-            bottom: 00
-            top: 999
+        validator: RegExpValidator {
+            regExp: /\d\d\d/
         }
     }
     SpacerH_20 {
@@ -109,9 +105,8 @@ GridLayout {
         objectName: "largoMax"
         supplierTab: "producto"
         Layout.minimumWidth: 150
-        validator: IntValidator {
-            bottom: 00
-            top: 9999
+        validator: RegExpValidator {
+            regExp: /\d\d\d\d/
         }
     }
     SpacerH_20 {

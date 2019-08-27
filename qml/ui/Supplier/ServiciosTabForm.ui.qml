@@ -26,6 +26,7 @@ Item {
     property alias textFieldAnchoMax2: textFieldAnchoMax2
     property alias textFieldAnchoMax3: textFieldAnchoMax3
     property alias comboBoxServicios: comboBoxServicios
+    property alias textFieldCatalogo: textFieldCatalogo
 
     visible: true
     Rectangle {
@@ -92,10 +93,10 @@ Item {
                         Layout.fillWidth: false
                         objectName: "servicio"
                         supplierTab: "servicio"
-                        Layout.minimumWidth:
-                            spacerEspesorMax.x - textFieldEspesorMin1.x - grid2.columnSpacing
-                        Layout.maximumWidth:
-                            spacerEspesorMax.x - textFieldEspesorMin1.x- grid2.columnSpacing
+                        Layout.minimumWidth: spacerEspesorMax.x - textFieldEspesorMin1.x
+                                             - grid2.columnSpacing
+                        Layout.maximumWidth: spacerEspesorMax.x - textFieldEspesorMin1.x
+                                             - grid2.columnSpacing
                     }
                     SpacerH_20 {
                         Layout.fillWidth: true
@@ -110,10 +111,10 @@ Item {
                         id: textFieldCatalogo
                         objectName: "catalogo"
                         supplierTab: "servicio"
-                        Layout.minimumWidth:
-                            anchoMaxSpacer.x - textFieldAnchoMin1.x - grid2.columnSpacing
-                        Layout.maximumWidth:
-                            anchoMaxSpacer.x - textFieldAnchoMin1.x - grid2.columnSpacing
+                        Layout.minimumWidth: anchoMaxSpacer.x - textFieldAnchoMin1.x
+                                             - grid2.columnSpacing
+                        Layout.maximumWidth: anchoMaxSpacer.x - textFieldAnchoMin1.x
+                                             - grid2.columnSpacing
                     }
                     SpacerH_20 {
                         Layout.fillWidth: true
@@ -176,7 +177,7 @@ Item {
                         }
                     }
                     SpacerH_20 {
-                        id:spacerEspesorMax
+                        id: spacerEspesorMax
                     }
                     Label {
                         id: labelAnchoMin1
@@ -186,9 +187,8 @@ Item {
                         id: textFieldAnchoMin1
                         objectName: "anchoMin1"
                         supplierTab: "servicio"
-                        validator: IntValidator {
-                            bottom: 00
-                            top: 999
+                        validator: RegExpValidator {
+                            regExp: /\d\d\d/
                         }
                     }
                     SpacerH_20 {
@@ -201,9 +201,8 @@ Item {
                         id: textFieldAnchoMax1
                         objectName: "anchoMax1"
                         supplierTab: "servicio"
-                        validator: IntValidator {
-                            bottom: 00
-                            top: 9999
+                        validator: RegExpValidator {
+                            regExp: /\d\d\d\d/
                         }
                     }
                     SpacerH_20 {
@@ -253,9 +252,8 @@ Item {
                         id: textFieldAnchoMin2
                         objectName: "anchoMin2"
                         supplierTab: "servicio"
-                        validator: IntValidator {
-                            bottom: 00
-                            top: 999
+                        validator: RegExpValidator {
+                            regExp: /\d\d\d/
                         }
                     }
                     SpacerH_20 {
@@ -268,9 +266,8 @@ Item {
                         id: textFieldAnchoMax2
                         objectName: "anchoMax2"
                         supplierTab: "servicio"
-                        validator: IntValidator {
-                            bottom: 00
-                            top: 9999
+                        validator: RegExpValidator {
+                            regExp: /\d\d\d\d/
                         }
                     }
                     SpacerH_20 {
@@ -319,9 +316,8 @@ Item {
                         id: textFieldAnchoMin3
                         objectName: "anchoMin3"
                         supplierTab: "servicio"
-                        validator: IntValidator {
-                            bottom: 00
-                            top: 999
+                        validator: RegExpValidator {
+                            regExp: /\d\d\d/
                         }
                     }
                     SpacerH_20 {
@@ -334,9 +330,8 @@ Item {
                         id: textFieldAnchoMax3
                         objectName: "anchoMax3"
                         supplierTab: "servicio"
-                        validator: IntValidator {
-                            bottom: 00
-                            top: 9999
+                        validator: RegExpValidator {
+                            regExp: /\d\d\d\d/
                         }
                     }
                     SpacerH_20 {
@@ -347,72 +342,6 @@ Item {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

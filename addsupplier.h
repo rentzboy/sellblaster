@@ -84,7 +84,7 @@ private:
                            {"diametroIntMin", ""}, {"diametroIntMax", ""}, {"diametroExtMin", ""}, {"diametroExtMax", ""}};
     QVariantMap servicioTabField = {{"espesorMin1", ""}, {"espesorMax1", ""}, {"anchoMin1", ""}, {"anchoMax1", ""},
                            {"espesorMin2", ""}, {"espesorMax2", ""}, {"anchoMin2", ""}, {"anchoMax2", ""},
-                           {"espesorMin3", ""}, {"espesorMax3", ""}, {"anchoMin3", ""}, {"anchoMax3", ""}};
+                           {"espesorMin3", ""}, {"espesorMax3", ""}, {"anchoMin3", ""}, {"anchoMax3", ""}, {"catalogo", ""}};
     QVariantMap toogleValue = {{"serie", false}, {"aleacion", false}, {"temple", false}, {"acabado", false},
                            {"anchoBobina", false}, {"diametroIntBobina", false}, {"formatoChapa", false}};
     QStringList paisList;
