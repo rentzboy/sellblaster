@@ -12,7 +12,7 @@ Window {
     id: newProveedorWindow
     visible: true
     minimumWidth: 1400 //menor que MainWindow
-    minimumHeight: 600 //menow que MainWindow
+    minimumHeight: 550 //menor que MainWindow
     title: qsTr("Nuevo proveedor")
 
 

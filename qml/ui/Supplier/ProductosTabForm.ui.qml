@@ -88,7 +88,7 @@ Item {
                 bottomPadding: 20 //asi se muetran los bordes Ok
                 clip: true
                 padding: 15
-                title: qsTr("Productos")
+                title: qsTr("Datos productos")
 
                 ColumnLayout {
                     id: columnProductos
@@ -239,23 +239,10 @@ Item {
                 }
             }
         }
-        RowLayout {
-            id: rowServicios
-            Layout.fillWidth: true
-
-            GroupBox {
-                //Row 3: Datos financieros
-                id: groupBox2
-                Layout.fillWidth: true //que se adapte al tamaño de la ventana
-                topPadding: 60 //asi se muetran los bordes Ok
-                bottomPadding: 20 //asi se muetran los bordes Ok
-                clip: true
-                padding: 15
-                title: qsTr("Servicios")
-            }
-        }
     }
 }
+
+
 
 
 

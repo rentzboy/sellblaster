@@ -72,7 +72,7 @@ Item {
                 Layout.fillWidth: true
                 clip: true
                 padding: 15
-                title: qsTr("Servicios")
+                title: qsTr("Datos servicios")
 
                 GridLayout {
                     //Servicios

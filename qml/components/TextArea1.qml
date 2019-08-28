@@ -9,10 +9,16 @@ import "../../js/supplier.js" as Supplier
 TextArea {
     id: textArea
     property string supplierTab
-    Layout.minimumWidth: 150
+    property Item navigationTab
+
     Layout.fillWidth: true
+    Layout.fillHeight: true
     Layout.preferredHeight: 40
-    //overwriteMode: true => cambia el cursor x uno bastante raro ......
+    wrapMode: Text.WordWrap
+    KeyNavigation.tab: navigationTab
+    KeyNavigation.priority: KeyNavigation.BeforeItem
     selectByMouse: true
+    clip: true
+    //overwriteMode: true => cambia el cursor x uno bastante raro ......
     onEditingFinished: Supplier.textValueToBackEnd(supplierTab, objectName, text)
 }

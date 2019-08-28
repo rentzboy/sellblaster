@@ -66,7 +66,7 @@ Item {
                 bottomPadding: 20 //asi se muetran los bordes Ok
                 clip: true
                 padding: 15
-                title: qsTr("Contacto")
+                title: qsTr("Datos contactos")
 
                 GridLayout {
                     id: grid
@@ -86,6 +86,7 @@ Item {
                         id: textFieldNombre
                         objectName: "nombre"
                         supplierTab: "contacto"
+                        Layout.minimumWidth: 150
                         maximumLength: 100
                     }
                     SpacerH_20 {
@@ -98,6 +99,7 @@ Item {
                         id: textFieldApellido
                         objectName: "apellido"
                         supplierTab: "contacto"
+                        Layout.minimumWidth: 150
                         maximumLength: 100
                     }
                     SpacerH_20 {
@@ -110,6 +112,8 @@ Item {
                         id: textFieldEmail
                         objectName: "email"
                         supplierTab: "contacto"
+                        Layout.minimumWidth: 150
+                        Layout.maximumWidth: 400
                         inputMethodHints: Qt.ImhEmailCharactersOnly
                     }
                     SpacerH_20 {
@@ -144,14 +148,20 @@ Item {
                         id: labelNotas
                         text: qsTr("Notas:")
                     }
-                    TextArea1 {
-                        id: textAreaNotasContacto
-                        objectName: "notasContacto"
-                        supplierTab: "contacto"
-                        wrapMode: Text.WordWrap
-                        Layout.fillHeight: false
-                        KeyNavigation.tab: comboBoxArea
-                        KeyNavigation.priority: KeyNavigation.BeforeItem
+                    ScrollView {
+                        id: view
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        Layout.rowSpan: 2
+                        Layout.maximumWidth: 400
+                        clip: true
+                        implicitHeight: Math.min(60, textAreaNotasContacto.height )
+                        TextArea1 {
+                            id: textAreaNotasContacto
+                            objectName: "notasContacto"
+                            supplierTab: "contacto"
+                            navigationTab: comboBoxArea
+                        }
                     }
                     SpacerH_20 {
                         Layout.fillWidth: true
@@ -183,50 +193,46 @@ Item {
                 }
             }
         }
-
-        RowLayout {
-            id: rowContactos2
-            Layout.fillWidth: true
-
-            GroupBox {
-                //Row 3: Datos financieros
-                id: groupBox2
-                Layout.fillWidth: true //que se adapte al tamaño de la ventana
-                topPadding: 60 //asi se muetran los bordes Ok
-                bottomPadding: 20 //asi se muetran los bordes Ok
-                clip: true
-                padding: 15
-                title: qsTr("Datos financieros")
-
-                GridLayout {
-                    //Datos financieros
-                    id: grid2
-                    columnSpacing: 15
-                    rowSpacing: 15
-                    anchors.fill: parent
-                    rows: 2
-                    columns: 9
-                    clip: true
-
-                    Label {
-                        id: labelGarbage
-                        text: qsTr("Garbage:")
-                        Layout.minimumWidth: 100
-                    }
-                    TextField1 {
-                        id: textFieldGarbage
-                        objectName: "garbage"
-                        supplierTab: "contacto"
-                    }
-                    Item {
-                        width: 5
-                        Layout.fillWidth: true
-                    }
-                }
-            }
-        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

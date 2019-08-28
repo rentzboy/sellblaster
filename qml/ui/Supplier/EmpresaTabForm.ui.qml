@@ -70,7 +70,7 @@ Item {
                 bottomPadding: 20 //asi se muetran los bordes Ok
                 clip: true
                 padding: 15
-                title: qsTr("Datos generales")
+                title: qsTr("Datos empresa")
 
                 GridLayout {
                     id: grid
@@ -78,19 +78,20 @@ Item {
                     rowSpacing: 15
                     anchors.fill: parent
                     columns: 9
+                    rows: 4
                     clip: true
 
                     Label {
                         id: labelEmpresa
                         text: qsTr("Empresa:")
-                        Layout.minimumWidth: 130 //Para alinearlo con Datos financieros
+                        Layout.minimumWidth: 130 //Para alinearlo con Forma pago
                     }
                     TextField1 {
                         id: textFieldEmpresa
                         objectName: "empresa"
                         supplierTab: "empresa"
-                        Layout.fillWidth: true
                         maximumLength: 100
+                        Layout.minimumWidth: 250
                     }
                     SpacerH_20 {
                     }
@@ -103,6 +104,7 @@ Item {
                         objectName: "holding"
                         supplierTab: "empresa"
                         maximumLength: 100
+                        Layout.minimumWidth: 250
                     }
                     SpacerH_20 {
                     }
@@ -114,6 +116,7 @@ Item {
                         id: comboBoxActividad
                         objectName: "actividad"
                         supplierTab: "empresa"
+                        Layout.minimumWidth: 250
                     }
                     SpacerH_20 {
                         Layout.fillWidth: true
@@ -132,7 +135,6 @@ Item {
                     }
                     SpacerH_20 {
                     }
-
                     Label {
                         id: labelPanjiba
                         text: qsTr("Panjiba:")
@@ -195,14 +197,12 @@ Item {
                         validator: IntValidator {
                             bottom: 00001
                             top: 99999
-                        } //mucho mejor
-                        inputMethodHints: Qt.ImhDigitsOnly
-                        //maximumLength: 5
-                        //inputMask: "99999"
+                        }
                     }
                     SpacerH_20 {
                         Layout.fillWidth: true
                     }
+
                     Label {
                         id: labelMoq
                         text: qsTr("MOQ:")
@@ -220,29 +220,47 @@ Item {
                     }
                     SpacerH_20 {
                     }
-
                     Label {
                         id: labelNotas
                         text: qsTr("Notas:")
                     }
-                    TextArea1 {
-                        id: textAreaNotasEmpresa
-                        objectName: "notasEmpresa"
-                        supplierTab: "empresa"
-                        wrapMode: Text.WordWrap
-                        Layout.fillHeight: false
+                    ScrollView {
+                        id: view
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        Layout.rowSpan: 2
                         Layout.columnSpan: 4
-                        KeyNavigation.tab: comboBoxFormaPago
-                        KeyNavigation.priority: KeyNavigation.BeforeItem
+                        //Layout.maximumWidth: 350
+                        TextArea1 {
+                            id: textAreaNotasEmpresa
+                            objectName: "notasEmpresa"
+                            supplierTab: "empresa"
+                            navigationTab: comboBoxFormaPago
+                        }
                     }
                     SpacerH_20 {
+                        Layout.fillWidth: true
+                    }
+
+                    Label {
+                        id: labelPago
+                        text: qsTr("Forma pago:")
+                        Layout.minimumWidth: 130
+                    }
+                    ComboBox1 {
+                        id: comboBoxFormaPago
+                        objectName: "formaPago"
+                        supplierTab: "empresa"
+                    }
+                    Item {
+                        width: 5
                         Layout.fillWidth: true
                     }
                 }
             }
         }
 
-        RowLayout {
+        /*RowLayout {
             id: rowDatosFinancieros
             Layout.fillWidth: true
 
@@ -280,9 +298,27 @@ Item {
                     }
                 }
             }
-        }
+        }*/
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
