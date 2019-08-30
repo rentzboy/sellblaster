@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT  += core gui sql quick quickcontrols2
+QT  += core sql quick quickcontrols2
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -35,39 +35,18 @@ CONFIG += c++17
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-        databasemanagement.cpp \
         excepciones.cpp \
-        createdatabasedialog.cpp \
-        sqlitemodel.cpp \
-        sqlitedelegate.cpp \
-        mapperdbmanagement.cpp \
         logindialog.cpp \
-        addsupplier.cpp \
-        checkboxlist.cpp
+        addsupplier.cpp
 
 HEADERS += \
         mainwindow.h \
         precompiled_header.h \
-        databasemanagement.h \
-        createdatabasedialog.h \
         excepciones.h \
         globals.h \
-        sqlitemodel.h \
-        sqlitedelegate.h \
-        mapperdbmanagement.h \
         logindialog.h \
         addsupplier.h \
-        basic_headers.h \
-        checkboxlist.h \
-        qchecklist.h
-
-FORMS += \
-        mainwindow.ui \
-        databasemanagement.ui \
-        createdatabasedialog.ui \
-        mapperdbmanagement.ui \
-        logindialog.ui \
-        addsupplier.ui
+        basic_headers.h
 
 RESOURCES += \
     resources.qrc \
