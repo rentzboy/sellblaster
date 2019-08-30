@@ -114,6 +114,7 @@ Item {
                         supplierTab: "contacto"
                         Layout.minimumWidth: 150
                         Layout.maximumWidth: 400
+                        maximumLength: 100
                         inputMethodHints: Qt.ImhEmailCharactersOnly
                     }
                     SpacerH_20 {
@@ -128,6 +129,7 @@ Item {
                         id: textFieldTelefono
                         objectName: "telefono"
                         supplierTab: "contacto"
+                        maximumLength: 45
                         inputMethodHints: Qt.ImhDialableCharactersOnly
                     }
                     SpacerH_20 {
@@ -140,6 +142,7 @@ Item {
                         id: textFieldMovil
                         objectName: "movil"
                         supplierTab: "contacto"
+                        maximumLength: 45
                         inputMethodHints: Qt.ImhDialableCharactersOnly
                     }
                     SpacerH_20 {
@@ -155,7 +158,8 @@ Item {
                         Layout.rowSpan: 2
                         Layout.maximumWidth: 400
                         clip: true
-                        implicitHeight: Math.min(60, textAreaNotasContacto.height )
+                        implicitHeight: Math.min(60,
+                                                 textAreaNotasContacto.height)
                         TextArea1 {
                             id: textAreaNotasContacto
                             objectName: "notasContacto"
@@ -195,44 +199,6 @@ Item {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -6,8 +6,6 @@
 #include <QSqlQuery>
 #include <QPointer>
 #include <QQuickView>
-
-#include "databasemanagement.h"
 #include "addsupplier.h"
 
 class MainWindow : public QQuickView
@@ -36,7 +34,6 @@ private:
     QSettings::Status readUserSettings(void);
     QSettings::Status writeUserSettings(void);
     QString get_usernameFromDb();
-    QPointer<DatabaseManagement> dbManagementWidget = Q_NULLPTR;
     static MainWindow *uniqueInstance;
     static int typeId;
     QString userName;

@@ -117,6 +117,7 @@ Item {
                                              - grid2.columnSpacing
                         Layout.maximumWidth: anchoMaxSpacer.x - textFieldAnchoMin1.x
                                              - grid2.columnSpacing
+                        maximumLength: 150
                     }
                     SpacerH_20 {
                         Layout.fillWidth: true

@@ -614,13 +614,19 @@ bool AddSupplier::sanitationCheck(QString tab)
     else if (tab == "servicio")
     {
         //Checking key fields & numeric fields are not empty
-        if(empresaTabField.value("empresa").toString().isEmpty()     || //Hay que controlarlo en todas las tabs
-            servicioSelectionList.isEmpty())
+        if(empresaTabField.value("empresa").toString().isEmpty() || servicioSelectionList.isEmpty())
             return EXIT_FAILURE;
+
         if(servicioSelectionList.contains("Slitting") &&
             servicioTabField.value("espesorMin1").toString().isEmpty() &&
             servicioTabField.value("espesorMin2").toString().isEmpty() &&
             servicioTabField.value("espesorMin3").toString().isEmpty())
+            return EXIT_FAILURE;
+
+        if((!servicioTabField.value("espesorMin1").toString().isEmpty() ||
+            !servicioTabField.value("espesorMin2").toString().isEmpty() ||
+            !servicioTabField.value("espesorMin3").toString().isEmpty())
+            && !servicioSelectionList.contains("Slitting"))
             return EXIT_FAILURE;
 
         else
@@ -684,33 +690,26 @@ void AddSupplier::resetFields(QString tab)
          //Solo se ejecuta al Cancalear/Guardar, pues borrariamos el textField "Empresa"
         this->setEmpresaTabField("clearAll", "");
         //Reset comboBoxes
-        QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("pais");
-        QQmlProperty::write(object, "currentIndex", -1);
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("actividad");
-        QQmlProperty::write(object, "currentIndex", -1);
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("formaPago");
-        QQmlProperty::write(object, "currentIndex", -1);
+        this->resetComboBox("pais");
+        this->resetFields("actividad");
+        this->resetFields("formaPago");
     }
     else if(tab == "contacto")
     {
         //Delete textFields
         this->setContactoTabField("clearAll", "");
         //Reset comboBoxes
-        QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("area");
-        QQmlProperty::write(object, "currentIndex", -1);
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("puesto");
-        QQmlProperty::write(object, "currentIndex", -1);
+        this->resetFields("area");
+        this->resetFields("puesto");
     }
     else if(tab == "producto")
     {
         //Delete textFields
         this->setProductoTabField("clearAll", "");
         //Reset comboBoxes
-        QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("tipo");
-        QQmlProperty::write(object, "currentIndex", -1);
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("material");
-        QQmlProperty::write(object, "currentIndex", -1);
-
+        this->resetComboBox("tipo");
+        this->resetComboBox("material");
+        //Uncheck comboBoxList
         this->uncheckAllValues("serie");
         this->uncheckAllValues("aleacion");
         this->uncheckAllValues("temple");
@@ -726,6 +725,11 @@ void AddSupplier::resetFields(QString tab)
         //Reset comboBoxes
         this->uncheckAllValues("servicio");
     }
+}
+void AddSupplier::resetComboBox(QString fieldName)
+{
+    QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> (fieldName);
+    QQmlProperty::write(object, "currentIndex", -1);
 }
 
 //PUBLIC SLOTS
@@ -1037,6 +1041,7 @@ void AddSupplier::onRelatedFieldUpdated(QString fieldName)
         fillRelatedComboCheckBoxFromDb(fieldName);
     else if(fieldName == "aisi" || fieldName == "werkstoff") //RadioButton
     {
+        this->resetComboBox("material");
         aleacionListCompleta.clear();
         aleacionRadioButton = fieldName;
 

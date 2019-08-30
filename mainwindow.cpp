@@ -1,7 +1,5 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include "basic_headers.h"
-#include "databasemanagement.h"
 #include "addsupplier.h"
 #include "logindialog.h"
 

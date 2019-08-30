@@ -70,6 +70,7 @@ private:
     //Members
     bool sanitationCheck(QString tab);
     void resetFields(QString tab);
+    void resetComboBox(QString fieldName);
     //Attributes
     static QQmlApplicationEngine *engine;
     static AddSupplier *uniqueInstance;
