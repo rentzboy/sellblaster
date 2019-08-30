@@ -27,7 +27,7 @@ GridLayout {
         supplierTab: "producto"
         Layout.minimumWidth: 150
         validator: RegExpValidator {
-            regExp: /\d\d\d/
+            regExp: /\d{0,3}/
         }
     }
     SpacerH_20 {
@@ -43,7 +43,7 @@ GridLayout {
         supplierTab: "producto"
         Layout.minimumWidth: 150
         validator: RegExpValidator {
-            regExp: /\d\d\d/
+            regExp: /\d{0,3}/
         }
     }
     SpacerH_20 {
@@ -59,7 +59,7 @@ GridLayout {
         supplierTab: "producto"
         Layout.minimumWidth: 150
         validator: RegExpValidator {
-            regExp: /\d\d\d\d/
+            regExp: /\d{0,3}/
         }
     }
     SpacerH_20 {
@@ -76,7 +76,7 @@ GridLayout {
         supplierTab: "producto"
         Layout.minimumWidth: 150
         validator: RegExpValidator {
-            regExp: /\d\d\d/
+            regExp: /\d{0,4}/
         }
     }
     SpacerH_20 {
@@ -89,9 +89,8 @@ GridLayout {
         id: textFieldDiametroExtMaxTubo
         objectName: "diametroExtMax"
         Layout.minimumWidth: 150
-        validator: IntValidator {
-            bottom: 00
-            top: 9999
+        validator: RegExpValidator {
+            regExp: /\d{0,4}/
         }
     }
     SpacerH_20 {
@@ -106,7 +105,7 @@ GridLayout {
         supplierTab: "producto"
         Layout.minimumWidth: 150
         validator: RegExpValidator {
-            regExp: /\d\d\d\d/
+            regExp: /\d{0,4}/
         }
     }
     SpacerH_20 {

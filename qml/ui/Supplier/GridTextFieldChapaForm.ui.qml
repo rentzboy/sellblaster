@@ -39,10 +39,8 @@ GridLayout {
         objectName: "espesorMin"
         supplierTab: "producto"
         Layout.minimumWidth: 150
-        validator: DoubleValidator {
-            bottom: 00
-            top: 99
-            decimals: 2
+        validator: RegExpValidator {
+            regExp: /\d{0,2}[.]\d{0,2}|\d{0,2}/
         }
     }
     SpacerH_20 {
@@ -58,10 +56,8 @@ GridLayout {
         objectName: "espesorMax"
         supplierTab: "producto"
         Layout.minimumWidth: 150
-        validator: DoubleValidator {
-            bottom: 00
-            top: 999
-            decimals: 2
+        validator: RegExpValidator {
+            regExp: /\d{0,3}/
         }
     }
     SpacerH_20 {

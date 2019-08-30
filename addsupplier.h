@@ -86,7 +86,7 @@ private:
                            {"espesorMin2", ""}, {"espesorMax2", ""}, {"anchoMin2", ""}, {"anchoMax2", ""},
                            {"espesorMin3", ""}, {"espesorMax3", ""}, {"anchoMin3", ""}, {"anchoMax3", ""}, {"catalogo", ""}};
     QVariantMap toogleValue = {{"serie", false}, {"aleacion", false}, {"temple", false}, {"acabado", false},
-                           {"anchoBobina", false}, {"diametroIntBobina", false}, {"formatoChapa", false}};
+                           {"anchoBobina", false}, {"diametroIntBobina", false}, {"formatoChapa", false}, {"servicio", false}};
     QStringList paisList;
     QStringList actividadList;
     QStringList formaPagoList;

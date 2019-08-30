@@ -27,7 +27,7 @@ GridLayout {
         Layout.fillWidth: false
         x: comboBoxTipo.x
         validator: RegExpValidator {
-            regExp: /\d\d\d/
+            regExp: /\d{0,3}/
         }
     }
     SpacerH_20 {
@@ -46,7 +46,7 @@ GridLayout {
         Layout.fillWidth: false
         x: comboBoxMaterial.x
         validator: RegExpValidator {
-            regExp: /\d\d\d\d/
+            regExp: /\d{0,4}/
         }
     }
     SpacerH_20 {
@@ -64,7 +64,7 @@ GridLayout {
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         validator: RegExpValidator {
-            regExp: /\d\d\d\d/
+            regExp: /\d{0,3}/
         }
     }
     SpacerH_20 {
@@ -80,7 +80,7 @@ GridLayout {
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         validator: RegExpValidator {
-            regExp: /\d\d\d\d/
+            regExp: /\d{0,4}/
         }
     }
     SpacerH_20 {

@@ -26,6 +26,7 @@ Item {
     property alias textFieldAnchoMax2: textFieldAnchoMax2
     property alias textFieldAnchoMax3: textFieldAnchoMax3
     property alias comboBoxServicios: comboBoxServicios
+    property alias comboBoxServiciosToogleAll: comboBoxServicios.toogleAllValues
     property alias textFieldCatalogo: textFieldCatalogo
 
     visible: true
@@ -93,6 +94,7 @@ Item {
                         Layout.fillWidth: false
                         objectName: "servicio"
                         supplierTab: "servicio"
+                        toogleAllValues: false
                         Layout.minimumWidth: spacerEspesorMax.x - textFieldEspesorMin1.x
                                              - grid2.columnSpacing
                         Layout.maximumWidth: spacerEspesorMax.x - textFieldEspesorMin1.x
@@ -153,10 +155,8 @@ Item {
                         id: textFieldEspesorMin1
                         objectName: "espesorMin1"
                         supplierTab: "servicio"
-                        validator: DoubleValidator {
-                            bottom: 00
-                            top: 99
-                            decimals: 2
+                        validator: RegExpValidator {
+                            regExp: /\d{0,2}[.]\d{0,2}|\d{0,2}/
                         }
                     }
                     SpacerH_20 {
@@ -170,10 +170,8 @@ Item {
                         objectName: "espesorMax1"
                         supplierTab: "servicio"
                         Layout.fillWidth: true
-                        validator: DoubleValidator {
-                            bottom: 00
-                            top: 99
-                            decimals: 2
+                        validator: RegExpValidator {
+                            regExp: /\d{0,3}/
                         }
                     }
                     SpacerH_20 {
@@ -188,7 +186,7 @@ Item {
                         objectName: "anchoMin1"
                         supplierTab: "servicio"
                         validator: RegExpValidator {
-                            regExp: /\d\d\d/
+                            regExp: /\d{0,3}/
                         }
                     }
                     SpacerH_20 {
@@ -202,7 +200,7 @@ Item {
                         objectName: "anchoMax1"
                         supplierTab: "servicio"
                         validator: RegExpValidator {
-                            regExp: /\d\d\d\d/
+                            regExp: /\d{0,4}/
                         }
                     }
                     SpacerH_20 {
@@ -219,10 +217,8 @@ Item {
                         objectName: "espesorMin2"
                         supplierTab: "servicio"
                         Layout.fillWidth: true
-                        validator: DoubleValidator {
-                            bottom: 00
-                            top: 99
-                            decimals: 2
+                        validator: RegExpValidator {
+                            regExp: /\d{0,2}[.]\d{0,2}|\d{0,2}/
                         }
                     }
                     SpacerH_20 {
@@ -236,10 +232,8 @@ Item {
                         objectName: "espesorMax2"
                         supplierTab: "servicio"
                         Layout.fillWidth: true
-                        validator: DoubleValidator {
-                            bottom: 00
-                            top: 99
-                            decimals: 2
+                        validator: RegExpValidator {
+                            regExp: /\d{0,3}/
                         }
                     }
                     SpacerH_20 {
@@ -253,7 +247,7 @@ Item {
                         objectName: "anchoMin2"
                         supplierTab: "servicio"
                         validator: RegExpValidator {
-                            regExp: /\d\d\d/
+                            regExp: /\d{0,3}/
                         }
                     }
                     SpacerH_20 {
@@ -267,7 +261,7 @@ Item {
                         objectName: "anchoMax2"
                         supplierTab: "servicio"
                         validator: RegExpValidator {
-                            regExp: /\d\d\d\d/
+                            regExp: /\d{0,4}/
                         }
                     }
                     SpacerH_20 {
@@ -283,10 +277,8 @@ Item {
                         objectName: "espesorMin3"
                         supplierTab: "servicio"
                         Layout.fillWidth: true
-                        validator: DoubleValidator {
-                            bottom: 00
-                            top: 99
-                            decimals: 2
+                        validator: RegExpValidator {
+                            regExp: /\d{0,2}[.]\d{0,2}|\d{0,2}/
                         }
                     }
                     SpacerH_20 {
@@ -300,10 +292,8 @@ Item {
                         objectName: "espesorMax3"
                         supplierTab: "servicio"
                         Layout.fillWidth: true
-                        validator: DoubleValidator {
-                            bottom: 00
-                            top: 99
-                            decimals: 2
+                        validator: RegExpValidator {
+                            regExp: /\d{0,3}/
                         }
                     }
                     SpacerH_20 {
@@ -317,7 +307,7 @@ Item {
                         objectName: "anchoMin3"
                         supplierTab: "servicio"
                         validator: RegExpValidator {
-                            regExp: /\d\d\d/
+                            regExp: /\d{0,3}/
                         }
                     }
                     SpacerH_20 {
@@ -331,7 +321,7 @@ Item {
                         objectName: "anchoMax3"
                         supplierTab: "servicio"
                         validator: RegExpValidator {
-                            regExp: /\d\d\d\d/
+                            regExp: /\d{0,4}/
                         }
                     }
                     SpacerH_20 {

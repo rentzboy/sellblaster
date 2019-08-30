@@ -144,7 +144,7 @@ void AddSupplier::uncheckAllValues(QString comboBox)
     else if(comboBox == "formatoChapa")
         formatoChapaSelectionList.clear();
     /////////////////////// SERVICIOS ///////////////////////
-    else if(comboBox == "servicios")
+    else if(comboBox == "servicio")
         servicioSelectionList.clear();
 }
 void AddSupplier::toogleAllValues(QString comboBox)
@@ -617,14 +617,36 @@ bool AddSupplier::sanitationCheck(QString tab)
         if(empresaTabField.value("empresa").toString().isEmpty()     || //Hay que controlarlo en todas las tabs
             servicioSelectionList.isEmpty())
             return EXIT_FAILURE;
+        if(servicioSelectionList.contains("Slitting") &&
+            servicioTabField.value("espesorMin1").toString().isEmpty() &&
+            servicioTabField.value("espesorMin2").toString().isEmpty() &&
+            servicioTabField.value("espesorMin3").toString().isEmpty())
+            return EXIT_FAILURE;
+
         else
         {
+            //Si se deja vacio EspesorMin se anula el registro completo
             if(servicioTabField.value("espesorMin1").toString().isEmpty())
+            {
                 servicioTabField.insert("espesorMin1",  "NULL");
+                servicioTabField.insert("espesorMax1",  "NULL");
+                servicioTabField.insert("anchoMin1",  "NULL");
+                servicioTabField.insert("anchoMax1",  "NULL");
+            }
             if(servicioTabField.value("espesorMin2").toString().isEmpty())
+            {
                 servicioTabField.insert("espesorMin2",  "NULL");
+                servicioTabField.insert("espesorMax2",  "NULL");
+                servicioTabField.insert("anchoMin2",  "NULL");
+                servicioTabField.insert("anchoMax2",  "NULL");
+            }
             if(servicioTabField.value("espesorMin3").toString().isEmpty())
+            {
                 servicioTabField.insert("espesorMin3",  "NULL");
+                servicioTabField.insert("espesorMax3",  "NULL");
+                servicioTabField.insert("anchoMin3",  "NULL");
+                servicioTabField.insert("anchoMax3",  "NULL");
+            }
 
             if(servicioTabField.value("espesorMax1").toString().isEmpty())
                 servicioTabField.insert("espesorMax1",  "NULL");
@@ -702,7 +724,7 @@ void AddSupplier::resetFields(QString tab)
         //Delete textFields
         this->setServicioTabField("clearAll", "");
         //Reset comboBoxes
-        this->uncheckAllValues("servicios");
+        this->uncheckAllValues("servicio");
     }
 }
 
@@ -925,21 +947,34 @@ bool AddSupplier::onAceptarButton(QString tab)
          for (auto servicio : servicioSelectionList)
              idServicio.append(QString::number (servicioList.indexOf(servicio) + 1)).append(","); //OJO: QString termina en ','
 
-         QString idEspesorMin = servicioTabField.value("espesorMin1").toString().append(",")
-                                          .append(servicioTabField.value("espesorMin2").toString()).append(",")
-                                          .append(servicioTabField.value("espesorMin3").toString()).append(",");
+        //If EspesorMin is NULL delete register to avoid empty rows in the DB
+         QString idEspesorMin, idEspesorMax, idAnchoMin, idAnchoMax;
+         if(servicioTabField.value("espesorMin1").toString() != "NULL")
+         {
+             idEspesorMin = servicioTabField.value("espesorMin1").toString().append(",");
+             idEspesorMax = servicioTabField.value("espesorMax1").toString().append(",");
+             idAnchoMin = servicioTabField.value("anchoMin1").toString().append(",");
+             idAnchoMax = servicioTabField.value("anchoMax1").toString().append(",");
+         }
+         if(servicioTabField.value("espesorMin2").toString() != "NULL")
+         {
+             idEspesorMin.append(servicioTabField.value("espesorMin2").toString()).append(",");
+             idEspesorMax.append(servicioTabField.value("espesorMax2").toString()).append(",");
+             idAnchoMin.append(servicioTabField.value("anchoMin2").toString()).append(",");
+             idAnchoMax.append(servicioTabField.value("anchoMax2").toString()).append(",");
+         }
+         if(servicioTabField.value("espesorMin3").toString() != "NULL")
+         {
+             idEspesorMin.append(servicioTabField.value("espesorMin3").toString()).append(",");
+             idEspesorMax.append(servicioTabField.value("espesorMax3").toString()).append(",");
+             idAnchoMin.append(servicioTabField.value("anchoMin3").toString()).append(",");
+             idAnchoMax.append(servicioTabField.value("anchoMax3").toString()).append(",");
+         }
 
-         QString idEspesorMax = servicioTabField.value("espesorMax1").toString().append(",")
-                                          .append(servicioTabField.value("espesorMax2").toString()).append(",")
-                                          .append(servicioTabField.value("espesorMax3").toString()).append(",");
-
-         QString idAnchoMin = servicioTabField.value("anchoMin1").toString().append(",")
-                                          .append(servicioTabField.value("anchoMin2").toString()).append(",")
-                                          .append(servicioTabField.value("anchoMin3").toString()).append(",");
-
-         QString idAnchoMax = servicioTabField.value("anchoMax1").toString().append(",")
-                                          .append(servicioTabField.value("anchoMax2").toString()).append(",")
-                                          .append(servicioTabField.value("anchoMax3").toString()).append(",");
+//         qDebug() << "idEspesorMin" << idEspesorMin;
+//         qDebug() << "idEspesorMax" << idEspesorMax;
+//         qDebug() << "idAnchoMin" << idAnchoMin;
+//         qDebug() << "idAnchoMax" << idAnchoMax;
 
         //OPTION #1: Stored Procedures
         QString sqlQuery = "CALL insert_ServiceList(";
