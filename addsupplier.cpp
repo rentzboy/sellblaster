@@ -613,6 +613,10 @@ bool AddSupplier::sanitationCheck(QString tab)
     }
     else if (tab == "servicio")
     {
+        //O uno o el otro seleccionado pero no los 2
+        if(servicioSelectionList.contains("Slitting") && servicioSelectionList.contains("Slitting + lacado"))
+            return EXIT_FAILURE;
+
         //Checking key fields & numeric fields are not empty
         if(empresaTabField.value("empresa").toString().isEmpty() || servicioSelectionList.isEmpty())
             return EXIT_FAILURE;
@@ -623,10 +627,17 @@ bool AddSupplier::sanitationCheck(QString tab)
             servicioTabField.value("espesorMin3").toString().isEmpty())
             return EXIT_FAILURE;
 
+        if(servicioSelectionList.contains("Slitting + lacado") &&
+            servicioTabField.value("espesorMin1").toString().isEmpty() &&
+            servicioTabField.value("espesorMin2").toString().isEmpty() &&
+            servicioTabField.value("espesorMin3").toString().isEmpty())
+            return EXIT_FAILURE;
+
         if((!servicioTabField.value("espesorMin1").toString().isEmpty() ||
             !servicioTabField.value("espesorMin2").toString().isEmpty() ||
             !servicioTabField.value("espesorMin3").toString().isEmpty())
-            && !servicioSelectionList.contains("Slitting"))
+            && !servicioSelectionList.contains("Slitting")
+            && !servicioSelectionList.contains("Slitting + lacado"))
             return EXIT_FAILURE;
 
         else
