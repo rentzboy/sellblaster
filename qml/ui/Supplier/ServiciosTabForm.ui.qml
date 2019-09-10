@@ -157,7 +157,7 @@ Item {
                         objectName: "espesorMin1"
                         supplierTab: "servicio"
                         validator: RegExpValidator {
-                            regExp: /\d{0,2}[.]\d{0,2}|\d{0,2}/
+                            regExp: /\d{0,2}[.]\d{0,3}|\d{0,2}/
                         }
                     }
                     SpacerH_20 {
@@ -172,7 +172,7 @@ Item {
                         supplierTab: "servicio"
                         Layout.fillWidth: true
                         validator: RegExpValidator {
-                            regExp: /\d{0,3}/
+                            regExp: /\d{0,2}[.]\d{0,3}|\d{0,2}/
                         }
                     }
                     SpacerH_20 {
@@ -219,7 +219,7 @@ Item {
                         supplierTab: "servicio"
                         Layout.fillWidth: true
                         validator: RegExpValidator {
-                            regExp: /\d{0,2}[.]\d{0,2}|\d{0,2}/
+                            regExp: /\d{0,2}[.]\d{0,3}|\d{0,2}/
                         }
                     }
                     SpacerH_20 {
@@ -234,7 +234,7 @@ Item {
                         supplierTab: "servicio"
                         Layout.fillWidth: true
                         validator: RegExpValidator {
-                            regExp: /\d{0,3}/
+                            regExp: /\d{0,2}[.]\d{0,3}|\d{0,2}/
                         }
                     }
                     SpacerH_20 {
@@ -279,7 +279,7 @@ Item {
                         supplierTab: "servicio"
                         Layout.fillWidth: true
                         validator: RegExpValidator {
-                            regExp: /\d{0,2}[.]\d{0,2}|\d{0,2}/
+                            regExp: /\d{0,2}[.]\d{0,3}|\d{0,2}/
                         }
                     }
                     SpacerH_20 {
@@ -294,7 +294,7 @@ Item {
                         supplierTab: "servicio"
                         Layout.fillWidth: true
                         validator: RegExpValidator {
-                            regExp: /\d{0,3}/
+                            regExp: /\d{0,2}[.]\d{0,3}|\d{0,2}/
                         }
                     }
                     SpacerH_20 {
