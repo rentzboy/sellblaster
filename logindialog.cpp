@@ -92,17 +92,18 @@ void LoginDialog::onAceptarClicked(void)
         MainWindow::executeForwardSqlWithReturn(sqlQuery, DB_QSQLITE_CONNECTION_NAME, result); //Output arg.
         if(!result.next())
             throw result.lastError();
-        int fieldName = result.record().indexOf("name");
+        //int fieldName = result.record().indexOf("name");
         int fieldDb = result.record().indexOf("database");
         int fieldServer = result.record().indexOf("serverurl");
 
         QMap <QString, QString> connectionDetails;
-        connectionDetails.insert("name", result.value(fieldName).toString());
+        //connectionDetails.insert("name", result.value(fieldName).toString());
         connectionDetails.insert("database", result.value(fieldDb).toString());
         connectionDetails.insert("serverurl", result.value(fieldServer).toString());
         connectionDetails.insert("username", userName);
         connectionDetails.insert("password", password);
         connectionDetails.insert("type", MAIN_DB_TYPE);
+        //qDebug() << connectionDetails;
 
         //Connect to MAIN_DB
         if (MainWindow::createExternDbConnection(connectionDetails) == EXIT_FAILURE)

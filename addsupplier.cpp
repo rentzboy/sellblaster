@@ -423,7 +423,7 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
             serieListCompleta.append(result.value(0).toString());
         }
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenuComplete('alloy', 'aisi')"; //AISI -se utiliza como apoyo-
+        sqlQuery = "CALL get_DropDownMenuComplete('alloy', 'werkstoff')"; //AISI -se utiliza como apoyo-
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
@@ -478,9 +478,9 @@ bool AddSupplier::sanitationCheck(QString tab)
         //Checking key fields & numeric fields are not empty
         if(empresaTabField.value("empresa").toString().isEmpty()     ||
             empresaTabField.value("ciudad").toString().isEmpty()        ||
-            empresaTabField.value("actividad").toString().isEmpty()    ||
-            empresaTabField.value("formaPago").toString().isEmpty() ||
-            empresaTabField.value("pais").toString().isEmpty())
+            empresaTabField.value("actividad").toString() == "reset"    ||
+            empresaTabField.value("formaPago").toString() == "reset" ||
+            empresaTabField.value("pais").toString() == "reset")
             return EXIT_FAILURE;
         else
         {
@@ -494,8 +494,8 @@ bool AddSupplier::sanitationCheck(QString tab)
         if(empresaTabField.value("empresa").toString().isEmpty()     || //Hay que controlarlo en todas las tabs
             contactoTabField.value("nombre").toString().isEmpty()      ||
             contactoTabField.value("email").toString().isEmpty()         ||
-            contactoTabField.value("area").toString().isEmpty()           ||
-            contactoTabField.value("puesto").toString().isEmpty())
+            contactoTabField.value("area").toString() == "reset"           ||
+            contactoTabField.value("puesto").toString() == "reset")
             return EXIT_FAILURE;
         else
         {
@@ -506,8 +506,8 @@ bool AddSupplier::sanitationCheck(QString tab)
     else if (tab == "producto")
     {
         if(empresaTabField.value("empresa").toString().isEmpty()     || //Hay que controlarlo en todas las tabs
-            productoTabField.value("tipo").toString().isEmpty()           ||
-            productoTabField.value("material").toString().isEmpty()    ||
+            productoTabField.value("tipo").toString() == "reset"           ||
+            productoTabField.value("material").toString() == "reset"    ||
             aleacionSelectionList.isEmpty() ||
             templeSelectionList.isEmpty() ||
             acabadoSelectionList.isEmpty())
@@ -691,16 +691,16 @@ void AddSupplier::resetFields(QString tab)
         this->setEmpresaTabField("clearAll", "");
         //Reset comboBoxes
         this->resetComboBox("pais");
-        this->resetFields("actividad");
-        this->resetFields("formaPago");
+        this->resetComboBox("actividad");
+        this->resetComboBox("formaPago");
     }
     else if(tab == "contacto")
     {
         //Delete textFields
         this->setContactoTabField("clearAll", "");
         //Reset comboBoxes
-        this->resetFields("area");
-        this->resetFields("puesto");
+        this->resetComboBox("area");
+        this->resetComboBox("puesto");
     }
     else if(tab == "producto")
     {
@@ -736,6 +736,8 @@ void AddSupplier::resetComboBox(QString fieldName)
 bool AddSupplier::onAceptarButton(QString tab)
 {
 //    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
+//    qDebug() << "aleacionSelectionList: " << aleacionSelectionList;
+//    qDebug() << "aleacionListCompleta: " << aleacionListCompleta;
 
     if(tab == "empresa")
     {
@@ -750,6 +752,7 @@ bool AddSupplier::onAceptarButton(QString tab)
 
         //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
         //El index de xxxList empieza en 0, pero los registros de la DB en 1 => +1
+        //qDebug() << "Actividad Checkbox: " << empresaTabField.value("actividad").toString();
         QString idActividad = QString::number (actividadList.indexOf(empresaTabField.value("actividad").toString()) +1);
         QString idPais = QString::number (paisList.indexOf(empresaTabField.value("pais").toString()) +1);
         QString idFormaPago = QString::number (formaPagoList.indexOf(empresaTabField.value("formaPago").toString()) +1);

@@ -52,7 +52,7 @@ Item {
                 Layout.columnSpan: 2
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                maximumLength: 15
+                maximumLength: 25
             }
             Label {
                 id: labelPassword
@@ -67,7 +67,7 @@ Item {
                 Layout.columnSpan: 2
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                maximumLength: 15
+                maximumLength: 25
                 echoMode: TextInput.Password
             }
             Item {

@@ -116,7 +116,7 @@ private:
     QStringList idBobinaSelectionList;
     QStringList servicioList;
     QStringList servicioSelectionList;
-    QString aleacionRadioButton = "aisi"; //valor inicial
+    QString aleacionRadioButton = "Werkstoff"; //valor inicial
     QErrorMessage *errorMessage = Q_NULLPTR;
 
 signals:

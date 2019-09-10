@@ -66,15 +66,15 @@ Item {
                 Layout.fillWidth: true
             }
             RadioButton {
-                id: radioButtonAisi
-                objectName: "aisi"
-                checked: true
-                text: qsTr("AISI")
-            }
-            RadioButton {
                 id: radioButtonWerkstoff
                 objectName: "werkstoff"
                 text: qsTr("Werkstoff")
+                checked: true
+            }
+            RadioButton {
+                id: radioButtonAisi
+                objectName: "aisi"
+                text: qsTr("AISI")
             }
         }
         RowLayout {
@@ -241,8 +241,6 @@ Item {
         }
     }
 }
-
-
 
 
 

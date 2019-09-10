@@ -27,6 +27,7 @@ GridLayout {
         objectName: "anchoBobina"
         supplierTab: "producto"
         toogleAllValues: false
+        Layout.minimumWidth: 150
     }
     SpacerH_20 {
     }
@@ -41,7 +42,7 @@ GridLayout {
         supplierTab: "producto"
         Layout.minimumWidth: 150
         validator: RegExpValidator {
-            regExp: /\d{0,2}[.]\d{0,2}|\d{0,2}/
+            regExp: /\d{0,2}[.]\d{0,3}|\d{0,2}/
         }
     }
     SpacerH_20 {
@@ -49,6 +50,7 @@ GridLayout {
     Label {
         id: labelEspesorMaxBobina
         text: qsTr("Espesor max:")
+        Layout.minimumWidth: 135
     }
     TextField1 {
         id: textFieldEspesorMaxBobina
@@ -56,7 +58,7 @@ GridLayout {
         supplierTab: "producto"
         Layout.minimumWidth: 150
         validator: RegExpValidator {
-            regExp: /\d{0,3}/
+            regExp: /\d{0,3}[.]\d{0,3}|\d{0,3}/
         }
     }
     SpacerH_20 {
@@ -72,6 +74,7 @@ GridLayout {
         objectName: "diametroIntBobina"
         supplierTab: "producto"
         toogleAllValues: false
+        Layout.minimumWidth: 150
     }
     SpacerH_20 {
     }

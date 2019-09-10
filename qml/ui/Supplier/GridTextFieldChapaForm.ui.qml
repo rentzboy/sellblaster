@@ -40,7 +40,7 @@ GridLayout {
         supplierTab: "producto"
         Layout.minimumWidth: 150
         validator: RegExpValidator {
-            regExp: /\d{0,2}[.]\d{0,2}|\d{0,2}/
+            regExp: /\d{0,2}[.]\d{0,3}|\d{0,2}/
         }
     }
     SpacerH_20 {
@@ -57,7 +57,7 @@ GridLayout {
         supplierTab: "producto"
         Layout.minimumWidth: 150
         validator: RegExpValidator {
-            regExp: /\d{0,3}/
+            regExp: /\d{0,3}[.]\d{0,3}|\d{0,3}/
         }
     }
     SpacerH_20 {

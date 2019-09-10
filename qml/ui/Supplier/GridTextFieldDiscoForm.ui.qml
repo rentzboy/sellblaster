@@ -78,7 +78,7 @@ GridLayout {
         Layout.preferredWidth: comboBoxTipo.width
         Layout.fillWidth: false
         validator: RegExpValidator {
-            regExp: /\d{0,3}/
+            regExp: /\d{0,3}[.]\d{0,2}|\d{0,3}/
         }
     }
     SpacerH_20 {
