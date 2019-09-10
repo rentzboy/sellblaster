@@ -70,8 +70,8 @@ void AddSupplier::textValueToBackEnd(QString tab, QString fieldName, QString tex
 }
 void AddSupplier::textListToBackEnd(QString fieldName, QString text, bool value)
 {
-    PRINT_FUNCTION_NAME
-    qDebug() << "fieldName: " << fieldName << ", text: " << text << ", value: " << value;
+//    PRINT_FUNCTION_NAME
+//    qDebug() << "fieldName: " << fieldName << ", text: " << text << ", value: " << value;
 
     if(fieldName == "serie")
     {
@@ -423,7 +423,7 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
             serieListCompleta.append(result.value(0).toString());
         }
         ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenuComplete('alloy', 'werkstoff')"; //AISI -se utiliza como apoyo-
+        sqlQuery = "CALL get_DropDownMenuComplete('alloy', 'werkstoff')"; //Alloy -se utiliza como apoyo-
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
@@ -736,6 +736,7 @@ void AddSupplier::resetComboBox(QString fieldName)
 bool AddSupplier::onAceptarButton(QString tab)
 {
 //    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
+//    qDebug() << "aleacionList: " << aleacionList;
 //    qDebug() << "aleacionSelectionList: " << aleacionSelectionList;
 //    qDebug() << "aleacionListCompleta: " << aleacionListCompleta;
 
@@ -1049,15 +1050,22 @@ void AddSupplier::onRelatedFieldUpdated(QString fieldName)
         aleacionRadioButton = fieldName;
 
         QSqlQuery result;
-        QString sqlQuery = "CALL get_DropDownMenuComplete('alloy', '";
+        QString sqlQuery = "CALL get_DropDownMenu('alloy', '";
         sqlQuery.append(fieldName).append("')"); //Se utiliza como apoyo
         //qDebug() << sqlQuery;
         MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
         while(result.next())
         {
-            aleacionListCompleta.append(result.value(0).toString());
+            aleacionList.append(result.value(0).toString()); //only values to show in the comboBox
         }
-        aleacionList = aleacionListCompleta; //aleacionListCompleta se guarda para luego recuperar los ids sin consultar la DB
+        sqlQuery = "CALL get_DropDownMenuComplete('alloy', '";
+        sqlQuery.append(fieldName).append("')"); //Se utiliza como apoyo
+        //qDebug() << sqlQuery;
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            aleacionListCompleta.append(result.value(0).toString()); //all values including nulls
+        }
         emit aleacionListChanged();
         //Resetear la selección en los comboBoxes Serie y Aleación
         this->uncheckAllValues("serie");
