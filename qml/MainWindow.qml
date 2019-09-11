@@ -61,6 +61,7 @@ ApplicationWindow {
     //SIGNALS
     //SLOTS
     function onCloseQmlInstance() {
+        //No se utiliza
         console.log("Se ha llamado a onCloseQmlInstance desde MainWindow.qml")
         close()
     }

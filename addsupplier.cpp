@@ -21,9 +21,8 @@ void AddSupplier::createComponent(void)
         engine = new QQmlApplicationEngine;
         engine->load(QUrl(QStringLiteral("qrc:/qml/NewProveedor.qml")));
 
+        //Esto es para hacernos el guay, podriamos llamar directamente al metodo
         connect(uniqueInstance, &AddSupplier::relatedFieldUpdated, uniqueInstance, &AddSupplier::onRelatedFieldUpdated);
-        connect(engine->rootObjects().value(AddSupplier::typeId), SIGNAL(closeQmlInstance()), uniqueInstance, SLOT(onCloseQmlInstance()));
-
 
         /* DEPRECATED:
          * Hemos encontrado otras maneras + sencillas, pero lo dejo pues explica como conectar los signals/slots
@@ -1018,15 +1017,12 @@ void AddSupplier::onCancelarButton(void)
 {
     PRINT_FUNCTION_NAME
 
-    //Opción #1: Eliminar el Objeto
-    delete uniqueInstance;
+    //Paso #1: Cerrar QML Windows
+    emit this->closingQmlInstance(); //trow in C++, catcher in QML
 
-    /*Opción #2: Resetear todas las variables y los campos del formulario
-    this->resetFields("empresa");
-    this->resetFields("contactos");
-    this->resetFields("productos");
-    emit this->closeQmlInstance(); //trow in C++, catcher in QML
-    reset los xxxList para que los comboBoxes no dupliquen sus campos tras cerrar y volver a abrir NewProveedor.qml */
+    //Paso #2: Eliminar el Objeto: no cierra el QML y al volver a darle a Cancelar
+    //intenta eliminar un puntero que ya no existe --> CRASH
+    delete uniqueInstance;
 }
 void AddSupplier::onGuardarButton(QString tab)
 {
@@ -1083,9 +1079,12 @@ void AddSupplier::onRelatedFieldUpdated(QString fieldName)
         this->uncheckAllValues("aleacion");
     }
 }
-void AddSupplier::onCloseQmlInstance()
+void AddSupplier::onCloseQmlInstance(void)
 {
-    this->onCancelarButton();
+    //NewProveedor.qml se va a cerrar, esto es solo x si queremos hacer algo antes del cierre
+    //qDebug() << "Se ha llamado a C++ desde QML - NewProveedor X button on Windows";
+    //Lo dejamos como ejemplo de llamada a SLOT en C++ desde signal en QML
+    PRINT_FUNCTION_NAME
 }
 
 //SETTERS & GETTERS

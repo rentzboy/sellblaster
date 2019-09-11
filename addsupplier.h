@@ -121,7 +121,7 @@ private:
 
 signals:
     //Connect signals
-    void closeQmlInstance(void);
+    void closingQmlInstance(void);
     void relatedFieldUpdated(QString fieldName);
     //Notify signals
     void actividadListChanged(void);

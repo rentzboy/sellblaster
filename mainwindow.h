@@ -17,7 +17,7 @@ class MainWindow : public QQuickView
 public:
     MainWindow(const MainWindow&) = delete;
     MainWindow& operator =(const MainWindow&) = delete;
-    ~MainWindow() override = default;
+    ~MainWindow();
     static void createComponent(void);
 
     static bool executeForwardSql(const QString &sqlQuery, const QString &connectionName);

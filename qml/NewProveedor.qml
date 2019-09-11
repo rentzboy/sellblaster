@@ -20,23 +20,14 @@ Window {
     BackgroundZ1 {
     }
 
-    //Opcion #1: CAlling C++ signal connect()
-    signal closeQmlInstance()
-    onClosing: closeQmlInstance()
-
-    /* Opcion #2: Calling C++ signal from QML
-    En este caso NO funciona por que hay un bug en Qt con el signal onClosing de Window
+    //Calling QML method from C++ signal using standard syntax (onSignalName)
+    //No se puede conectar directamente un signal de C++ a un handler en QML para los C++ Singleton (Bug)
     Connections {
         target: SupplierType
-        onClosing: onCloseQmlInstance()
-    } */
-
-    //JS
-    function onCloseQmlInstance() {
-        console.log("Se ha llamado a onCloseQmlInstance() desde NewProveedor.qml")
-        SupplierType.onCancelarButton()
+        onClosingQmlInstance: close()
     }
 
+    //JS
     Component.onCompleted: function setWindowPosition() {
         if (MainWindowType.windowSize.width > minimumWidth)
             x = ((MainWindowType.windowSize.width - minimumWidth) / 2)

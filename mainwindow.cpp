@@ -27,6 +27,14 @@ void MainWindow::createComponent(void)
         //Connect QML to C++ Signals/Slots
     }
 }
+MainWindow::~MainWindow()
+{
+    PRINT_FUNCTION_NAME
+
+    delete uniqueInstance;
+    uniqueInstance = Q_NULLPTR;
+
+}
 bool MainWindow::executeForwardSql(const QString &sqlQuery, const QString &connectionName)
 {
     //Execute SQL query without retrieving any values
