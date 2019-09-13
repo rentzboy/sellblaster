@@ -61,7 +61,7 @@ public slots:
     void onCancelarButton(void);
     void onGuardarButton(QString tab);
     void onRelatedFieldUpdated(QString fieldName);
-    void onCloseQmlInstance(void);
+    void deleteUniqueInstance(void);
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 private:
@@ -100,6 +100,7 @@ private:
     QStringList serieIndexList;
     QStringList serieSelectionList;
     QStringList aleacionList;
+    QStringList aleacionListMaterial;
     QStringList aleacionListCompleta;
     QStringList aleacionSelectionList;
     QStringList templeList;

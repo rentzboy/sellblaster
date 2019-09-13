@@ -15,10 +15,11 @@ Window {
     minimumHeight: 550 //menor que MainWindow
     title: qsTr("Nuevo proveedor")
 
-
-
     BackgroundZ1 {
     }
+
+    //Cuando se cierra la ventana desde el X button
+    onClosing: SupplierType.deleteUniqueInstance()
 
     //Calling QML method from C++ signal using standard syntax (onSignalName)
     //No se puede conectar directamente un signal de C++ a un handler en QML para los C++ Singleton (Bug)

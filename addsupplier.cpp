@@ -206,8 +206,7 @@ AddSupplier::~AddSupplier()
 {
     PRINT_FUNCTION_NAME
 
-    //Importante
-    uniqueInstance = Q_NULLPTR;
+    uniqueInstance = Q_NULLPTR; //importante
 }
 
 //PRIVATE MEMBERS
@@ -240,9 +239,7 @@ void AddSupplier::fillRelatedComboCheckBoxFromDb(QString)
     aleacionList.clear();
     serieIndexList.clear();
     if(serieSelectionList.isEmpty())
-    {
-        aleacionList = aleacionListCompleta;
-    }
+        aleacionList = aleacionListMaterial;
     else
     {
         for (auto itr : serieSelectionList)
@@ -319,6 +316,7 @@ void AddSupplier::fillRelatedComboBoxFromDb(QString comboBox)
         {
             aleacionList.append(result.value(0).toString());
         }
+        aleacionListMaterial = aleacionList;
         emit aleacionListChanged();
         //qDebug() << "aleacionList: " << aleacionList;
 
@@ -745,10 +743,10 @@ void AddSupplier::resetComboBox(QString fieldName)
 //PUBLIC SLOTS
 bool AddSupplier::onAceptarButton(QString tab)
 {
-//    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
-//    qDebug() << "aleacionList: " << aleacionList;
-//    qDebug() << "aleacionSelectionList: " << aleacionSelectionList;
-//    qDebug() << "aleacionListCompleta: " << aleacionListCompleta;
+    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
+    qDebug() << "aleacionList: " << aleacionList;
+    qDebug() << "aleacionSelectionList: " << aleacionSelectionList;
+    qDebug() << "aleacionListCompleta: " << aleacionListCompleta;
 
     if(tab == "empresa")
     {
@@ -942,11 +940,11 @@ bool AddSupplier::onAceptarButton(QString tab)
         .append(productoTabField.value("diametroExtMax").toString()).append(");"); //⌀exterior max (tubos)
         qDebug() << sqlQuery;
 
-        if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
-        {
-            resetFields(tab);
-            return EXIT_SUCCESS;
-        }
+//        if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
+//        {
+//            resetFields(tab);
+//            return EXIT_SUCCESS;
+//        }
         return EXIT_FAILURE;
     }
     else if (tab == "servicio")
@@ -1016,18 +1014,17 @@ bool AddSupplier::onAceptarButton(QString tab)
 void AddSupplier::onCancelarButton(void)
 {
     PRINT_FUNCTION_NAME
-
-    //Paso #1: Cerrar QML Windows
     emit this->closingQmlInstance(); //trow in C++, catcher in QML
-
-    //Paso #2: Eliminar el Objeto: no cierra el QML y al volver a darle a Cancelar
-    //intenta eliminar un puntero que ya no existe --> CRASH
-    delete uniqueInstance;
 }
 void AddSupplier::onGuardarButton(QString tab)
 {
     if(this->onAceptarButton(tab) == EXIT_SUCCESS)
         this->onCancelarButton();
+}
+void AddSupplier::deleteUniqueInstance(void)
+{
+    PRINT_FUNCTION_NAME
+    delete uniqueInstance;
 }
 void AddSupplier::onRelatedFieldUpdated(QString fieldName)
 {
@@ -1052,39 +1049,40 @@ void AddSupplier::onRelatedFieldUpdated(QString fieldName)
         fillRelatedComboCheckBoxFromDb(fieldName);
     else if(fieldName == "aisi" || fieldName == "werkstoff") //RadioButton
     {
-        this->resetComboBox("material");
-        aleacionListCompleta.clear();
-        aleacionRadioButton = fieldName;
-
-        QSqlQuery result;
-        QString sqlQuery = "CALL get_DropDownMenu('alloy', '";
-        sqlQuery.append(fieldName).append("')"); //Se utiliza como apoyo
-        //qDebug() << sqlQuery;
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            aleacionList.append(result.value(0).toString()); //only values to show in the comboBox
-        }
-        sqlQuery = "CALL get_DropDownMenuComplete('alloy', '";
-        sqlQuery.append(fieldName).append("')"); //Se utiliza como apoyo
-        //qDebug() << sqlQuery;
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            aleacionListCompleta.append(result.value(0).toString()); //all values including nulls
-        }
-        emit aleacionListChanged();
         //Resetear la selección en los comboBoxes Serie y Aleación
         this->uncheckAllValues("serie");
         this->uncheckAllValues("aleacion");
+
+        aleacionList.clear();
+        aleacionListCompleta.clear();
+        aleacionRadioButton = fieldName;
+
+        QString value = productoTabField.value("material").toString();
+        QString idMaterial = QString::number(materialList.indexOf(value) + 1);
+        QSqlQuery result;
+        QString sqlQuery;
+
+        if(!value.isEmpty())
+        {
+            sqlQuery = "CALL get_DependentDropDownMenu('alloy', '";
+            sqlQuery.append(aleacionRadioButton).append("', 'id_metal', '").append(idMaterial).append("')");
+            MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+            while(result.next())
+            {
+                aleacionList.append(result.value(0).toString());
+            }
+            emit aleacionListChanged();
+
+            sqlQuery = "CALL get_DropDownMenuComplete('alloy', '";
+            sqlQuery.append(fieldName).append("')"); //Se utiliza como apoyo
+            //qDebug() << sqlQuery;
+            MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+            while(result.next())
+            {
+                aleacionListCompleta.append(result.value(0).toString()); //all values including nulls
+            }
+        }
     }
-}
-void AddSupplier::onCloseQmlInstance(void)
-{
-    //NewProveedor.qml se va a cerrar, esto es solo x si queremos hacer algo antes del cierre
-    //qDebug() << "Se ha llamado a C++ desde QML - NewProveedor X button on Windows";
-    //Lo dejamos como ejemplo de llamada a SLOT en C++ desde signal en QML
-    PRINT_FUNCTION_NAME
 }
 
 //SETTERS & GETTERS
