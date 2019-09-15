@@ -10,7 +10,7 @@ AddSupplier* AddSupplier::uniqueInstance = Q_NULLPTR;
 int AddSupplier::typeId = 0;
 
 //PUBLIC MEMBERS
-void AddSupplier::createComponent(void)
+AddSupplier* AddSupplier::createComponent(void)
 {
     if(uniqueInstance == Q_NULLPTR)
     {
@@ -40,11 +40,270 @@ void AddSupplier::createComponent(void)
 
         qDebug() << "***** FINAL CREATE_COMPONENT ADDSUPPLIER *****";
     }
+    return uniqueInstance;
+}
+void AddSupplier::fillRelatedComboCheckBoxFromDb(QString)
+{
+    //Unicamente se llama al modificar el comboBox SERIE
+    //El comboBox dependiente es el de ALEACION
+    //por lo que el parámetero de la función NO es necesario.
+
+    PRINT_FUNCTION_NAME
+
+    //Aleación
+    aleacionList.clear();
+    serieIndexList.clear();
+    if(serieSelectionList.isEmpty())
+    {
+        aleacionList = aleacionListMaterial; //aleacionList=f(material) --> empty if not material selected
+        QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("aleacion");
+        QQmlProperty::write(object, "model", aleacionList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+    }
     else
     {
-        //Load QML component
-        engine = new QQmlApplicationEngine;
-        engine->load(QUrl(QStringLiteral("qrc:/qml/NewProveedor.qml")));
+        for (auto itr : serieSelectionList)
+            serieIndexList.append(QString::number(serieList.key(itr)));
+        QString indexList = serieIndexList.join(", ");
+
+        QSqlQuery result;
+        QString sqlQuery = "CALL get_AlloyDropDownMenu(";
+        sqlQuery.append("'alloy', '").append(aleacionRadioButton).append("', 'id_serie', '").append(indexList).append("');");
+        //qDebug() << sqlQuery;
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            aleacionList.insert(result.value(0).toInt(), result.value(1));
+        }
+        //qDebug() << "aleacionList: " << aleacionList;
+        QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("aleacion");
+        QQmlProperty::write(object, "model", aleacionList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+    }
+}
+void AddSupplier::fillRelatedComboBoxFromDb(QString comboBox)
+{
+    //Actualiza los comboBoxes dependientes en ProductosTab
+    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << comboBox << ")";
+    QObject *object;
+    QSqlQuery result;
+    QString sqlQuery;
+
+    try
+    {
+        if(comboBox == "tipo")
+        {
+            //Sanitation check before SQL (en tipo no hace falta, pero quitamos calls a la DB
+            QString tipo = productoTabField.value("tipo").toString();
+            if(tipo.isEmpty())
+                throw(QObject::tr("LLamada a la database sin definir el campo tipo !"));
+
+            if(tipo == "Bobina" || tipo == "Chapa" || tipo == "Plancha")
+            {
+                //Formato Chapa-Plancha / Ancho-Bobina (comparten el mismo)
+                formatoList.clear();
+                sqlQuery = "CALL get_DependentDropDownMenu(";
+                sqlQuery.append("'format', 'format', 'id_type', ").append(QString::number(tipoList.key(tipo))).append(");");
+                //qDebug() << sqlQuery;
+                MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+                while(result.next())
+                {
+                    formatoList.insert(result.value(0).toInt(), result.value(1));
+                }
+
+                if(tipo == "Bobina")
+                    object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("anchoBobina");
+                else
+                    object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("formatoChapa");
+
+                QQmlProperty::write(object, "model", formatoList.values());
+                QQmlProperty::write(object, "currentIndex", -1);
+            }
+            //else qDebug() << "Implementation for Bar, Discs, ... PENDING";
+        }
+        else if(comboBox == "material")
+        {
+            //Sanitation check before SQL query -no deberia entrar
+            QString material = productoTabField.value("material").toString();
+            if(material.isEmpty())
+                throw(QObject::tr("LLamada a la database sin definir el campo material !"));
+
+            //SERIE
+            serieList.clear();
+            sqlQuery = "CALL get_DependentDropDownMenu(";
+            sqlQuery.append("'serie', 'serie', 'id_metal', ").append(QString::number(materialList.key(material))).append(");");
+            //qDebug() << sqlQuery;
+            MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+            while(result.next())
+            {
+                serieList.insert(result.value(0).toInt(), result.value(1));
+            }
+            //qDebug() << "serieList: " << serieList;
+            object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("serie");
+            QQmlProperty::write(object, "model", serieList.values());
+            QQmlProperty::write(object, "currentIndex", -1);
+
+            //ALEACION
+            aleacionList.clear();
+            sqlQuery = "CALL get_DependentDropDownMenu('alloy', '";
+            sqlQuery.append(aleacionRadioButton).append("', 'id_metal', ").append(QString::number(materialList.key(material))).append(");");
+            qDebug() << sqlQuery;
+            MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+            while(result.next())
+            {
+                aleacionList.insert(result.value(0).toInt(), result.value(1));
+            }
+            aleacionListMaterial = aleacionList; //save call to DB, aleacion = f(material)
+            //qDebug() << "aleacionList: " << aleacionList;
+            object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("aleacion");
+            QQmlProperty::write(object, "model", aleacionList.values());
+            QQmlProperty::write(object, "currentIndex", -1);
+
+            //TEMPLE
+            templeList.clear();
+            sqlQuery = "CALL get_DependentDropDownMenu(";
+            sqlQuery.append("'temper', 'temper', 'id_metal', ").append(QString::number(materialList.key(material))).append(");");
+            MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+            while(result.next())
+            {
+                templeList.insert(result.value(0).toInt(), result.value(1));
+            }
+            //qDebug() << "templeList: " << templeList;
+            object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("temple");
+            QQmlProperty::write(object, "model", templeList.values());
+            QQmlProperty::write(object, "currentIndex", -1);
+
+            //ACABADO
+            acabadoList.clear();
+            sqlQuery = "CALL get_DependentDropDownMenu(";
+            sqlQuery.append("'finition', 'finition', 'id_metal', ").append(QString::number(materialList.key(material))).append(");");
+            MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+            while(result.next())
+            {
+                acabadoList.insert(result.value(0).toInt(), result.value(1));
+            }
+            //qDebug() << "acabadoList: " << acabadoList;
+            object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("acabado");
+            QQmlProperty::write(object, "model", acabadoList.values());
+            QQmlProperty::write(object, "currentIndex", -1);
+        }
+    }
+    catch (const QString &e)
+    {
+        EXCEPTION_HANDLER
+    }
+}
+void AddSupplier::fillComboBoxesFromDb(QString tab)
+{
+    //Unicamente se llama una vez para cada pestaña -empresa, contactos, productos-
+    //Los resultados NO se actualizan en f(selección usuario)
+    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
+
+    QSqlQuery result; //sirven para todas las consultas
+    QObject *object;
+    QString sqlQuery;
+
+    if(tab == "empresa") //Se carga desde Mainwindow.cpp (no me gusta, pero no veo otra opción mejor
+    {
+        sqlQuery = "CALL get_DropDownMenu('country', 'country')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            paisList.insert(result.value(0).toInt(), result.value(1));
+        }
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("pais");
+        QQmlProperty::write(object, "model", paisList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('activity', 'activity')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            actividadList.insert(result.value(0).toInt(), result.value(1));
+        }
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("actividad");
+        QQmlProperty::write(object, "model", actividadList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('payment', 'payment')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            formaPagoList.insert(result.value(0).toInt(), result.value(1));
+        }
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("formaPago");
+        QQmlProperty::write(object, "model", formaPagoList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+    }
+    else if (tab == "contactos") //Se llama desde JS, al actualizarse el TabBar
+    {
+        sqlQuery = "CALL get_DropDownMenu('department', 'department')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            areaList.insert(result.value(0).toInt(), result.value(1));
+        }
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("area");
+        QQmlProperty::write(object, "model", areaList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('position', 'position')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            puestoList.insert(result.value(0).toInt(), result.value(1));
+        }
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("puesto");
+        QQmlProperty::write(object, "model", puestoList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+    }
+    else if(tab == "productos") //Se llama desde JS, al actualizarse el TabBar
+    {
+        QString sqlQuery = "CALL get_DropDownMenu('type', 'type')"; //Tipo
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            tipoList.insert(result.value(0).toInt(), result.value(1));
+        }
+        //qDebug() << "tipoList. " << tipoList;
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("tipo");
+        QQmlProperty::write(object, "model", tipoList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('metal', 'metal')"; //Material
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            materialList.insert(result.value(0).toInt(), result.value(1));
+        }
+        //qDebug() << "materialList. " << materialList;
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("material");
+        QQmlProperty::write(object, "model", materialList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('inner_diameter', 'inner_diameter')"; //I.D.
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            idBobinaList.insert(result.value(0).toInt(), result.value(1));
+        }
+        //qDebug() << "idBobinaList. " << idBobinaList;
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("diametroIntBobina");
+        QQmlProperty::write(object, "model", idBobinaList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+    }
+    else if (tab == "servicios") //Se llama desde JS, al actualizarse el TabBar
+    {
+        sqlQuery = "CALL get_DropDownMenu('servicing', 'servicing')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            servicioList.insert(result.value(0).toInt(), result.value(1));
+        }
+        //qDebug() << "servicioList. " << servicioList;
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("servicio");
+        QQmlProperty::write(object, "model", servicioList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
     }
 }
 void AddSupplier::textValueToBackEnd(QString tab, QString fieldName, QString text)
@@ -150,56 +409,80 @@ void AddSupplier::toogleAllValues(QString comboBox)
 {
     //Toogle all checkboxes for the ComboBox's parameter -se activa mediante la key F12-
     bool tmp = toogleValue.value(comboBox).toBool();
-    toogleValue.insert(comboBox, !tmp);
+    toogleValue.insert(comboBox, !tmp); //swith value true <-> false
     emit toogleValueChanged();
+
+    QMap<int, QString>::const_iterator itr;
 
     if(comboBox == "serie")
     {
         if(tmp) //all checked --> change to unchecked
             serieSelectionList.clear();
         else
-            serieSelectionList = serieList;
+        {
+            for (QMap<int, QVariant>::const_iterator itr = serieList.cbegin(), end = serieList.cend(); itr != end; ++itr)
+                serieSelectionList.append(itr.value().toString());
+        }
     }
     else if(comboBox == "aleacion")
-    {        if(tmp) //all checked
+    {
+        if(tmp) //all checked
             aleacionSelectionList.clear();
         else
-            aleacionSelectionList = aleacionList;
+        {
+            for (QMap<int, QVariant>::const_iterator itr = aleacionList.cbegin(), end = aleacionList.cend(); itr != end; ++itr)
+                aleacionSelectionList.append(itr.value().toString());
+        }
     }
     else if(comboBox == "temple")
     {
         if(tmp) //all checked
             templeSelectionList.clear();
         else
-            templeSelectionList = templeList;
+        {
+            for (QMap<int, QVariant>::const_iterator itr = templeList.cbegin(), end = templeList.cend(); itr != end; ++itr)
+                templeSelectionList.append(itr.value().toString());
+        }
     }
     else if(comboBox == "acabado")
     {
         if(tmp) //all checked
             acabadoSelectionList.clear();
         else
-            acabadoSelectionList = acabadoList;
+        {
+            for (QMap<int, QVariant>::const_iterator itr = acabadoList.cbegin(), end = acabadoList.cend(); itr != end; ++itr)
+                acabadoSelectionList.append(itr.value().toString());
+        }
     }
     else if(comboBox == "anchoBobina")
     {
         if(tmp) //all checked
             formatoBobinaSelectionList.clear();
         else
-            formatoBobinaSelectionList = formatoList;
+        {
+            for (QMap<int, QVariant>::const_iterator itr = formatoList.cbegin(), end = formatoList.cend(); itr != end; ++itr)
+                formatoBobinaSelectionList.append(itr.value().toString());
+        }
     }
     else if(comboBox == "diametroIntBobina")
     {
         if(tmp) //all checked
             idBobinaSelectionList.clear();
         else
-            idBobinaSelectionList = idBobinaList;
+        {
+            for (QMap<int, QVariant>::const_iterator itr = idBobinaList.cbegin(), end = idBobinaList.cend(); itr != end; ++itr)
+                idBobinaSelectionList.append(itr.value().toString());
+        }
     }
     else if(comboBox == "formatoChapa")
     {
         if(tmp) //all checked
             formatoChapaSelectionList.clear();
         else
-            formatoChapaSelectionList = formatoList;
+        {
+            for (QMap<int, QVariant>::const_iterator itr = formatoList.cbegin(), end = formatoList.cend(); itr != end; ++itr)
+                formatoChapaSelectionList.append(itr.value().toString());
+        }
     }
 }
 AddSupplier::~AddSupplier()
@@ -210,13 +493,7 @@ AddSupplier::~AddSupplier()
 }
 
 //PRIVATE MEMBERS
-AddSupplier::AddSupplier(QObject *parent) : QObject(parent) //private singleton constructor
-{
-    this->fillComboBoxesFromDb("empresa");
-    //fill ComboBox with checkboxes
-    //this->fillComboBoxWithCheckBoxFromDb();
-    //PENDING
-}
+AddSupplier::AddSupplier(QObject *parent) : QObject(parent){} //private singleton constructor
 void AddSupplier::registerSingleton(void)
 {
     qmlRegisterSingletonType<AddSupplier>("SupplierClass", 1, 0, "SupplierType",
@@ -225,248 +502,6 @@ void AddSupplier::registerSingleton(void)
         Q_UNUSED(engine)
         return uniqueInstance;
             });
-}
-void AddSupplier::fillRelatedComboCheckBoxFromDb(QString)
-{
-    //Unicamente se llama al modificar el comboBox SERIE
-    //El comboBox dependiente es el de ALEACION
-    //por lo que el parámetero de la función NO es necesario.
-
-    QSqlQuery result;
-    QString sqlQuery;
-
-    //Aleación
-    aleacionList.clear();
-    serieIndexList.clear();
-    if(serieSelectionList.isEmpty())
-        aleacionList = aleacionListMaterial;
-    else
-    {
-        for (auto itr : serieSelectionList)
-        {
-            serieIndexList.append(QString::number(serieListCompleta.indexOf(itr) + 1)); //+1 from comboBox index to idTableName
-        }
-        QString indexList = serieIndexList.join(", ");
-        //qDebug() << "serieIndexList: " << serieIndexList;
-
-        sqlQuery = "CALL get_AlloyDropDownMenu(";
-        sqlQuery.append("'alloy', '").append(aleacionRadioButton).append("', 'id_serie', '").append(indexList).append("');");
-        //qDebug() << sqlQuery;
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            aleacionList.append(result.value(0).toString());
-        }
-    }
-    emit aleacionListChanged();
-    //qDebug() << "aleacionList: " << aleacionList;
-}
-void AddSupplier::fillRelatedComboBoxFromDb(QString comboBox)
-{   
-    //Actualiza los comboBoxes dependientes
-    QString value;
-    QSqlQuery result;
-    QString sqlQuery;
-    QString idType, idMaterial;
-
-    if(comboBox == "tipo")
-    {
-        value = productoTabField.value("tipo").toString();
-
-        if(value == "Bobina" || value == "Chapa" || value == "Plancha")
-        {
-            //Formato Chapa-Plancha / Ancho-Bobina (comparten el mismo)
-            formatoList.clear();
-            idType = QString::number(tipoList.indexOf(value) + 1);
-            sqlQuery = "CALL get_DependentDropDownMenu(";
-            sqlQuery.append("'format', 'format', 'id_type', ").append(idType).append(");");
-            MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-            while(result.next())
-            {
-                formatoList.append(result.value(0).toString());
-            }
-            emit formatoListChanged();
-            //qDebug() << "formatoList: " << formatoList;
-        }
-    }
-    else if(comboBox == "material")
-    {
-        value = productoTabField.value("material").toString();
-        idMaterial = QString::number(materialList.indexOf(value) + 1);
-
-        //SERIE
-        serieList.clear();
-        sqlQuery = "CALL get_DependentDropDownMenu(";
-        sqlQuery.append("'serie', 'serie', 'id_metal', ").append(idMaterial).append(");");
-        //qDebug() << "sqlQuery for serieList" << sqlQuery;
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            serieList.append(result.value(0).toString());
-        }
-        emit serieListChanged();
-        //qDebug() << "serieList: " << serieList;
-
-        //ALEACION
-        aleacionList.clear();
-        sqlQuery = "CALL get_DependentDropDownMenu('alloy', '";
-        sqlQuery.append(aleacionRadioButton).append("', 'id_metal', ").append(idMaterial).append(");");
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            aleacionList.append(result.value(0).toString());
-        }
-        aleacionListMaterial = aleacionList;
-        emit aleacionListChanged();
-        //qDebug() << "aleacionList: " << aleacionList;
-
-        //TEMPLE
-        templeList.clear();
-        sqlQuery = "CALL get_DependentDropDownMenu(";
-        sqlQuery.append("'temper', 'temper', 'id_metal', ").append(idMaterial).append(");");
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            templeList.append(result.value(0).toString());
-        }
-        emit templeListChanged();
-        //qDebug() << "templeList: " << templeList;
-
-        //ACABADO
-        acabadoList.clear();
-        sqlQuery = "CALL get_DependentDropDownMenu(";
-        sqlQuery.append("'finition', 'finition', 'id_metal', ").append(idMaterial).append(");");
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            acabadoList.append(result.value(0).toString());
-        }
-        emit acabadoListChanged();
-        //qDebug() << "acabadoList: " << acabadoList;
-    }
-}
-void AddSupplier::fillComboBoxesFromDb(QString tab)
-{
-    //Unicamente se llama una vez para cada pestaña -empresa, contactos, productos-
-    //Los resultados NO se actualizan en f(selección usuario)
-    //qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
-
-    QSqlQuery result; //sirve para todas las consultas
-
-    if(tab == "empresa") //Se carga desde el constructor
-    {
-        QString sqlQuery = "CALL get_DropDownMenu('country', 'country')";
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            paisList.append(result.value(0).toString());
-        }
-        emit paisListChanged(); //Para "empresa" no hace falta pues al crearse el comboBox ya tenemos listo el modelo con los datos
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('activity', 'activity')";
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            actividadList.append(result.value(0).toString());
-        }
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('payment', 'payment')";
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            formaPagoList.append(result.value(0).toString());
-        }
-    }
-    else if (tab == "contactos") //Se llama desde JS, al actualizarse el TabBar
-    {
-        QString sqlQuery = "CALL get_DropDownMenu('department', 'department')";
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            areaList.append(result.value(0).toString());
-        }
-        emit areaListChanged();
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('position', 'position')";
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            puestoList.append(result.value(0).toString());
-        }
-        emit puestoListChanged();
-    }
-    else if(tab == "productos") //Se llama desde JS, al actualizarse el TabBar
-    {
-        QString sqlQuery = "CALL get_DropDownMenu('type', 'type')"; //Tipo
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            tipoList.append(result.value(0).toString());
-        }
-        emit tipoListChanged();
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('metal', 'metal')"; //Material
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            materialList.append(result.value(0).toString());
-        }
-        emit materialListChanged();
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('serie', 'serie')"; //Serie -se utiliza como apoyo-
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            serieListCompleta.append(result.value(0).toString());
-        }
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenuComplete('alloy', 'werkstoff')"; //Alloy -se utiliza como apoyo-
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            aleacionListCompleta.append(result.value(0).toString());
-        }
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenuComplete('temper', 'temper')"; //Temple -se utiliza como apoyo-
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            templeListCompleta.append(result.value(0).toString());
-        }
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenuComplete('finition', 'finition')"; //Acabado -se utiliza como apoyo-
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            acabadoListCompleta.append(result.value(0).toString());
-        }
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenuComplete('format', 'format')"; //Formato -se utiliza como apoyo-
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            formatoListCompleta.append(result.value(0).toString());
-        }
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('inner_diameter', 'inner_diameter')"; //I.D.
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            idBobinaList.append(result.value(0).toString());
-        }
-        emit idBobinaListChanged();
-    }
-    else if (tab == "servicios") //Se llama desde JS, al actualizarse el TabBar
-    {
-        QString sqlQuery = "CALL get_DropDownMenu('servicing', 'servicing')";
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            servicioList.append(result.value(0).toString());
-        }
-        emit servicioListChanged();
-        //qDebug() << "servicioList. " << servicioList;
-    }
 }
 bool AddSupplier::sanitationCheck(QString tab)
 {
@@ -717,7 +752,12 @@ void AddSupplier::resetFields(QString tab)
         //Reset comboBoxes
         this->resetComboBox("tipo");
         this->resetComboBox("material");
-        //Uncheck comboBoxList
+        //Quitar el filtro x serie
+        aleacionList.clear();
+        QObject* object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("aleacion");
+        QQmlProperty::write(object, "model", aleacionList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+
         this->uncheckAllValues("serie");
         this->uncheckAllValues("aleacion");
         this->uncheckAllValues("temple");
@@ -743,10 +783,9 @@ void AddSupplier::resetComboBox(QString fieldName)
 //PUBLIC SLOTS
 bool AddSupplier::onAceptarButton(QString tab)
 {
-    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
-    qDebug() << "aleacionList: " << aleacionList;
-    qDebug() << "aleacionSelectionList: " << aleacionSelectionList;
-    qDebug() << "aleacionListCompleta: " << aleacionListCompleta;
+//    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
+//    qDebug() << "aleacionList: " << aleacionList;
+//    qDebug() << "aleacionSelectionList: " << aleacionSelectionList;
 
     if(tab == "empresa")
     {
@@ -762,9 +801,9 @@ bool AddSupplier::onAceptarButton(QString tab)
         //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
         //El index de xxxList empieza en 0, pero los registros de la DB en 1 => +1
         //qDebug() << "Actividad Checkbox: " << empresaTabField.value("actividad").toString();
-        QString idActividad = QString::number (actividadList.indexOf(empresaTabField.value("actividad").toString()) +1);
-        QString idPais = QString::number (paisList.indexOf(empresaTabField.value("pais").toString()) +1);
-        QString idFormaPago = QString::number (formaPagoList.indexOf(empresaTabField.value("formaPago").toString()) +1);
+        QString idActividad = QString::number(actividadList.key(empresaTabField.value("actividad").toString()));
+        QString idPais = QString::number(paisList.key(empresaTabField.value("pais").toString()));
+        QString idFormaPago = QString::number(formaPagoList.key(empresaTabField.value("formaPago").toString()));
 
         //OPTION #1: Stored Procedures
         QString sqlQuery = "CALL insert_Supplier(";
@@ -824,8 +863,8 @@ bool AddSupplier::onAceptarButton(QString tab)
         }
 
         //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
-        QString idArea = QString::number (areaList.indexOf(contactoTabField.value("area").toString()) + 1);
-        QString idPuesto = QString::number (puestoList.indexOf(contactoTabField.value("puesto").toString()) + 1);
+        QString idArea = QString::number(areaList.key(contactoTabField.value("area").toString()));
+        QString idPuesto = QString::number(puestoList.key(contactoTabField.value("puesto").toString()));
 
         //OPTION #1: Stored Procedures
         QString sqlQuery = "CALL insert_Contact(";
@@ -859,17 +898,17 @@ bool AddSupplier::onAceptarButton(QString tab)
         }
 
         //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
-        QString idTipo = QString::number (tipoList.indexOf(productoTabField.value("tipo").toString()) + 1);
-        QString idMaterial = QString::number (materialList.indexOf(productoTabField.value("material").toString()) + 1);
+        QString idTipo = QString::number(tipoList.key(productoTabField.value("tipo").toString()));
+        QString idMaterial = QString::number(materialList.key(productoTabField.value("material").toString()));
 
        //Retrieve indexes from ComboCheckBoxes
         QString idAleacion, idTemple, idAcabado, idDiametroInterior, idAncho, idLargo;
         for (auto aleacion : aleacionSelectionList)
-            idAleacion.append(QString::number (aleacionListCompleta.indexOf(aleacion) + 1)).append(","); //la QString tiene que terminar con ','
+            idAleacion.append(QString::number(aleacionList.key(aleacion))).append(","); //la QString tiene que terminar con ','
          for(auto temple : templeSelectionList)
-             idTemple.append(QString::number (templeListCompleta.indexOf(temple) + 1)).append(",");
+             idTemple.append(QString::number(templeList.key(temple))).append(",");
        for(auto acabado : acabadoSelectionList)
-           idAcabado.append(QString::number (acabadoListCompleta.indexOf(acabado) + 1)).append(",");
+           idAcabado.append(QString::number(acabadoList.key(acabado))).append(",");
 
        if(productoTabField.value("tipo").toString() == "Bobina")
        {
@@ -878,7 +917,7 @@ bool AddSupplier::onAceptarButton(QString tab)
                idAncho.append(formato).append(",");
 
            for(auto diametroInterior : idBobinaSelectionList)
-                idDiametroInterior.append(QString::number (idBobinaList.indexOf(diametroInterior) + 1)).append((","));
+                idDiametroInterior.append(QString::number(idBobinaList.key(diametroInterior))).append((","));
        }
 
        else if (productoTabField.value("tipo").toString() == "Chapa" || productoTabField.value("tipo").toString() == "Plancha")
@@ -940,11 +979,11 @@ bool AddSupplier::onAceptarButton(QString tab)
         .append(productoTabField.value("diametroExtMax").toString()).append(");"); //⌀exterior max (tubos)
         qDebug() << sqlQuery;
 
-//        if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
-//        {
-//            resetFields(tab);
-//            return EXIT_SUCCESS;
-//        }
+        if(MainWindow::executeForwardSql(sqlQuery, MAIN_DB_CONNECTION_NAME) == EXIT_SUCCESS)
+        {
+            resetFields(tab);
+            return EXIT_SUCCESS;
+        }
         return EXIT_FAILURE;
     }
     else if (tab == "servicio")
@@ -961,7 +1000,7 @@ bool AddSupplier::onAceptarButton(QString tab)
         //Retrieve indexes from ComboCheckBoxes
          QString idServicio;
          for (auto servicio : servicioSelectionList)
-             idServicio.append(QString::number (servicioList.indexOf(servicio) + 1)).append(","); //OJO: QString termina en ','
+             idServicio.append(QString::number(servicioList.key(servicio))).append(","); //OJO: QString termina en ','
 
         //If EspesorMin is NULL delete register to avoid empty rows in the DB
          QString idEspesorMin, idEspesorMax, idAnchoMin, idAnchoMax;
@@ -1028,6 +1067,8 @@ void AddSupplier::deleteUniqueInstance(void)
 }
 void AddSupplier::onRelatedFieldUpdated(QString fieldName)
 {
+    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << fieldName << ")";
+
     //Se llama desde QML (onRadioButtonClicked) y desde textValueToBackEnd() en C++
     if(fieldName == "tipo")
     {
@@ -1054,33 +1095,24 @@ void AddSupplier::onRelatedFieldUpdated(QString fieldName)
         this->uncheckAllValues("aleacion");
 
         aleacionList.clear();
-        aleacionListCompleta.clear();
         aleacionRadioButton = fieldName;
 
-        QString value = productoTabField.value("material").toString();
-        QString idMaterial = QString::number(materialList.indexOf(value) + 1);
+        QString idMaterial = QString::number(materialList.key(productoTabField.value("material").toString()));
         QSqlQuery result;
-        QString sqlQuery;
 
-        if(!value.isEmpty())
+        if(!idMaterial.isEmpty())
         {
-            sqlQuery = "CALL get_DependentDropDownMenu('alloy', '";
+            QString sqlQuery = "CALL get_DependentDropDownMenu('alloy', '";
             sqlQuery.append(aleacionRadioButton).append("', 'id_metal', '").append(idMaterial).append("')");
             MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
             while(result.next())
             {
-                aleacionList.append(result.value(0).toString());
+                aleacionList.insert(result.value(0).toInt(), result.value(1));
             }
-            emit aleacionListChanged();
-
-            sqlQuery = "CALL get_DropDownMenuComplete('alloy', '";
-            sqlQuery.append(fieldName).append("')"); //Se utiliza como apoyo
-            //qDebug() << sqlQuery;
-            MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-            while(result.next())
-            {
-                aleacionListCompleta.append(result.value(0).toString()); //all values including nulls
-            }
+            QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("aleacion");
+            QQmlProperty::write(object, "model", aleacionList.values());
+            QQmlProperty::write(object, "currentIndex", -1);
+            //emit aleacionListChanged();
         }
     }
 }

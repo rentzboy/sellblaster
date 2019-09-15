@@ -265,7 +265,9 @@ QString MainWindow::get_usernameFromDb(void) //MAIN_DB_TYPE
 //PRIVATE SLOTS
 void MainWindow::onAnadirProveedor(void)
 {
-    AddSupplier::createComponent();
+    //Hack to load comboBoxes from Database
+    QPointer <AddSupplier> ptr = AddSupplier::createComponent();
+    ptr->fillComboBoxesFromDb("empresa");
 }
 void MainWindow::onActionExitTriggered(void)
 {

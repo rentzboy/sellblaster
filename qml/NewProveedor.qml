@@ -19,7 +19,7 @@ Window {
     }
 
     //Cuando se cierra la ventana desde el X button
-    onClosing: SupplierType.deleteUniqueInstance()
+    onClosing: SupplierType.deleteUniqueInstance() //lo marca como error pero funciona OK4
 
     //Calling QML method from C++ signal using standard syntax (onSignalName)
     //No se puede conectar directamente un signal de C++ a un handler en QML para los C++ Singleton (Bug)
@@ -28,8 +28,9 @@ Window {
         onClosingQmlInstance: close()
     }
 
-    //JS
     Component.onCompleted: function setWindowPosition() {
+        //set window position
+        //console.log("Call to ---> setWindowPosition()")
         if (MainWindowType.windowSize.width > minimumWidth)
             x = ((MainWindowType.windowSize.width - minimumWidth) / 2)
                     + MainWindowType.windowPosition.x
@@ -41,6 +42,8 @@ Window {
         else
             y = 0
     }
+
+    //JS
 
     NewProveedorForm {
         id: form
@@ -63,6 +66,7 @@ Window {
                 SupplierType.fillComboBoxesFromDb(tab)
                 contactosTabCounter--
             } else if (productosTabCounter === 1 && tab === "productos") {
+                productosTab.state = "reset" //Sino muestra state=bobina
                 SupplierType.fillComboBoxesFromDb(tab)
                 productosTabCounter--
             } else if (serviciosTabCounter === 1 && tab === "servicios") {
@@ -70,8 +74,6 @@ Window {
                 serviciosTabCounter--
             }
         }
-
-
 
         Keys.onPressed: {
             //Select / Unselect all checkBoxes

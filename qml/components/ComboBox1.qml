@@ -17,7 +17,8 @@ ComboBox {
     Layout.fillWidth: true
     Layout.preferredHeight: 40
 
-    onModelChanged: Supplier.resetComboBoxIndex(supplierTab, objectName)
-    onDisplayTextChanged: Supplier.textValueToBackEnd(supplierTab, objectName, displayText)
+    onActivated: Supplier.textValueToBackEnd(supplierTab, objectName, displayText)
+    //onModelChanged: Supplier.resetComboBoxIndex(supplierTab, objectName)
+    //onDisplayTextChanged: Supplier.textValueToBackEnd(supplierTab, objectName, displayText)
     //Component.onCompleted: Supplier.onComboBoxCompleted()
 }

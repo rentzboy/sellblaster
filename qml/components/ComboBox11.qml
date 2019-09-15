@@ -34,7 +34,7 @@ ComboBox {
             onToggled: Supplier.textListToBackEnd(comboBox11.objectName, text, checked) //OJO: checked es el valor de property
         }
     }
-    onModelChanged: Supplier.resetComboBoxIndex(supplierTab, objectName)
+    //onModelChanged: Supplier.resetComboBoxIndex(supplierTab, objectName)
     //Component.onCompleted: Supplier.onComboBoxCompleted()
 }
 

@@ -22,10 +22,7 @@ EmpresaTabForm {
     textFieldMoq.text: SupplierType.empresaTabField.moq
     textAreaNotasEmpresa.text: SupplierType.empresaTabField.notasEmpresa
 
-    //ComboBoxes
-    comboBoxPais.model: SupplierType.paisList
-    comboBoxActividad.model: SupplierType.actividadList
-    comboBoxFormaPago.model: SupplierType.formaPagoList
+    //ComboBoxes (models loaded in C++)
 
     //Buttons
     buttonAceptar.onClicked: SupplierType.onAceptarButton("empresa")

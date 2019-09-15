@@ -15,6 +15,8 @@ Item {
     property alias empresaTab: empresa
     property alias contactosTab: contactos
     property alias productosTab: productos
+    property alias serviciosTab: servicios
+    property alias certificacionesTab: certificaciones
     visible: true
 
     Pane {
@@ -98,8 +100,6 @@ Item {
         }
     }
 }
-
-
 
 
 

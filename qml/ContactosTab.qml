@@ -23,9 +23,6 @@ ContactosTabForm {
     comboBoxArea.onDisplayTextChanged: SupplierType.contactoTabField.area = comboBoxArea.displayText
     comboBoxPuesto.onDisplayTextChanged: SupplierType.contactoTabField.puesto = comboBoxArea.displayText
 
-    comboBoxArea.model: SupplierType.areaList
-    comboBoxPuesto.model: SupplierType.puestoList
-
     //Buttons
     buttonAceptar.onClicked: SupplierType.onAceptarButton("contacto")
     buttonCancelar.onClicked: SupplierType.onCancelarButton()

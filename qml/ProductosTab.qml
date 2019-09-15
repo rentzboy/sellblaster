@@ -46,17 +46,6 @@ ProductosTabForm {
     gridTextFieldBobina.comboBoxDiametroIntToogleAll: SupplierType.toogleValue.diametroIntBobina
     gridTextFieldChapa.comboBoxFormatoChapaToogleAll: SupplierType.toogleValue.formatoChapa
 
-    comboBoxTipo.model: SupplierType.tipoList
-    comboBoxMaterial.model: SupplierType.materialList
-    comboBoxSerie.model: SupplierType.serieList
-    comboBoxAleacion.model: SupplierType.aleacionList
-    comboBoxTemple.model: SupplierType.templeList
-    comboBoxAcabado.model: SupplierType.acabadoList
-
-    gridTextFieldBobina.comboBoxAnchoBobina.model: SupplierType.formatoList //comparten el mismo
-    gridTextFieldChapa.comboBoxFormatoChapa.model: SupplierType.formatoList //comparten el mismo
-    gridTextFieldBobina.comboBoxDiametroIntBobina.model: SupplierType.idBobinaList
-
     //Buttons
     buttonAceptar.onClicked: SupplierType.onAceptarButton("producto")
     buttonCancelar.onClicked: SupplierType.onCancelarButton()
