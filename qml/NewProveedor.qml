@@ -62,14 +62,14 @@ Window {
             console.log("Se ha llamado a la función onBarIndexChanged(" + tab + ")")
             if (tab === "empresa") {
                 //Se llama desde el constructor
-            } else if (contactosTabCounter === 1 && tab === "contactos") {
+            } else if (contactosTabCounter === 1 && tab === "contacto") {
                 SupplierType.fillComboBoxesFromDb(tab)
                 contactosTabCounter--
-            } else if (productosTabCounter === 1 && tab === "productos") {
+            } else if (productosTabCounter === 1 && tab === "producto") {
                 productosTab.state = "reset" //Sino muestra state=bobina
                 SupplierType.fillComboBoxesFromDb(tab)
                 productosTabCounter--
-            } else if (serviciosTabCounter === 1 && tab === "servicios") {
+            } else if (serviciosTabCounter === 1 && tab === "servicio") {
                 SupplierType.fillComboBoxesFromDb(tab)
                 serviciosTabCounter--
             }
@@ -124,14 +124,15 @@ Window {
                 }
             } else if (event.key === Qt.Key_Return
                        && event.modifiers === Qt.ControlModifier) {
-                console.log("Key logger: Crtl+Enter")
+                //console.log("Key logger: Crtl+Enter")
                 SupplierType.onAceptarButton(bar.currentItem.objectName)
+                console.log("Key logger: " + bar.currentItem.objectName)
             } else if (event.key === Qt.Key_G
                        && event.modifiers === Qt.ControlModifier) {
-                console.log("Key logger: Crtl+G")
+                //console.log("Key logger: Crtl+G")
                 SupplierType.onGuardarButton(bar.currentItem.objectName)
             } else if (event.key === Qt.Key_Escape) {
-                console.log("Key logger: Crtl+Esc")
+                //console.log("Key logger: Esc")
                 SupplierType.onCancelarButton()
             }
         }

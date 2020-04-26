@@ -11,7 +11,7 @@
 #include <memory>
 
 /* IMPORTANTE: Diseñamos esta clase pues no se pueden generar members de la clase base exceptions
- * ya que esta clase úncamente tiene el member what() */
+    ya que esta clase úncamente tiene el member what() */
 
 class Excepciones
 {
@@ -25,7 +25,7 @@ public:
 
 private:
     //members
-    QString databaseUsername(void);
+    static QString databaseUsername(void);
     void saveExceptionInterface(void);
     bool saveToDb(const QString& dbConnectionName);
     void saveToLogFile(QString method); //Using Qt or STL

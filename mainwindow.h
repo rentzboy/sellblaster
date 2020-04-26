@@ -23,7 +23,7 @@ public:
     static bool executeForwardSql(const QString &sqlQuery, const QString &connectionName);
     static bool executeForwardSqlException(const QString &sqlQuery, const QString &connectionName);
     static bool executeForwardSqlWithReturn(const QString &sqlQuery, const QString &connectionName, QSqlQuery &query);
-    static bool createExternDbConnection(const QMap <QString, QString> connectionDetails);
+    static bool createMainDbConnection(const QMap <QString, QString> connectionDetails);
     static void createInterDbConnection(void);
     static void sanitationUserInput(QMap<QString, QVariant> &userFields);
 

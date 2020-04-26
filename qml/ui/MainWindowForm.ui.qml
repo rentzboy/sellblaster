@@ -36,15 +36,14 @@ Item {
     }
     Frame {
         id: pane
+        anchors.verticalCenterOffset: -5
+        anchors.horizontalCenterOffset: 90
         contentHeight: 400
         contentWidth: 800
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
     }
 }
-
-
-
 
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}

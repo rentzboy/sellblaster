@@ -32,7 +32,7 @@ bool LoginDialog::sanitationCheck()
         return EXIT_FAILURE;
     else return EXIT_SUCCESS;
 }
-void LoginDialog::getUserNameFromQsettings(void) //static
+void LoginDialog::getUserNameFromQsettings(void)
 {
     //Retrieve configuration from the last user's session
     QSettings userSettings(QObject::tr("Fx Team®"), QObject::tr("Sellblaster"));
@@ -47,7 +47,7 @@ void LoginDialog::createComponent(void)
     if(uniqueInstance == Q_NULLPTR)
     {
         uniqueInstance = new LoginDialog;
-        registerSingleton();
+        registerSingleton(); //para poder utilizarla con QML
 
         //Hay que crear la conexión con la Db SQLite3 -necesario para Login.qml-
         MainWindow::createInterDbConnection();
@@ -79,6 +79,7 @@ void LoginDialog::onCancelarClicked(void)
 void LoginDialog::onAceptarClicked(void)
 {
     PRINT_FUNCTION_NAME
+
     if(this->sanitationCheck() == EXIT_FAILURE)
         return;
 
@@ -106,7 +107,7 @@ void LoginDialog::onAceptarClicked(void)
         //qDebug() << connectionDetails;
 
         //Connect to MAIN_DB
-        if (MainWindow::createExternDbConnection(connectionDetails) == EXIT_FAILURE)
+        if (MainWindow::createMainDbConnection(connectionDetails) == EXIT_FAILURE)
         {
             errorVisible = true;
             emit errorVisibleChanged();

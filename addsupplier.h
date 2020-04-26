@@ -27,16 +27,8 @@ public:
 
     Q_INVOKABLE void textValueToBackEnd(QString tab, QString fieldName, QString text);
     Q_INVOKABLE void textListToBackEnd(QString fieldName, QString text, bool value);
-    void uncheckAllValues(QString comboBox);
     Q_INVOKABLE void toogleAllValues(QString comboBox);
     Q_INVOKABLE void fillComboBoxesFromDb(QString tab);
-    void fillRelatedComboBoxFromDb(QString comboBox);
-    void fillRelatedComboCheckBoxFromDb(QString comboBox);
-
-    void setEmpresaTabField(const QString key, const QString value);
-    void setContactoTabField(const QString key, const QString value);
-    void setProductoTabField(const QString key, const QString value);
-    void setServicioTabField(const QString key, const QString value);
 
 public slots:
     bool onAceptarButton(QString tab);
@@ -48,10 +40,18 @@ public slots:
 private:
     explicit AddSupplier(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)
     static void registerSingleton(void);
-    //Members
+    void fillRelatedComboBoxFromDb(QString comboBox);
+    void fillRelatedComboCheckBoxFromDb(QString comboBox);
+    void uncheckAllValues(QString comboBox);
+    void clearSelectionList(QString comboBox);
     bool sanitationCheck(QString tab);
     void resetFields(QString tab);
     void resetComboBox(QString fieldName);
+    //Getters & Setters
+    void setEmpresaTabField(const QString key, const QString value);
+    void setContactoTabField(const QString key, const QString value);
+    void setProductoTabField(const QString key, const QString value);
+    void setServicioTabField(const QString key, const QString value);
     //Attributes
     static QQmlApplicationEngine *engine;
     static AddSupplier *uniqueInstance;
@@ -68,7 +68,7 @@ private:
                            {"espesorMin2", ""}, {"espesorMax2", ""}, {"anchoMin2", ""}, {"anchoMax2", ""},
                            {"espesorMin3", ""}, {"espesorMax3", ""}, {"anchoMin3", ""}, {"anchoMax3", ""}, {"catalogo", ""}};
     QVariantMap toogleValue = {{"serie", false}, {"aleacion", false}, {"temple", false}, {"acabado", false},
-                           {"anchoBobina", false}, {"diametroIntBobina", false}, {"formatoChapa", false}, {"servicio", false}};
+                           {"anchoBobina", false}, {"diametroIntBobina", false}, {"formatoChapa", false}, {"servicios", false}};
     QMap<int, QVariant> paisList;
     QMap<int, QVariant> actividadList;
     QMap<int, QVariant> formaPagoList;

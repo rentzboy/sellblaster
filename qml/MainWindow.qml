@@ -57,7 +57,6 @@ ApplicationWindow {
     }
 
     //FUNCTIONS
-
     //SIGNALS
     //SLOTS
     function onCloseQmlInstance() {
@@ -109,6 +108,14 @@ ApplicationWindow {
                 // ...
             }
         }
+
+        Keys.onPressed: {
+            //Crtl+P -Añadir nuevo proveedor ===> OJO: NO ESTÁ FUNCIONANDO
+            if (event.key === Qt.Key_P && event.modifiers === Qt.ControlModifier) {
+                console.log("Key logger: Crtl+P")
+                MainWindowType.onAnadirProveedor()
+            }
+        }
     }
 }
 
@@ -117,7 +124,8 @@ ApplicationWindow {
 
 
 
-/*##^## Designer {
+/*##^##
+Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
- ##^##*/
+##^##*/

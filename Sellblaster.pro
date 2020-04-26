@@ -22,15 +22,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+#To allow build executable to be recognized by the the OS (https://stackoverflow.com/a/45332687)
+QMAKE_LFLAGS += -no-pie
+
 # Use Precompiled headers (PCH)
 PRECOMPILED_HEADER  = precompiled_header.h
 
 #Indicamos la versión del compilador a la que tiene que llamar (si no queremos el predeterminado x Linux)
 #No es suficiente con indicarlo en Options > Kit
+#Compilador support for each C++ version: https://en.cppreference.com/w/cpp/compiler_support
 #QMAKE_CXX = ccache g++-9
-
-#To allow build executable to be recognized by the the OS (https://stackoverflow.com/a/45332687)
-QMAKE_LFLAGS += -no-pie
 
 #Indicar la versión de C++
 CONFIG += c++17

@@ -13,10 +13,10 @@ Item {
     id: newProveedorFormWindow
     property alias bar: bar
     property alias empresaTab: empresa
-    property alias contactosTab: contactos
-    property alias productosTab: productos
-    property alias serviciosTab: servicios
-    property alias certificacionesTab: certificaciones
+    property alias contactosTab: contacto
+    property alias productosTab: producto
+    property alias serviciosTab: servicio
+    property alias certificacionesTab: certificacion
     visible: true
 
     Pane {
@@ -39,25 +39,25 @@ Item {
             }
             TabButton {
                 text: qsTr("Contactos")
-                objectName: "contactos"
+                objectName: "contacto"
                 display: AbstractButton.TextOnly
                 width: 150
             }
             TabButton {
                 text: qsTr("Productos")
-                objectName: "productos"
+                objectName: "producto"
                 display: AbstractButton.TextOnly
                 width: 150
             }
             TabButton {
                 text: qsTr("Servicios")
-                objectName: "servicios"
+                objectName: "servicio"
                 display: AbstractButton.TextOnly
                 width: 150
             }
             TabButton {
                 text: qsTr("Certificaciones")
-                objectName: "certificaciones"
+                objectName: "certificacion"
                 display: AbstractButton.TextOnly
                 width: 200
             }
@@ -77,23 +77,23 @@ Item {
                 Layout.fillWidth: parent
             }
             ContactosTab {
-                id: contactos
+                id: contacto
                 width: 2
                 Layout.fillHeight: parent
                 Layout.fillWidth: parent
             }
             ProductosTab {
-                id: productos
+                id: producto
                 Layout.fillHeight: parent
                 Layout.fillWidth: parent
             }
             ServiciosTab {
-                id: servicios
+                id: servicio
                 Layout.fillHeight: parent
                 Layout.fillWidth: parent
             }
             Item {
-                id: certificaciones
+                id: certificacion
                 Layout.fillHeight: parent
                 Layout.fillWidth: parent
             }

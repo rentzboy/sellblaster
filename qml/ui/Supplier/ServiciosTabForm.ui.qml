@@ -92,7 +92,7 @@ Item {
                     ComboBox11 {
                         id: comboBoxServicios
                         Layout.fillWidth: false
-                        objectName: "servicio"
+                        objectName: "servicios"
                         supplierTab: "servicio"
                         toogleAllValues: false
                         Layout.minimumWidth: spacerEspesorMax.x - textFieldEspesorMin1.x

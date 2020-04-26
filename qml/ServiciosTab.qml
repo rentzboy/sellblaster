@@ -27,7 +27,7 @@ ServiciosTabForm {
     textFieldCatalogo.text: SupplierType.servicioTabField.catalogo
 
     //ComboBoxes
-    comboBoxServiciosToogleAll: SupplierType.toogleValue.servicio
+    comboBoxServiciosToogleAll: SupplierType.toogleValue.servicios
 
     //Buttons
     buttonAceptar.onClicked: SupplierType.onAceptarButton("servicio")

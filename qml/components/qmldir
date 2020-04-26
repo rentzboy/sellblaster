@@ -1,9 +1,9 @@
 
 # Estos no hacen falta darlos de alta por que estan en el mismo directorio que el archivo qmldir ?¿?¿
-TextArea1 TextArea1.qml
-TextField1 TextField1.qml
-ComboBox1 ComboBox1.qml
-SpacerH_20 SpacerH_20.qml
+TextArea1          TextArea1.qml
+TextField1          TextField1.qml
+ComboBox1       ComboBox1.qml
+SpacerH_20        SpacerH_20.qml
 
 
 #Indicar la ruta desde la ubicación del archivo qmldir hasta cada archivo de la lista
@@ -24,20 +24,20 @@ ServiciosTab              ../ServiciosTab.qml
 
 #<ui directory>
 #Necesarios pues los .ui solo están visibles para su .qml si estan en el mismo directorio
-LoginForm                ../ui/LoginForm.ui.qml
+LoginForm                 ../ui/LoginForm.ui.qml
 MainWindowForm    ../ui/MainWindowForm.ui.qml
 
 #<ui/Supplier directory>
-NewProveedorForm   ../ui/Supplier/NewProveedorForm.ui.qml
-EmpresaTabForm       ../ui/Supplier/EmpresaTabForm.ui.qml
-ContactosTabForm     ../ui/Supplier/ContactosTabForm.ui.qml
-ProductosTabForm     ../ui/Supplier/ProductosTabForm.ui.qml
-ServiciosTabForm      ../ui/Supplier/ServiciosTabForm.ui.qml
-GridTextFieldBarraForm    ../ui/Supplier/GridTextFieldBarraForm.ui.qml
-GridTextFieldBobinaForm  ../ui/Supplier/GridTextFieldBobinaForm.ui.qml
-GridTextFieldChapaForm   ../ui/Supplier/GridTextFieldChapaForm.ui.qml
-GridTextFieldDiscoForm    ../ui/Supplier/GridTextFieldDiscoForm.ui.qml
-GridTextFieldTuboForm     ../ui/Supplier/GridTextFieldTuboForm.ui.qml
+NewProveedorForm                ../ui/Supplier/NewProveedorForm.ui.qml
+EmpresaTabForm                    ../ui/Supplier/EmpresaTabForm.ui.qml
+ContactosTabForm                  ../ui/Supplier/ContactosTabForm.ui.qml
+ProductosTabForm                  ../ui/Supplier/ProductosTabForm.ui.qml
+ServiciosTabForm                   ../ui/Supplier/ServiciosTabForm.ui.qml
+GridTextFieldBarraForm        ../ui/Supplier/GridTextFieldBarraForm.ui.qml
+GridTextFieldBobinaForm     ../ui/Supplier/GridTextFieldBobinaForm.ui.qml
+GridTextFieldChapaForm      ../ui/Supplier/GridTextFieldChapaForm.ui.qml
+GridTextFieldDiscoForm       ../ui/Supplier/GridTextFieldDiscoForm.ui.qml
+GridTextFieldTuboForm        ../ui/Supplier/GridTextFieldTuboForm.ui.qml
 
 
 

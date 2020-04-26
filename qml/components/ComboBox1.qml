@@ -8,8 +8,7 @@ import "../../js/supplier.js" as Supplier
 
 
 /* IMPORTANTE: que todos los comboBox1 que creemos le asignemos
-  un objectName pues se necesitan para las funciones de JS
-*/
+  un objectName pues se necesitan para las funciones de JS */
 ComboBox {
     id: comboBox
     property string supplierTab

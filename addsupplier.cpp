@@ -42,6 +42,296 @@ AddSupplier* AddSupplier::createComponent(void)
     }
     return uniqueInstance;
 }
+void AddSupplier::fillComboBoxesFromDb(QString tab)
+{
+    //Unicamente se llama una vez para cada pestaña -empresa, contactos, productos-
+    //Los resultados NO se actualizan en f(selección usuario)
+    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
+
+    QSqlQuery result; //sirven para todas las consultas
+    QObject *object;
+    QString sqlQuery;
+
+    if(tab == "empresa") //Se carga desde Mainwindow.cpp (no me gusta, pero no veo otra opción mejor
+    {
+        sqlQuery = "CALL get_DropDownMenu('country', 'country')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            paisList.insert(result.value(0).toInt(), result.value(1));
+        }
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("pais");
+        QQmlProperty::write(object, "model", paisList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('activity', 'activity')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            actividadList.insert(result.value(0).toInt(), result.value(1));
+        }
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("actividad");
+        QQmlProperty::write(object, "model", actividadList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('payment', 'payment')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            formaPagoList.insert(result.value(0).toInt(), result.value(1));
+        }
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("formaPago");
+        QQmlProperty::write(object, "model", formaPagoList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+    }
+    else if (tab == "contacto") //Se llama desde JS, al actualizarse el TabBar
+    {
+        sqlQuery = "CALL get_DropDownMenu('department', 'department')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            areaList.insert(result.value(0).toInt(), result.value(1));
+        }
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("area");
+        QQmlProperty::write(object, "model", areaList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('position', 'position')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            puestoList.insert(result.value(0).toInt(), result.value(1));
+        }
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("puesto");
+        QQmlProperty::write(object, "model", puestoList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+    }
+    else if(tab == "producto") //Se llama desde JS, al actualizarse el TabBar
+    {
+        QString sqlQuery = "CALL get_DropDownMenu('type', 'type')"; //Tipo
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            tipoList.insert(result.value(0).toInt(), result.value(1));
+        }
+        //qDebug() << "tipoList. " << tipoList;
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("tipo");
+        QQmlProperty::write(object, "model", tipoList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('metal', 'metal')"; //Material
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            materialList.insert(result.value(0).toInt(), result.value(1));
+        }
+        //qDebug() << "materialList. " << materialList;
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("material");
+        QQmlProperty::write(object, "model", materialList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+        ////////////////////////////////////////////////////////////////
+        sqlQuery = "CALL get_DropDownMenu('inner_diameter', 'inner_diameter')"; //I.D.
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            idBobinaList.insert(result.value(0).toInt(), result.value(1));
+        }
+        //qDebug() << "idBobinaList. " << idBobinaList;
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("diametroIntBobina");
+        QQmlProperty::write(object, "model", idBobinaList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+    }
+    else if (tab == "servicio") //Se llama desde JS, al actualizarse el TabBar
+    {
+        sqlQuery = "CALL get_DropDownMenu('servicing', 'servicing')";
+        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
+        while(result.next())
+        {
+            servicioList.insert(result.value(0).toInt(), result.value(1));
+        }
+        qDebug() << "servicioList. " << servicioList;
+        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("servicios");
+        QQmlProperty::write(object, "model", servicioList.values());
+        QQmlProperty::write(object, "currentIndex", -1);
+    }
+}
+void AddSupplier::textValueToBackEnd(QString tab, QString fieldName, QString text)
+{
+//    PRINT_FUNCTION_NAME
+//    qDebug() << "tab:" << tab <<"fieldName:" << fieldName << ", " << "tex: " << text;
+
+    if(tab == "empresa")
+        setEmpresaTabField(fieldName, text);
+    else if(tab == "contacto")
+        setContactoTabField(fieldName, text);
+    else if(tab == "producto")
+    {
+        setProductoTabField(fieldName, text);
+
+        //Cargar los comboBoxes relacionados
+        if(fieldName == "tipo" || fieldName == "material")
+            emit relatedFieldUpdated(fieldName);
+    }
+    else if(tab == "servicio")
+        setServicioTabField(fieldName, text);
+}
+void AddSupplier::textListToBackEnd(QString fieldName, QString text, bool value)
+{
+//    PRINT_FUNCTION_NAME
+//    qDebug() << "fieldName: " << fieldName << ", text: " << text << ", value: " << value;
+
+    if(fieldName == "serie")
+    {
+        if(value) //checked=true
+            serieSelectionList.append(text);
+        else
+            serieSelectionList.removeOne(text);
+        emit relatedFieldUpdated(fieldName);
+    }
+    else if(fieldName == "aleacion")
+    {
+        if(value) aleacionSelectionList.append(text);
+        else aleacionSelectionList.removeOne(text);
+    }
+    else if(fieldName == "temple")
+    {
+        if(value) templeSelectionList.append(text);
+        else templeSelectionList.removeOne(text);
+    }
+    else if(fieldName == "acabado")
+    {
+        if(value) acabadoSelectionList.append(text);
+        else acabadoSelectionList.removeOne(text);
+    }
+    else if(fieldName == "formatoChapa")
+    {
+        if(value) formatoChapaSelectionList.append(text);
+        else formatoChapaSelectionList.removeOne(text);
+    }
+    else if(fieldName == "anchoBobina")
+    {
+        if(value) formatoBobinaSelectionList.append(text);
+        else formatoBobinaSelectionList.removeOne(text);
+    }
+    else if(fieldName == "diametroIntBobina")
+    {
+        if(value) idBobinaSelectionList.append(text);
+        else idBobinaSelectionList.removeOne(text);
+    }
+    else if(fieldName == "servicios") //OJO: en plural para pues ya existía otro ObjectName: "servicio"
+    {
+        if(value) servicioSelectionList.append(text);
+        else servicioSelectionList.removeOne(text);
+    }
+}
+void AddSupplier::toogleAllValues(QString comboBox)
+{
+    //Toogle all checkboxes for the ComboBox's parameter -se activa mediante la key F12-
+    bool tmp = toogleValue.value(comboBox).toBool();
+    toogleValue.insert(comboBox, !tmp); //swith value true <-> false
+    emit toogleValueChanged();
+
+    QMap<int, QString>::const_iterator itr;
+
+    if(comboBox == "serie")
+    {
+        if(tmp) //all checked --> change to unchecked
+            serieSelectionList.clear();
+        else
+        {
+            for (QMap<int, QVariant>::const_iterator itr = serieList.cbegin(), end = serieList.cend(); itr != end; ++itr)
+                serieSelectionList.append(itr.value().toString());
+        }
+    }
+    else if(comboBox == "aleacion")
+    {
+        if(tmp) //all checked
+            aleacionSelectionList.clear();
+        else
+        {
+            for (QMap<int, QVariant>::const_iterator itr = aleacionList.cbegin(), end = aleacionList.cend(); itr != end; ++itr)
+                aleacionSelectionList.append(itr.value().toString());
+        }
+    }
+    else if(comboBox == "temple")
+    {
+        if(tmp) //all checked
+            templeSelectionList.clear();
+        else
+        {
+            for (QMap<int, QVariant>::const_iterator itr = templeList.cbegin(), end = templeList.cend(); itr != end; ++itr)
+                templeSelectionList.append(itr.value().toString());
+        }
+    }
+    else if(comboBox == "acabado")
+    {
+        if(tmp) //all checked
+            acabadoSelectionList.clear();
+        else
+        {
+            for (QMap<int, QVariant>::const_iterator itr = acabadoList.cbegin(), end = acabadoList.cend(); itr != end; ++itr)
+                acabadoSelectionList.append(itr.value().toString());
+        }
+    }
+    else if(comboBox == "anchoBobina")
+    {
+        if(tmp) //all checked
+            formatoBobinaSelectionList.clear();
+        else
+        {
+            for (QMap<int, QVariant>::const_iterator itr = formatoList.cbegin(), end = formatoList.cend(); itr != end; ++itr)
+                formatoBobinaSelectionList.append(itr.value().toString());
+        }
+    }
+    else if(comboBox == "diametroIntBobina")
+    {
+        if(tmp) //all checked
+            idBobinaSelectionList.clear();
+        else
+        {
+            for (QMap<int, QVariant>::const_iterator itr = idBobinaList.cbegin(), end = idBobinaList.cend(); itr != end; ++itr)
+                idBobinaSelectionList.append(itr.value().toString());
+        }
+    }
+    else if(comboBox == "formatoChapa")
+    {
+        if(tmp) //all checked
+            formatoChapaSelectionList.clear();
+        else
+        {
+            for (QMap<int, QVariant>::const_iterator itr = formatoList.cbegin(), end = formatoList.cend(); itr != end; ++itr)
+                formatoChapaSelectionList.append(itr.value().toString());
+        }
+    }
+    else if(comboBox == "servicios")
+    {
+        if(tmp) //all checked
+            servicioSelectionList.clear();
+        else
+        {
+            for (QMap<int, QVariant>::const_iterator itr = servicioList.cbegin(), end = servicioList.cend(); itr != end; ++itr)
+                servicioSelectionList.append(itr.value().toString());
+        }
+    }
+}
+AddSupplier::~AddSupplier()
+{
+    PRINT_FUNCTION_NAME
+
+    uniqueInstance = Q_NULLPTR; //importante
+}
+
+//PRIVATE MEMBERS
+AddSupplier::AddSupplier(QObject *parent) : QObject(parent){} //private singleton constructor
+void AddSupplier::registerSingleton(void)
+{
+    qmlRegisterSingletonType<AddSupplier>("SupplierClass", 1, 0, "SupplierType",
+        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+        Q_UNUSED(scriptEngine)
+        Q_UNUSED(engine)
+        return uniqueInstance;
+            });
+}
 void AddSupplier::fillRelatedComboCheckBoxFromDb(QString)
 {
     //Unicamente se llama al modificar el comboBox SERIE
@@ -193,188 +483,6 @@ void AddSupplier::fillRelatedComboBoxFromDb(QString comboBox)
         EXCEPTION_HANDLER
     }
 }
-void AddSupplier::fillComboBoxesFromDb(QString tab)
-{
-    //Unicamente se llama una vez para cada pestaña -empresa, contactos, productos-
-    //Los resultados NO se actualizan en f(selección usuario)
-    qDebug() << "Se ha llamado a la función: " << __FUNCTION__ <<"(" << tab << ")";
-
-    QSqlQuery result; //sirven para todas las consultas
-    QObject *object;
-    QString sqlQuery;
-
-    if(tab == "empresa") //Se carga desde Mainwindow.cpp (no me gusta, pero no veo otra opción mejor
-    {
-        sqlQuery = "CALL get_DropDownMenu('country', 'country')";
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            paisList.insert(result.value(0).toInt(), result.value(1));
-        }
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("pais");
-        QQmlProperty::write(object, "model", paisList.values());
-        QQmlProperty::write(object, "currentIndex", -1);
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('activity', 'activity')";
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            actividadList.insert(result.value(0).toInt(), result.value(1));
-        }
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("actividad");
-        QQmlProperty::write(object, "model", actividadList.values());
-        QQmlProperty::write(object, "currentIndex", -1);
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('payment', 'payment')";
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            formaPagoList.insert(result.value(0).toInt(), result.value(1));
-        }
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("formaPago");
-        QQmlProperty::write(object, "model", formaPagoList.values());
-        QQmlProperty::write(object, "currentIndex", -1);
-    }
-    else if (tab == "contactos") //Se llama desde JS, al actualizarse el TabBar
-    {
-        sqlQuery = "CALL get_DropDownMenu('department', 'department')";
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            areaList.insert(result.value(0).toInt(), result.value(1));
-        }
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("area");
-        QQmlProperty::write(object, "model", areaList.values());
-        QQmlProperty::write(object, "currentIndex", -1);
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('position', 'position')";
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            puestoList.insert(result.value(0).toInt(), result.value(1));
-        }
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("puesto");
-        QQmlProperty::write(object, "model", puestoList.values());
-        QQmlProperty::write(object, "currentIndex", -1);
-    }
-    else if(tab == "productos") //Se llama desde JS, al actualizarse el TabBar
-    {
-        QString sqlQuery = "CALL get_DropDownMenu('type', 'type')"; //Tipo
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            tipoList.insert(result.value(0).toInt(), result.value(1));
-        }
-        //qDebug() << "tipoList. " << tipoList;
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("tipo");
-        QQmlProperty::write(object, "model", tipoList.values());
-        QQmlProperty::write(object, "currentIndex", -1);
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('metal', 'metal')"; //Material
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            materialList.insert(result.value(0).toInt(), result.value(1));
-        }
-        //qDebug() << "materialList. " << materialList;
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("material");
-        QQmlProperty::write(object, "model", materialList.values());
-        QQmlProperty::write(object, "currentIndex", -1);
-        ////////////////////////////////////////////////////////////////
-        sqlQuery = "CALL get_DropDownMenu('inner_diameter', 'inner_diameter')"; //I.D.
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            idBobinaList.insert(result.value(0).toInt(), result.value(1));
-        }
-        //qDebug() << "idBobinaList. " << idBobinaList;
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("diametroIntBobina");
-        QQmlProperty::write(object, "model", idBobinaList.values());
-        QQmlProperty::write(object, "currentIndex", -1);
-    }
-    else if (tab == "servicios") //Se llama desde JS, al actualizarse el TabBar
-    {
-        sqlQuery = "CALL get_DropDownMenu('servicing', 'servicing')";
-        MainWindow::executeForwardSqlWithReturn(sqlQuery, MAIN_DB_CONNECTION_NAME, result); //Output arg.
-        while(result.next())
-        {
-            servicioList.insert(result.value(0).toInt(), result.value(1));
-        }
-        //qDebug() << "servicioList. " << servicioList;
-        object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("servicio");
-        QQmlProperty::write(object, "model", servicioList.values());
-        QQmlProperty::write(object, "currentIndex", -1);
-    }
-}
-void AddSupplier::textValueToBackEnd(QString tab, QString fieldName, QString text)
-{
-//    PRINT_FUNCTION_NAME
-//    qDebug() << "tab:" << tab <<"fieldName:" << fieldName << ", " << "tex: " << text;
-
-    if(tab == "empresa")
-        setEmpresaTabField(fieldName, text);
-    else if(tab == "contacto")
-        setContactoTabField(fieldName, text);
-    else if(tab == "producto")
-    {
-        setProductoTabField(fieldName, text);
-
-        //Cargar los comboBoxes relacionados
-        if(fieldName == "tipo" || fieldName == "material")
-            emit relatedFieldUpdated(fieldName);
-    }
-    else if(tab == "servicio")
-        setServicioTabField(fieldName, text);
-}
-void AddSupplier::textListToBackEnd(QString fieldName, QString text, bool value)
-{
-//    PRINT_FUNCTION_NAME
-//    qDebug() << "fieldName: " << fieldName << ", text: " << text << ", value: " << value;
-
-    if(fieldName == "serie")
-    {
-        if(value) //checked=true
-            serieSelectionList.append(text);
-        else
-            serieSelectionList.removeOne(text);
-        emit relatedFieldUpdated(fieldName);
-    }
-    else if(fieldName == "aleacion")
-    {
-        if(value) aleacionSelectionList.append(text);
-        else aleacionSelectionList.removeOne(text);
-    }
-    else if(fieldName == "temple")
-    {
-        if(value) templeSelectionList.append(text);
-        else templeSelectionList.removeOne(text);
-    }
-    else if(fieldName == "acabado")
-    {
-        if(value) acabadoSelectionList.append(text);
-        else acabadoSelectionList.removeOne(text);
-    }
-    else if(fieldName == "formatoChapa")
-    {
-        if(value) formatoChapaSelectionList.append(text);
-        else formatoChapaSelectionList.removeOne(text);
-    }
-    else if(fieldName == "anchoBobina")
-    {
-        if(value) formatoBobinaSelectionList.append(text);
-        else formatoBobinaSelectionList.removeOne(text);
-    }
-    else if(fieldName == "diametroIntBobina")
-    {
-        if(value) idBobinaSelectionList.append(text);
-        else idBobinaSelectionList.removeOne(text);
-    }
-    else if(fieldName == "servicio")
-    {
-        if(value) servicioSelectionList.append(text);
-        else servicioSelectionList.removeOne(text);
-    }
-}
 void AddSupplier::uncheckAllValues(QString comboBox)
 {
     //Se llama despues de añadir un registro a la DB y al modificar los comboBoxes Tipo, Material y Serie
@@ -384,6 +492,11 @@ void AddSupplier::uncheckAllValues(QString comboBox)
     toogleValue.insert(comboBox, false);
     emit toogleValueChanged();
 
+    //Clear selection in C++ (QStringList)
+    clearSelectionList(comboBox);
+}
+void AddSupplier::clearSelectionList(QString comboBox)
+{
     //Si tuvieramos los selectionList en un QMap<QString, QStringList>
     //no habria que ir con los ifs ...........
     /////////////////////// PRODUCTOS ///////////////////////
@@ -402,106 +515,8 @@ void AddSupplier::uncheckAllValues(QString comboBox)
     else if(comboBox == "formatoChapa")
         formatoChapaSelectionList.clear();
     /////////////////////// SERVICIOS ///////////////////////
-    else if(comboBox == "servicio")
+    else if(comboBox == "servicios")
         servicioSelectionList.clear();
-}
-void AddSupplier::toogleAllValues(QString comboBox)
-{
-    //Toogle all checkboxes for the ComboBox's parameter -se activa mediante la key F12-
-    bool tmp = toogleValue.value(comboBox).toBool();
-    toogleValue.insert(comboBox, !tmp); //swith value true <-> false
-    emit toogleValueChanged();
-
-    QMap<int, QString>::const_iterator itr;
-
-    if(comboBox == "serie")
-    {
-        if(tmp) //all checked --> change to unchecked
-            serieSelectionList.clear();
-        else
-        {
-            for (QMap<int, QVariant>::const_iterator itr = serieList.cbegin(), end = serieList.cend(); itr != end; ++itr)
-                serieSelectionList.append(itr.value().toString());
-        }
-    }
-    else if(comboBox == "aleacion")
-    {
-        if(tmp) //all checked
-            aleacionSelectionList.clear();
-        else
-        {
-            for (QMap<int, QVariant>::const_iterator itr = aleacionList.cbegin(), end = aleacionList.cend(); itr != end; ++itr)
-                aleacionSelectionList.append(itr.value().toString());
-        }
-    }
-    else if(comboBox == "temple")
-    {
-        if(tmp) //all checked
-            templeSelectionList.clear();
-        else
-        {
-            for (QMap<int, QVariant>::const_iterator itr = templeList.cbegin(), end = templeList.cend(); itr != end; ++itr)
-                templeSelectionList.append(itr.value().toString());
-        }
-    }
-    else if(comboBox == "acabado")
-    {
-        if(tmp) //all checked
-            acabadoSelectionList.clear();
-        else
-        {
-            for (QMap<int, QVariant>::const_iterator itr = acabadoList.cbegin(), end = acabadoList.cend(); itr != end; ++itr)
-                acabadoSelectionList.append(itr.value().toString());
-        }
-    }
-    else if(comboBox == "anchoBobina")
-    {
-        if(tmp) //all checked
-            formatoBobinaSelectionList.clear();
-        else
-        {
-            for (QMap<int, QVariant>::const_iterator itr = formatoList.cbegin(), end = formatoList.cend(); itr != end; ++itr)
-                formatoBobinaSelectionList.append(itr.value().toString());
-        }
-    }
-    else if(comboBox == "diametroIntBobina")
-    {
-        if(tmp) //all checked
-            idBobinaSelectionList.clear();
-        else
-        {
-            for (QMap<int, QVariant>::const_iterator itr = idBobinaList.cbegin(), end = idBobinaList.cend(); itr != end; ++itr)
-                idBobinaSelectionList.append(itr.value().toString());
-        }
-    }
-    else if(comboBox == "formatoChapa")
-    {
-        if(tmp) //all checked
-            formatoChapaSelectionList.clear();
-        else
-        {
-            for (QMap<int, QVariant>::const_iterator itr = formatoList.cbegin(), end = formatoList.cend(); itr != end; ++itr)
-                formatoChapaSelectionList.append(itr.value().toString());
-        }
-    }
-}
-AddSupplier::~AddSupplier()
-{
-    PRINT_FUNCTION_NAME
-
-    uniqueInstance = Q_NULLPTR; //importante
-}
-
-//PRIVATE MEMBERS
-AddSupplier::AddSupplier(QObject *parent) : QObject(parent){} //private singleton constructor
-void AddSupplier::registerSingleton(void)
-{
-    qmlRegisterSingletonType<AddSupplier>("SupplierClass", 1, 0, "SupplierType",
-        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-        Q_UNUSED(scriptEngine)
-        Q_UNUSED(engine)
-        return uniqueInstance;
-            });
 }
 bool AddSupplier::sanitationCheck(QString tab)
 {
@@ -672,58 +687,56 @@ bool AddSupplier::sanitationCheck(QString tab)
             && !servicioSelectionList.contains("Slitting + lacado"))
             return EXIT_FAILURE;
 
-        else
+        //Si se deja vacio EspesorMinX se anula el registro completo
+        if(servicioTabField.value("espesorMin1").toString().isEmpty())
         {
-            //Si se deja vacio EspesorMin se anula el registro completo
-            if(servicioTabField.value("espesorMin1").toString().isEmpty())
-            {
-                servicioTabField.insert("espesorMin1",  "NULL");
-                servicioTabField.insert("espesorMax1",  "NULL");
-                servicioTabField.insert("anchoMin1",  "NULL");
-                servicioTabField.insert("anchoMax1",  "NULL");
-            }
-            if(servicioTabField.value("espesorMin2").toString().isEmpty())
-            {
-                servicioTabField.insert("espesorMin2",  "NULL");
-                servicioTabField.insert("espesorMax2",  "NULL");
-                servicioTabField.insert("anchoMin2",  "NULL");
-                servicioTabField.insert("anchoMax2",  "NULL");
-            }
-            if(servicioTabField.value("espesorMin3").toString().isEmpty())
-            {
-                servicioTabField.insert("espesorMin3",  "NULL");
-                servicioTabField.insert("espesorMax3",  "NULL");
-                servicioTabField.insert("anchoMin3",  "NULL");
-                servicioTabField.insert("anchoMax3",  "NULL");
-            }
-
-            if(servicioTabField.value("espesorMax1").toString().isEmpty())
-                servicioTabField.insert("espesorMax1",  "NULL");
-            if(servicioTabField.value("espesorMax2").toString().isEmpty())
-                servicioTabField.insert("espesorMax2",  "NULL");
-            if(servicioTabField.value("espesorMax3").toString().isEmpty())
-                servicioTabField.insert("espesorMax3",  "NULL");
-
-            if(servicioTabField.value("anchoMin1").toString().isEmpty())
-                servicioTabField.insert("anchoMin1",  "NULL");
-            if(servicioTabField.value("anchoMin2").toString().isEmpty())
-                servicioTabField.insert("anchoMin2",  "NULL");
-            if(servicioTabField.value("anchoMin3").toString().isEmpty())
-                servicioTabField.insert("anchoMin3",  "NULL");
-
-            if(servicioTabField.value("anchoMax1").toString().isEmpty())
-                servicioTabField.insert("anchoMax1",  "NULL");
-            if(servicioTabField.value("anchoMax2").toString().isEmpty())
-                servicioTabField.insert("anchoMax2",  "NULL");
-            if(servicioTabField.value("anchoMax3").toString().isEmpty())
-                servicioTabField.insert("anchoMax3",  "NULL");
-
-            if(servicioTabField.value("catalogo").toString().isEmpty())
-                servicioTabField.insert("catalogo",  "NULL");
-
-            MainWindow::sanitationUserInput(servicioTabField);
-            return EXIT_SUCCESS;
+            servicioTabField.insert("espesorMin1",  "NULL");
+            servicioTabField.insert("espesorMax1",  "NULL");
+            servicioTabField.insert("anchoMin1",  "NULL");
+            servicioTabField.insert("anchoMax1",  "NULL");
         }
+        if(servicioTabField.value("espesorMin2").toString().isEmpty())
+        {
+            servicioTabField.insert("espesorMin2",  "NULL");
+            servicioTabField.insert("espesorMax2",  "NULL");
+            servicioTabField.insert("anchoMin2",  "NULL");
+            servicioTabField.insert("anchoMax2",  "NULL");
+        }
+        if(servicioTabField.value("espesorMin3").toString().isEmpty())
+        {
+            servicioTabField.insert("espesorMin3",  "NULL");
+            servicioTabField.insert("espesorMax3",  "NULL");
+            servicioTabField.insert("anchoMin3",  "NULL");
+            servicioTabField.insert("anchoMax3",  "NULL");
+        }
+
+        //Poner los campos vacios a NULL
+        if(servicioTabField.value("espesorMax1").toString().isEmpty())
+            servicioTabField.insert("espesorMax1",  "NULL");
+        if(servicioTabField.value("espesorMax2").toString().isEmpty())
+            servicioTabField.insert("espesorMax2",  "NULL");
+        if(servicioTabField.value("espesorMax3").toString().isEmpty())
+            servicioTabField.insert("espesorMax3",  "NULL");
+
+        if(servicioTabField.value("anchoMin1").toString().isEmpty())
+            servicioTabField.insert("anchoMin1",  "NULL");
+        if(servicioTabField.value("anchoMin2").toString().isEmpty())
+            servicioTabField.insert("anchoMin2",  "NULL");
+        if(servicioTabField.value("anchoMin3").toString().isEmpty())
+            servicioTabField.insert("anchoMin3",  "NULL");
+
+        if(servicioTabField.value("anchoMax1").toString().isEmpty())
+            servicioTabField.insert("anchoMax1",  "NULL");
+        if(servicioTabField.value("anchoMax2").toString().isEmpty())
+            servicioTabField.insert("anchoMax2",  "NULL");
+        if(servicioTabField.value("anchoMax3").toString().isEmpty())
+            servicioTabField.insert("anchoMax3",  "NULL");
+
+        if(servicioTabField.value("catalogo").toString().isEmpty())
+            servicioTabField.insert("catalogo",  "NULL");
+
+        MainWindow::sanitationUserInput(servicioTabField);
+        return EXIT_SUCCESS;
     }
 }
 void AddSupplier::resetFields(QString tab)
@@ -771,7 +784,7 @@ void AddSupplier::resetFields(QString tab)
         //Delete textFields
         this->setServicioTabField("clearAll", "");
         //Reset comboBoxes
-        this->uncheckAllValues("servicio");
+        this->uncheckAllValues("servicios");
     }
 }
 void AddSupplier::resetComboBox(QString fieldName)

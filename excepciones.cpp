@@ -19,7 +19,7 @@ Excepciones::Excepciones(const std::exception &e, const QString& _fileName, //st
                                                     operativeSystem(QSysInfo::productVersion()),
                                                     systemTime(QDateTime::currentDateTime()),
                                                     fileName(_fileName), functionName(_functionName),
-                                                    errorDescription(e.what()), userName(databaseUsername()),
+                                                    errorDescription(e.what()), userName(Excepciones::databaseUsername()),
                                                     fileLine(_lineNumber)
 {
     qDebug() << "Se ha llamado a: " << __FUNCTION__ <<"(std::exception)";
@@ -60,7 +60,7 @@ Excepciones::Excepciones(const QSqlError &e, const QString& _fileName, //QSqlErr
                                                    operativeSystem(QSysInfo::productVersion()),
                                                    systemTime(QDateTime::currentDateTime()),
                                                    fileName(_fileName), functionName(_functionName),
-                                                   errorDescription(e.databaseText()), userName(databaseUsername()),
+                                                   errorDescription(e.databaseText()), userName(Excepciones::databaseUsername()),
                                                    fileLine(_lineNumber)
 {
     qDebug() << "Se ha llamado a: " << __FUNCTION__ <<"(QSqlError)";
@@ -100,7 +100,7 @@ Excepciones::Excepciones(const QString& errorMsg, const QString& _fileName, //QS
                                                    operativeSystem(QSysInfo::productVersion()),
                                                    systemTime(QDateTime::currentDateTime()),
                                                    fileName(_fileName), functionName(_functionName),
-                                                   errorDescription(errorMsg), userName(databaseUsername()),
+                                                   errorDescription(errorMsg), userName(Excepciones::databaseUsername()),
                                                    fileLine(_lineNumber)
 {
     qDebug() << "Se ha llamado a: " << __FUNCTION__ <<"(QString)";
@@ -142,7 +142,7 @@ QString Excepciones::databaseUsername(void)
 
     if(user.isEmpty())
     {
-        tmp = QSqlDatabase::database(DB_QPSQL_CONNECTION_NAME);
+        tmp = QSqlDatabase::database(AUXILIARY_DB_CONNECTION_NAME); //se puede eliminar sin problemas
         user = tmp.userName();
         if(user.isEmpty())
             user = "empty";
@@ -263,27 +263,29 @@ void Excepciones::saveToLogFile(QString method)
         if(method == "STL") //OPCION #1: STL
         {
             std::string logPath;
-            logPath.append(DIRECTORY_PATH).append(LOG_FILE_RELATIVE_PATH);
+            logPath.append(APPLICATION_PATH).append(LOG_FILE_RELATIVE_PATH);
             std::string fileUrl (logPath);
             std::ofstream outputFile(fileUrl, std::ios_base::out | std::ios_base::app);
             outputFile.exceptions(std::ios_base::badbit | std::ios_base::failbit); //Activar las excepciones
             outputFile.is_open(); //si no se puede abrir salta la exception directamente
 
             qDebug() << "Volcando excepción al archivo.....";
+
             outputFile << QObject::tr("Time: ").toStdString() << systemTime.toString().toStdString() << "\n"
-                       << QObject::tr("System Operative: ").toStdString() << operativeSystem.toStdString() << "\n"
-                      << QObject::tr("Hostname: ").toStdString() << hostName.toStdString() << "\n"
-                       << QObject::tr("User: ").toStdString() << userName.toStdString() << "\n"
-                       << QObject::tr("File: ").toStdString() << fileName.toStdString() << "\n"
-                       << QObject::tr("Function name: ").toStdString() << functionName.toStdString() << "\n"
-                       << QObject::tr("Line: ").toStdString() << QString::number(fileLine).toStdString() << "\n"
-                       << QObject::tr("Error Description: ").toStdString() << errorDescription.toStdString() << "\n\n\n";
+                             << QObject::tr("System Operative: ").toStdString() << operativeSystem.toStdString() << "\n"
+                             << QObject::tr("Hostname: ").toStdString() << hostName.toStdString() << "\n"
+                             << QObject::tr("User: ").toStdString() << userName.toStdString() << "\n"
+                             << QObject::tr("File: ").toStdString() << fileName.toStdString() << "\n"
+                             << QObject::tr("Function name: ").toStdString() << functionName.toStdString() << "\n"
+                             << QObject::tr("Line: ").toStdString() << QString::number(fileLine).toStdString() << "\n"
+                             << QObject::tr("Error Description: ").toStdString() << errorDescription.toStdString() << "\n\n\n";
+
                 qDebug() << QObject::tr("Se ha grabado (STL) un error al archivo de texto");
         }
         else //OPCION #2: Qt
         {
             QString logPath;
-            logPath.append(DIRECTORY_PATH).append(LOG_FILE_RELATIVE_PATH);
+            logPath.append(APPLICATION_PATH).append(LOG_FILE_RELATIVE_PATH);
             QFile logFile(logPath);
              if (!logFile.open(QFile::WriteOnly | QFile::Append))
                  throw(QObject::tr("No se ha podido abrir (Qt) el archivo de excepcionts.txt !"));

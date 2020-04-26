@@ -107,11 +107,14 @@ bool MainWindow::executeForwardSqlWithReturn(const QString &sqlQuery, const QStr
         return EXIT_FAILURE;
     }
 }
-bool MainWindow::createExternDbConnection(const QMap<QString, QString> connectionDetails)
+bool MainWindow::createMainDbConnection(const QMap<QString, QString> connectionDetails)
 {
     //Only for PSQL and MYSQL -SQLite has createInnerDbConnection() instead
     try
     {
+        auto db(QSqlDatabase::addDatabase(MAIN_DB_TYPE, MAIN_DB_CONNECTION_NAME));
+
+        /* Refactoring (cambio por la linea superior)
         QSqlDatabase db;
         if(connectionDetails["type"] == "QMYSQL")
         {
@@ -120,9 +123,10 @@ bool MainWindow::createExternDbConnection(const QMap<QString, QString> connectio
         }
         else
         {
-            QSqlDatabase dbTmp = QSqlDatabase::addDatabase("QSQLITE", DB_QPSQL_CONNECTION_NAME);
+            QSqlDatabase dbTmp = QSqlDatabase::addDatabase("QPSQL", DB_QPSQL_CONNECTION_NAME);
             db = dbTmp;
         }
+        */
 
         //Create and open connection to db
         db.setDatabaseName(connectionDetails["database"]);
@@ -186,7 +190,7 @@ void MainWindow::createInterDbConnection(void)
         //Create db connection with SQLite at start-up
          QSqlDatabase innerDb = QSqlDatabase::addDatabase("QSQLITE", DB_QSQLITE_CONNECTION_NAME);
          QString dbPath;
-         dbPath.append(DIRECTORY_PATH).append(SQLITE_RELATIVE_PATH); //absolute path for persistent SQLite database
+         dbPath.append(APPLICATION_PATH).append(SQLITE_RELATIVE_PATH); //absolute path for persistent SQLite database
           innerDb.setDatabaseName(dbPath); //databaseName
 
          //Open db connection
@@ -262,7 +266,7 @@ QString MainWindow::get_usernameFromDb(void) //MAIN_DB_TYPE
     return user;
 }
 
-//PRIVATE SLOTS
+//PUBLIC SLOTS
 void MainWindow::onAnadirProveedor(void)
 {
     //Hack to load comboBoxes from Database

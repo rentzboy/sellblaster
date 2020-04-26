@@ -29,10 +29,12 @@ public slots:
     void onCancelarClicked(void);
 
 signals:
-    void userNameChanged();  //NOTIFY no utilizado
-    void passwordChanged();  //NOTIFY no utilizado
+    //Notify signals
+    void userNameChanged();
+    void passwordChanged();
     void errorVisibleChanged();
-    void closeQmlInstance();
+    //Connect signals
+    void closeQmlInstance();  //no utilizado
 
 private:
     static QQmlApplicationEngine *engine;
