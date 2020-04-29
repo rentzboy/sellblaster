@@ -16,6 +16,46 @@ ApplicationWindow {
     minimumWidth: 1500
     title: qsTr("Sellblaster - Copia registrada")
 
+    MenuBar {
+        id: menuBar
+
+        Menu {
+            id: fileMenu
+            title: qsTr("Empresa")
+            MenuItem {
+                id: newProveedor
+                text: "Añadir proveedor"
+                shortcut: "Ctrl+A"
+                onTriggered: MainWindowType.onAnadirProveedor()
+            }
+
+            MenuItem {
+                id: salirApp
+                text: "Salir"
+                shortcut: StandardKey.Quit
+                onTriggered: Qt.quit()
+            }
+        }
+
+        Menu {
+            id: editMenu
+            title: qsTr("&Edit")
+            // ...
+        }
+
+        Menu {
+            id: viewMenu
+            title: qsTr("&View")
+            // ...
+        }
+
+        Menu {
+            id: helpMenu
+            title: qsTr("&Help")
+            // ...
+        }
+    }
+
     onHeightChanged: function updateHeightProperty() {
         MainWindowType.windowSize.height = height
         //console.log("HeightChanged: " + MainWindowType.windowSize.height)
@@ -68,46 +108,6 @@ ApplicationWindow {
     MainWindowForm {
         id: form
         anchors.fill: parent
-
-        MenuBar {
-            id: menuBar
-
-            Menu {
-                id: fileMenu
-                title: qsTr("Empresa")
-                MenuItem {
-                    id: newProveedor
-                    text: "Añadir proveedor"
-                    shortcut: "Ctrl+A"
-                    onTriggered: MainWindowType.onAnadirProveedor()
-                }
-
-                MenuItem {
-                    id: salirApp
-                    text: "Salir"
-                    shortcut: StandardKey.Quit
-                    onTriggered: Qt.quit()
-                }
-            }
-
-            Menu {
-                id: editMenu
-                title: qsTr("&Edit")
-                // ...
-            }
-
-            Menu {
-                id: viewMenu
-                title: qsTr("&View")
-                // ...
-            }
-
-            Menu {
-                id: helpMenu
-                title: qsTr("&Help")
-                // ...
-            }
-        }
 
         Keys.onPressed: {
             //Crtl+P -Añadir nuevo proveedor ===> OJO: NO ESTÁ FUNCIONANDO

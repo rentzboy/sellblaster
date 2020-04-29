@@ -39,7 +39,7 @@ public slots:
 
 private:
     explicit AddSupplier(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)
-    static void registerSingleton(void);
+    static void registerSingleton(void); //static because called from static
     void fillRelatedComboBoxFromDb(QString comboBox);
     void fillRelatedComboCheckBoxFromDb(QString comboBox);
     void uncheckAllValues(QString comboBox);

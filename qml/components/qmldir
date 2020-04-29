@@ -1,20 +1,28 @@
+###################################################################
+# En este archivo vamos a mapear los diferentes components (archivos.qml),
+# con el nombre que se utilizará para llamarlos desde otros archivos.
+# Indicar la ruta desde la ubicación del archivo qmldir hasta cada archivo de la lista
+# Hay que añadir a esta lista cada QML type (componente)
+# que demos de alta y que llamemos desde otro archivo
+###################################################################
+# Antes de poder llamar a los components mapeados sin tener que indicar el relative path,
+# al inicio de cada archivo.qml hay que añadir "import components", que es el directorio
+# donde esta nuestro archivo qmldir. De esta forma el interprete recupera las rutas de los
+# QML types que hemos mapeado aqui (siempre que el nombre del archivo empiece con Mayuscula)
+###################################################################
+# La ventaja es que si cambiamos la ruta de un archivo.qml únicamente hay que hacer
+# el cambio en este archivo y no en todos los archivos desde donde lo llamamos.
+# >> Los .ui solo están visibles para su .qml si estan en el mismo directorio
+# >>: a veces que el interprete se raya y no reconoce los QML types -> reiniciar Qt.
+###################################################################
 
-# Estos no hacen falta darlos de alta por que estan en el mismo directorio que el archivo qmldir ?¿?¿
+# Estos no hacen falta mapearlos (creo), pues están en el directorio del archivo qmldir
 TextArea1          TextArea1.qml
 TextField1          TextField1.qml
 ComboBox1       ComboBox1.qml
 SpacerH_20        SpacerH_20.qml
 
-
-#Indicar la ruta desde la ubicación del archivo qmldir hasta cada archivo de la lista
-#Hay que añadir a esta lista cada QML type que demos de alta y que llamemos desde otro archivo
-
-#Además hay que añadir al inicio de cada archivo.qml "import components", que es el directorio
-#donde esta el archivo qmldir. De esta forma el interprete recupera todas las rutas de los
-#QML types que hemos creado de qmldir y no hay que añadirlas a cada archivo.
-#OJO: hay veces que el interprete se raya y no reconoce los QML types; en estos casos lo mejor
-#cerrar Qt y volver a abrirlo.
-
+###################################################################
 #<qml directory>
 NewProveedor           ../NewProveedor.qml
 EmpresaTab               ../EmpresaTab.qml
@@ -23,7 +31,6 @@ ProductosTab             ../ProductosTab.qml
 ServiciosTab              ../ServiciosTab.qml
 
 #<ui directory>
-#Necesarios pues los .ui solo están visibles para su .qml si estan en el mismo directorio
 LoginForm                 ../ui/LoginForm.ui.qml
 MainWindowForm    ../ui/MainWindowForm.ui.qml
 

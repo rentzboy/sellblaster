@@ -19,7 +19,7 @@ Window {
     }
 
     //Cuando se cierra la ventana desde el X button
-    onClosing: SupplierType.deleteUniqueInstance() //lo marca como error pero funciona OK4
+    onClosing: SupplierType.deleteUniqueInstance() //lo marca como error pero funciona OK
 
     //Calling QML method from C++ signal using standard syntax (onSignalName)
     //No se puede conectar directamente un signal de C++ a un handler en QML para los C++ Singleton (Bug)

@@ -54,12 +54,12 @@ Item {
                 Layout.fillHeight: true
                 maximumLength: 25
             }
+
             Label {
                 id: labelPassword
                 text: qsTr("Password:")
                 Layout.fillWidth: true
             }
-
             TextField {
                 id: textInputPassword
                 //overwriteMode: true
@@ -70,6 +70,7 @@ Item {
                 maximumLength: 25
                 echoMode: TextInput.Password
             }
+
             Item {
                 Layout.fillWidth: true
             }
