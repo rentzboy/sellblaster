@@ -8,10 +8,10 @@ import Qt.labs.platform 1.1
 import "components"
 import MainClass 1.0
 
+//minimumHeight y minimumWidth tienen que ser > que los minH y minW de los popups
 ApplicationWindow {
     id: window
     visible: true
-    //minimumHeight y minimumWidth tienen que ser > que los minH y minW de los popups
     minimumHeight: 800
     minimumWidth: 1500
     title: qsTr("Sellblaster - Copia registrada")
@@ -108,6 +108,9 @@ ApplicationWindow {
     MainWindowForm {
         id: form
         anchors.fill: parent
+        toolButtonStocklist.onClicked: MainWindowType.close()
+        toolButtonProveedores.onClicked: MainWindowType.close()
+        toolButtonClientes.onClicked: MainWindowType.close()
 
         Keys.onPressed: {
             //Crtl+P -Añadir nuevo proveedor ===> OJO: NO ESTÁ FUNCIONANDO

@@ -3,10 +3,6 @@
 #include "addsupplier.h"
 #include "logindialog.h"
 
-//static initialization
-MainWindow* MainWindow::uniqueInstance = Q_NULLPTR;
-int MainWindow::typeId = 0;
-
 //PUBLIC MEMBERS
 void MainWindow::createComponent(void)
 {
@@ -107,7 +103,7 @@ bool MainWindow::executeForwardSqlWithReturn(const QString &sqlQuery, const QStr
         return EXIT_FAILURE;
     }
 }
-bool MainWindow::createMainDbConnection(const QMap<QString, QString> connectionDetails)
+bool MainWindow::createMainDbConnection(const QMap<QString, QString>& connectionDetails)
 {
     //Only for PSQL and MYSQL -SQLite has createInnerDbConnection() instead
     try
@@ -231,7 +227,7 @@ QSize MainWindow::get_screenResolution(void)
     {
         return screenList.at(0)->size();
     }
-    else return QSize(0,0);
+    return QSize(0,0);
 }
 QSettings::Status MainWindow::readUserSettings(void)
 {
@@ -241,7 +237,7 @@ QSettings::Status MainWindow::readUserSettings(void)
     userSettings.beginGroup(QObject::tr("mainwindow"));
     windowSize = userSettings.value(QObject::tr("size")).toSize();
     windowPosition = userSettings.value(QObject::tr("position")).toPoint();
-    QString userName = (userSettings.value(QObject::tr("username")).toString());
+    userName = (userSettings.value(QObject::tr("username")).toString());
     userSettings.endGroup();
     return userSettings.status();
 }

@@ -23,7 +23,7 @@ public:
     static bool executeForwardSql(const QString &sqlQuery, const QString &connectionName);
     static bool executeForwardSqlException(const QString &sqlQuery, const QString &connectionName);
     static bool executeForwardSqlWithReturn(const QString &sqlQuery, const QString &connectionName, QSqlQuery &query);
-    static bool createMainDbConnection(const QMap <QString, QString> connectionDetails);
+    static bool createMainDbConnection(const QMap <QString, QString>& connectionDetails);
     static void createInterDbConnection(void);
     static void sanitationUserInput(QMap<QString, QVariant> &userFields);
 
@@ -34,12 +34,12 @@ private:
     QSettings::Status readUserSettings(void);
     QSettings::Status writeUserSettings(void);
     QString get_usernameFromDb();
-    static MainWindow *uniqueInstance;
-    static int typeId;
+    inline static MainWindow *uniqueInstance = Q_NULLPTR;
+    inline static int typeId = 0;
     QString userName;
     QSize windowSize;
     QPoint windowPosition;
-    bool windowFullScreen;
+    //bool windowFullScreen; No utilizada
 
 signals:
     void closeQmlInstance();

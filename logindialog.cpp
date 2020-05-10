@@ -3,11 +3,6 @@
 #include "mainwindow.h"
 #include <QQuickWindow>
 
-//static initialization
-QQmlApplicationEngine* LoginDialog::engine = Q_NULLPTR;
-LoginDialog* LoginDialog::uniqueInstance = Q_NULLPTR;
-int LoginDialog::typeId = 0;
-
 //PRIVATE MEMBERS
 LoginDialog::LoginDialog(QObject *parent) : QObject(parent),
     errorMsg(QObject::tr("No se ha podido establecer la conexión")), errorVisible(false)

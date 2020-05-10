@@ -1,5 +1,5 @@
+#include "globals.h" //lo primero de todo para que no haya problemas.
 #include "mainwindow.h"
-#include "globals.h"
 #include "logindialog.h"
 #include "excepciones.h"
 #include <QQmlApplicationEngine>

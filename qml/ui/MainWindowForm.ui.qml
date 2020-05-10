@@ -9,6 +9,9 @@ import MainClass 1.0
 
 Item {
     id: applicationWindow
+    property alias toolButtonStocklist : toolButtonStocklist
+    property alias toolButtonProveedores : toolButtonProveedores
+    property alias toolButtonClientes : toolButtonClientes
     visible: true
 
     ToolBar {
@@ -24,13 +27,18 @@ Item {
             spacing: 10
 
             ToolButton {
-                id: toolButton
-                text: qsTr("Tool Button")
+                id: toolButtonStocklist
+                text: qsTr("Stocklist")
             }
 
             ToolButton {
-                id: toolButton1
-                text: qsTr("Tool Button")
+                id: toolButtonProveedores
+                text: qsTr("Proveedores")
+            }
+
+            ToolButton {
+                id: toolButtonClientes
+                text: qsTr("Clientes")
             }
         }
     }
@@ -45,5 +53,8 @@ Item {
     }
 }
 
-
-
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/

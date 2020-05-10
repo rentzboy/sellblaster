@@ -37,13 +37,13 @@ signals:
     void closeQmlInstance();  //no utilizado
 
 private:
-    static QQmlApplicationEngine *engine;
+    inline static QQmlApplicationEngine *engine = Q_NULLPTR;
     QString userName;
     QString password;
     QString errorMsg;
     bool errorVisible;
-    static LoginDialog *uniqueInstance;
-    static int typeId;
+    inline static LoginDialog *uniqueInstance = Q_NULLPTR;
+    inline static int typeId;
 };
 
 #endif // LOGINDIALOG_H

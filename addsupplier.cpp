@@ -4,11 +4,6 @@
 #include <QMessageBox>
 #include <QQmlProperty>
 
-//static initialization
-QQmlApplicationEngine* AddSupplier::engine = Q_NULLPTR;
-AddSupplier* AddSupplier::uniqueInstance = Q_NULLPTR;
-int AddSupplier::typeId = 0;
-
 //PUBLIC MEMBERS
 AddSupplier* AddSupplier::createComponent(void)
 {

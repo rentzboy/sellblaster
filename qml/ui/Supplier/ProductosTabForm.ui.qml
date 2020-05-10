@@ -31,6 +31,7 @@ Item {
     property alias comboBoxAcabadoToogleAll: comboBoxAcabado.toogleAllValues
 
     visible: true
+
     Rectangle {
         clip: true
         anchors.fill: parent

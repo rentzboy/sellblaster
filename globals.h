@@ -11,17 +11,17 @@
 #define PRINT_FUNCTION_NAME          qDebug() << "Se ha llamado a la función: " << __FUNCTION__;
 
 /* GLOBAL VARIABLES */
-const QByteArray DB_QSQLITE_CONNECTION_NAME ("innerDb");
-const QByteArray MAIN_DB_TYPE ("QMYSQL");  //or "QPSQL" (hay que indicarselo)
+inline const QByteArray DB_QSQLITE_CONNECTION_NAME ("innerDb");
+inline const QByteArray MAIN_DB_TYPE ("QMYSQL");  //or "QPSQL" (hay que indicarselo)
 
-const QByteArray DB_QPSQL_CONNECTION_NAME ("psqlDb");
-const QByteArray DB_QMYSQL_CONNECTION_NAME ("mysqlDb");
-const QByteArray MAIN_DB_CONNECTION_NAME (MAIN_DB_TYPE == "QMYSQL" ? DB_QMYSQL_CONNECTION_NAME : DB_QPSQL_CONNECTION_NAME);
-const QByteArray AUXILIARY_DB_CONNECTION_NAME (MAIN_DB_TYPE == "QMYSQL" ?DB_QPSQL_CONNECTION_NAME : DB_QMYSQL_CONNECTION_NAME);
+inline const QByteArray DB_QPSQL_CONNECTION_NAME ("psqlDb");
+inline const QByteArray DB_QMYSQL_CONNECTION_NAME ("mysqlDb");
+inline const QByteArray MAIN_DB_CONNECTION_NAME (MAIN_DB_TYPE == "QMYSQL" ? DB_QMYSQL_CONNECTION_NAME : DB_QPSQL_CONNECTION_NAME);
+inline const QByteArray AUXILIARY_DB_CONNECTION_NAME (MAIN_DB_TYPE == "QMYSQL" ?DB_QPSQL_CONNECTION_NAME : DB_QMYSQL_CONNECTION_NAME);
 
-const QByteArray APPLICATION_PATH (QDir::homePath().toUtf8().append("/Qt/Proyectos"));
-const QByteArray LOG_FILE_RELATIVE_PATH ("/Q_Sellblaster/logs/exceptions.txt");
-const QByteArray SQLITE_RELATIVE_PATH ("/Q_Sellblaster/logs/innerdb.sqlite3");
+inline const QByteArray APPLICATION_PATH (QDir::homePath().toUtf8().append("/Qt/Proyectos"));
+inline const QByteArray LOG_FILE_RELATIVE_PATH ("/Q_Sellblaster/logs/exceptions.txt");
+inline const QByteArray SQLITE_RELATIVE_PATH ("/Q_Sellblaster/logs/innerdb.sqlite3");
 
 /*Deprecated
 #define DB_QSQLITE_CONNECTION_NAME       "innerDb"

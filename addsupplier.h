@@ -53,9 +53,10 @@ private:
     void setProductoTabField(const QString key, const QString value);
     void setServicioTabField(const QString key, const QString value);
     //Attributes
-    static QQmlApplicationEngine *engine;
-    static AddSupplier *uniqueInstance;
-    static int typeId;
+    inline static QQmlApplicationEngine *engine = Q_NULLPTR;
+    inline static AddSupplier *uniqueInstance = Q_NULLPTR;
+    inline static int typeId = 0;
+
     QVariantMap empresaTabField = {{"empresa", ""}, {"holding", ""}, {"web", ""}, {"panjiba", ""},
                            {"maps", ""}, {"ciudad", ""}, {"postcode", ""}, {"moq", ""}, {"notasEmpresa", ""},
                            {"pais", ""}, {"actividad", ""}, {"formaPago", ""}};
