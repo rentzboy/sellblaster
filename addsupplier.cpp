@@ -3,6 +3,7 @@
 #include <QMap>
 #include <QMessageBox>
 #include <QQmlProperty>
+#include <QDebug>
 
 //PUBLIC MEMBERS
 AddSupplier* AddSupplier::createComponent(void)
@@ -17,6 +18,7 @@ AddSupplier* AddSupplier::createComponent(void)
         engine->load(QUrl(QStringLiteral("qrc:/qml/NewProveedor.qml")));
 
         //Esto es para hacernos el guay, podriamos llamar directamente al metodo
+        //SLOT-SIGNAL se utiliza normalmente entre diferentes objetos, no para llamarse a si mismo...
         connect(uniqueInstance, &AddSupplier::relatedFieldUpdated, uniqueInstance, &AddSupplier::onRelatedFieldUpdated);
 
         /* DEPRECATED:
@@ -26,8 +28,6 @@ AddSupplier* AddSupplier::createComponent(void)
         Solo funciona para SLOTS definidos en archivo .qml que cargamos mediante engine->load
         QObject *contactosTabObject = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("ContactosTabForm");
         connect(uniqueInstance, SIGNAL(clearFormFields(QVariant)), contactosTabObject, SLOT(onClearContactosFields(QVariant)));
-        QObject *productosTabObject = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("ProductosTabForm");
-        connect(uniqueInstance, SIGNAL(clearFormFields(QVariant)), productosTabObject, SLOT(onClearProductosFields(QVariant)));
 
         2- Connect QML to C++ Signals/Slots
         connect(engine->rootObjects().value(AddSupplier::typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(closeEvent(QCloseEvent*)));
@@ -317,7 +317,7 @@ AddSupplier::~AddSupplier()
 }
 
 //PRIVATE MEMBERS
-AddSupplier::AddSupplier(QObject *parent) : QObject(parent){} //private singleton constructor
+AddSupplier::AddSupplier(QObject *parent) : QObject(parent) {}//declared private singleton ctor
 void AddSupplier::registerSingleton(void)
 {
     qmlRegisterSingletonType<AddSupplier>("SupplierClass", 1, 0, "SupplierType",
@@ -808,7 +808,9 @@ bool AddSupplier::onAceptarButton(QString tab)
 
         //Retrieve index from ComboBoxes -no pueden estar vacios pues romperian la SQL query -
         //El index de xxxList empieza en 0, pero los registros de la DB en 1 => +1
+
         //qDebug() << "Actividad Checkbox: " << empresaTabField.value("actividad").toString();
+
         QString idActividad = QString::number(actividadList.key(empresaTabField.value("actividad").toString()));
         QString idPais = QString::number(paisList.key(empresaTabField.value("pais").toString()));
         QString idFormaPago = QString::number(formaPagoList.key(empresaTabField.value("formaPago").toString()));
@@ -1061,6 +1063,7 @@ bool AddSupplier::onAceptarButton(QString tab)
 void AddSupplier::onCancelarButton(void)
 {
     PRINT_FUNCTION_NAME
+
     emit this->closingQmlInstance(); //trow in C++, catcher in QML
 }
 void AddSupplier::onGuardarButton(QString tab)
@@ -1071,6 +1074,7 @@ void AddSupplier::onGuardarButton(QString tab)
 void AddSupplier::deleteUniqueInstance(void)
 {
     PRINT_FUNCTION_NAME
+
     delete uniqueInstance;
 }
 void AddSupplier::onRelatedFieldUpdated(QString fieldName)
@@ -1130,7 +1134,7 @@ void AddSupplier::setEmpresaTabField(const QString key, const QString value)
 {
     if(key != "clearAll")
         empresaTabField.insert(key, QVariant(value));
-    else
+    else //clear
     {
         QMap<QString, QVariant>::iterator itr;
         for(itr = empresaTabField.begin(); itr != empresaTabField.end(); ++itr)

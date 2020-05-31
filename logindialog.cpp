@@ -48,7 +48,7 @@ void LoginDialog::createComponent(void)
         MainWindow::createInterDbConnection();
 
         //Load QML component
-        engine = new QQmlApplicationEngine;
+        engine = new QQmlApplicationEngine ;
         engine->load(QUrl(QStringLiteral("qrc:/qml/Login.qml")));
 
         //Connect Signals(C++) to Slots(QML)
@@ -60,7 +60,6 @@ LoginDialog::~LoginDialog()
 {
     PRINT_FUNCTION_NAME
 
-    delete uniqueInstance;
     uniqueInstance = Q_NULLPTR;
 }
 
@@ -68,7 +67,7 @@ LoginDialog::~LoginDialog()
 void LoginDialog::onCancelarClicked(void)
 {
     PRINT_FUNCTION_NAME
-    QMetaObject::invokeMethod(qGuiApp, "quit", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(qApp, "quit", Qt::QueuedConnection);
     //qGuiApp->quit(); No funciona pues la App aun no ha entrado en el main event loop (app.exec())
 }
 void LoginDialog::onAceptarClicked(void)
@@ -109,9 +108,13 @@ void LoginDialog::onAceptarClicked(void)
         }
         else
         {
-            //Close Login.qml
+            //OJO: Partimos de engine (QQmlApplicationEngine) y no uniqueInstance (Login) -de la otra manera no funciona-
+            //deleteLate --> delete QML file + engine --> ~Login() --> delete uniqueInstance
+            engine->deleteLater(); //se ejecuta al volver al loop principial (sino no se ejecutaria el codigo de abajo)
+
+            /* DEPRECATED
             QObject *object = engine->rootObjects().value(LoginDialog::typeId);
-            QMetaObject::invokeMethod(object, "close");
+            QMetaObject::invokeMethod(object, "close"); */
             //Load MainWindow.qml
             MainWindow::createComponent();
         }

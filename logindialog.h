@@ -2,7 +2,7 @@
 #define LOGINDIALOG_H
 
 #include <QObject>
-#include <QtQml>
+#include <QQmlApplicationEngine>
 
 class LoginDialog : public QObject
 {
@@ -38,12 +38,12 @@ signals:
 
 private:
     inline static QQmlApplicationEngine *engine = Q_NULLPTR;
+    inline static LoginDialog *uniqueInstance = Q_NULLPTR;
+    inline static int typeId;
     QString userName;
     QString password;
     QString errorMsg;
     bool errorVisible;
-    inline static LoginDialog *uniqueInstance = Q_NULLPTR;
-    inline static int typeId;
 };
 
 #endif // LOGINDIALOG_H

@@ -12,7 +12,7 @@ void MainWindow::createComponent(void)
         registerSingleton();
 
         //Load QML component
-        auto *engine = new QQmlApplicationEngine;
+        engine = new QQmlApplicationEngine;
         engine->load(QUrl(QStringLiteral("qrc:/qml/MainWindow.qml")));
 
         //Connect C++ to QML Signals / Slots
@@ -59,7 +59,7 @@ bool MainWindow::executeForwardSql(const QString &sqlQuery, const QString &conne
 }
 bool MainWindow::executeForwardSqlException(const QString &sqlQuery, const QString &connectionName)
 {
-    //Es idéntica pero sin el handler block -try/catch- pues se utiliza desde exceptions y sino podria entrar en un bucle infinito
+    //Same as executeForwardSql() but without the -try/catch- to avoid endless loop when called from exceptions
 
     auto db = QSqlDatabase::database(connectionName);
 
@@ -75,7 +75,7 @@ bool MainWindow::executeForwardSqlException(const QString &sqlQuery, const QStri
 }
 bool MainWindow::executeForwardSqlWithReturn(const QString &sqlQuery, const QString &connectionName, QSqlQuery &query)
 {
-    //Execute SQL query and returns result by reference
+    //Execute SQL query and returns result by reference (&query)
     try
     {
         auto db = QSqlDatabase::database(connectionName);

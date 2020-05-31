@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QSettings>
 #include <QSqlQuery>
-#include <QPointer>
 #include <QQuickView>
 #include "addsupplier.h"
+
 
 class MainWindow : public QQuickView
 {
@@ -34,6 +34,7 @@ private:
     QSettings::Status readUserSettings(void);
     QSettings::Status writeUserSettings(void);
     QString get_usernameFromDb();
+    inline static QQmlApplicationEngine *engine = Q_NULLPTR; //inline permite inicializarlas dentro de la clase, como si fueran const
     inline static MainWindow *uniqueInstance = Q_NULLPTR;
     inline static int typeId = 0;
     QString userName;

@@ -53,8 +53,8 @@ private:
     void setProductoTabField(const QString key, const QString value);
     void setServicioTabField(const QString key, const QString value);
     //Attributes
-    inline static QQmlApplicationEngine *engine = Q_NULLPTR;
-    inline static AddSupplier *uniqueInstance = Q_NULLPTR;
+    inline static QQmlApplicationEngine *engine = Q_NULLPTR; //inline permite inicializarlas dentro de la clase, como si fueran const
+    inline static AddSupplier *uniqueInstance = Q_NULLPTR;  //--> no se como utilizar Qt SmartPointers para statick members
     inline static int typeId = 0;
 
     QVariantMap empresaTabField = {{"empresa", ""}, {"holding", ""}, {"web", ""}, {"panjiba", ""},
