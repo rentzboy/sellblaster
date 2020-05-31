@@ -1,6 +1,8 @@
 #ifndef LOGINDIALOG_H
 #define LOGINDIALOG_H
 
+//esto es para probar las ramas
+
 #include <QObject>
 #include <QQmlApplicationEngine>
 
