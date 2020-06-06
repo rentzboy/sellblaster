@@ -4,7 +4,7 @@
 #include "logindialog.h"
 
 //PUBLIC MEMBERS
-void MainWindow::createComponent(void)
+void MainWindow::createComponent(QQmlApplicationEngine *engine)
 {
     if(uniqueInstance == Q_NULLPTR)
     {
@@ -12,11 +12,10 @@ void MainWindow::createComponent(void)
         registerSingleton();
 
         //Load QML component
-        engine = new QQmlApplicationEngine;
         engine->load(QUrl(QStringLiteral("qrc:/qml/MainWindow.qml")));
 
         //Connect C++ to QML Signals / Slots
-        //engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funcionaria)
+        //engine->rootObjects() solo recupera los objetos instanciados con load -no funciona para: component.create()-
         //Solo funciona para SLOTS definidos en archivo .qml que cargamos mediante engine->load
         //connect(uniqueInstance, SIGNAL(closeQmlInstance()), engine->rootObjects().value(typeId), SLOT(onCloseQmlInstance()));
     }
@@ -25,9 +24,7 @@ MainWindow::~MainWindow()
 {
     PRINT_FUNCTION_NAME
 
-    delete uniqueInstance;
     uniqueInstance = Q_NULLPTR;
-
 }
 bool MainWindow::executeForwardSql(const QString &sqlQuery, const QString &connectionName)
 {
@@ -162,7 +159,7 @@ void MainWindow::sanitationUserInput(QMap<QString, QVariant>&userFields)
 }
 
 //PRIVATE MEMBERS
-MainWindow::MainWindow(QQuickView *parent) : QQuickView(parent) //PENDING StatusBar
+MainWindow::MainWindow(QObject *parent) : QObject(parent) //PENDING StatusBar
 {
     PRINT_FUNCTION_NAME
     //Retrieve persistent data from last user's sesion
@@ -265,8 +262,10 @@ QString MainWindow::get_usernameFromDb(void) //MAIN_DB_TYPE
 //PUBLIC SLOTS
 void MainWindow::onAnadirProveedor(void)
 {
+    PRINT_FUNCTION_NAME
+
     //Hack to load comboBoxes from Database
-    QPointer <AddSupplier> ptr = AddSupplier::createComponent();
+    QPointer <AddSupplier> ptr = AddSupplier::createComponent(); //ptr gets detroyed at the {}
     ptr->fillComboBoxesFromDb("empresa");
 }
 void MainWindow::onActionExitTriggered(void)

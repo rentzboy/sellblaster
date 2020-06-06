@@ -8,7 +8,7 @@
 #include "addsupplier.h"
 
 
-class MainWindow : public QQuickView
+class MainWindow : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QSize windowSize MEMBER windowSize NOTIFY windowSizeChanged)
@@ -18,7 +18,7 @@ public:
     MainWindow(const MainWindow&) = delete;
     MainWindow& operator =(const MainWindow&) = delete;
     ~MainWindow();
-    static void createComponent(void);
+    static void createComponent(QQmlApplicationEngine *engine);
 
     static bool executeForwardSql(const QString &sqlQuery, const QString &connectionName);
     static bool executeForwardSqlException(const QString &sqlQuery, const QString &connectionName);
@@ -28,13 +28,12 @@ public:
     static void sanitationUserInput(QMap<QString, QVariant> &userFields);
 
 private:
-    explicit MainWindow(QQuickView *parent = Q_NULLPTR); //Private construstror (Singleton class)
+    explicit MainWindow(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)
     static void registerSingleton(void);
     QSize get_screenResolution(void);
     QSettings::Status readUserSettings(void);
     QSettings::Status writeUserSettings(void);
     QString get_usernameFromDb();
-    inline static QQmlApplicationEngine *engine = Q_NULLPTR; //inline permite inicializarlas dentro de la clase, como si fueran const
     inline static MainWindow *uniqueInstance = Q_NULLPTR;
     inline static int typeId = 0;
     QString userName;

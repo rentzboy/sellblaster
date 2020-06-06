@@ -18,7 +18,7 @@ public:
     LoginDialog(const LoginDialog &other) = delete;
     LoginDialog operator=(const LoginDialog &other) = delete;
     ~LoginDialog();
-    static void createComponent(void);
+    static void createComponent(QQmlApplicationEngine *engine);
 
 private:
     explicit LoginDialog(QObject *parent = Q_NULLPTR); //Private construstror (Singleton class)
@@ -39,13 +39,13 @@ signals:
     void closeQmlInstance();  //no utilizado
 
 private:
-    inline static QQmlApplicationEngine *engine = Q_NULLPTR;
+    //inline static QQmlApplicationEngine *engine = Q_NULLPTR;
     inline static LoginDialog *uniqueInstance = Q_NULLPTR;
     inline static int typeId;
     QString userName;
     QString password;
-    QString errorMsg;
-    bool errorVisible;
+    QString errorMsg = QObject::tr("No se ha podido establecer la conexión");
+    bool errorVisible = false;
 };
 
 #endif // LOGINDIALOG_H

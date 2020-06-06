@@ -2,10 +2,10 @@
 #include "basic_headers.h"
 #include "mainwindow.h"
 #include <QQuickWindow>
+#include "addsupplier.h"
 
 //PRIVATE MEMBERS
-LoginDialog::LoginDialog(QObject *parent) : QObject(parent),
-    errorMsg(QObject::tr("No se ha podido establecer la conexión")), errorVisible(false)
+LoginDialog::LoginDialog(QObject *parent) : QObject(parent)
 {
     PRINT_FUNCTION_NAME
 
@@ -37,7 +37,7 @@ void LoginDialog::getUserNameFromQsettings(void)
 }
 
 //PUBLIC MEMBERS
-void LoginDialog::createComponent(void)
+void LoginDialog::createComponent(QQmlApplicationEngine *engine)
 {
     if(uniqueInstance == Q_NULLPTR)
     {
@@ -48,7 +48,6 @@ void LoginDialog::createComponent(void)
         MainWindow::createInterDbConnection();
 
         //Load QML component
-        engine = new QQmlApplicationEngine ;
         engine->load(QUrl(QStringLiteral("qrc:/qml/Login.qml")));
 
         //Connect Signals(C++) to Slots(QML)
@@ -60,6 +59,7 @@ LoginDialog::~LoginDialog()
 {
     PRINT_FUNCTION_NAME
 
+    //delete uniqueInstance; --> Si lo descomento entra en bucle ........
     uniqueInstance = Q_NULLPTR;
 }
 
@@ -67,7 +67,11 @@ LoginDialog::~LoginDialog()
 void LoginDialog::onCancelarClicked(void)
 {
     PRINT_FUNCTION_NAME
-    QMetaObject::invokeMethod(qApp, "quit", Qt::QueuedConnection);
+
+    //Al cerrar la última ventana QML cierra la app automáticamente
+    emit closeQmlInstance(); //trowing in C++, catching in QML
+
+    //QMetaObject::invokeMethod(qApp, "quit", Qt::QueuedConnection);
     //qGuiApp->quit(); No funciona pues la App aun no ha entrado en el main event loop (app.exec())
 }
 void LoginDialog::onAceptarClicked(void)
@@ -108,15 +112,19 @@ void LoginDialog::onAceptarClicked(void)
         }
         else
         {
-            //OJO: Partimos de engine (QQmlApplicationEngine) y no uniqueInstance (Login) -de la otra manera no funciona-
-            //deleteLate --> delete QML file + engine --> ~Login() --> delete uniqueInstance
-            engine->deleteLater(); //se ejecuta al volver al loop principial (sino no se ejecutaria el codigo de abajo)
-
             /* DEPRECATED
-            QObject *object = engine->rootObjects().value(LoginDialog::typeId);
-            QMetaObject::invokeMethod(object, "close"); */
+             * opcion #1
+             * QObject *object = engine->rootObjects().value(LoginDialog::typeId);
+             * QMetaObject::invokeMethod(object, "close");
+             * opcion #2
+             * engine->deleteLater --> delete QML file + engine --> ~Login() --> delete uniqueInstance
+             * se ejecuta al volver al loop principial (sino no se ejecutaria el codigo de abajo)*/
+
             //Load MainWindow.qml
-            MainWindow::createComponent();
+            emit closeQmlInstance(); //solo cierra el Qml, pero no llama al dtror de C++ ni del engine
+            //Probablemente podríamos utilizar un nuevo engine como en AddSupplier y destruir el de LoginDialog
+            QQmlApplicationEngine *engine = qobject_cast<QQmlApplicationEngine*>(qmlEngine(uniqueInstance));
+            MainWindow::createComponent(engine);
         }
     }
     catch (const QSqlError &e)

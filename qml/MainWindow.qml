@@ -76,7 +76,7 @@ ApplicationWindow {
 
     onClosing: function closeApp() {
         //PENDING -preguntar si cerrar sin guardar antes de salir-
-        console.log("Recuperando los datos de la pantalla onClosing")
+        //console.log("Recuperando los datos de la pantalla onClosing")
         //console.log(MainWindowType.windowSize.width)
         //console.log(MainWindowType.windowSize.height)
         close.accepted = false //no sirve de nada, se cierra igual al final del {}
@@ -108,9 +108,10 @@ ApplicationWindow {
     MainWindowForm {
         id: form
         anchors.fill: parent
-        toolButtonStocklist.onClicked: MainWindowType.close()
-        toolButtonProveedores.onClicked: MainWindowType.close()
-        toolButtonClientes.onClicked: MainWindowType.close()
+        /* PENDING Icon buttons
+        toolButtonStocklist.onClicked:
+        toolButtonProveedores.onClicked:
+        toolButtonClientes.onClicked: */
 
         Keys.onPressed: {
             //Crtl+P -Añadir nuevo proveedor ===> OJO: NO ESTÁ FUNCIONANDO

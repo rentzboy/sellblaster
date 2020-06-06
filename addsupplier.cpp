@@ -13,8 +13,11 @@ AddSupplier* AddSupplier::createComponent(void)
         uniqueInstance = new AddSupplier;
         registerSingleton();
 
+        //Taking ownership to manual handler instance destructor
+        //QQmlEngine::setObjectOwnership(uniqueInstance, QQmlEngine::CppOwnership);
+
         //Load QML component
-        engine = new QQmlApplicationEngine;
+        auto *engine = new QQmlApplicationEngine;
         engine->load(QUrl(QStringLiteral("qrc:/qml/NewProveedor.qml")));
 
         //Esto es para hacernos el guay, podriamos llamar directamente al metodo
@@ -46,6 +49,8 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
     QSqlQuery result; //sirven para todas las consultas
     QObject *object;
     QString sqlQuery;
+    QQmlApplicationEngine *engine = qobject_cast<QQmlApplicationEngine*>(qmlEngine(uniqueInstance));
+
 
     if(tab == "empresa") //Se carga desde Mainwindow.cpp (no me gusta, pero no veo otra opción mejor
     {
@@ -55,6 +60,8 @@ void AddSupplier::fillComboBoxesFromDb(QString tab)
         {
             paisList.insert(result.value(0).toInt(), result.value(1));
         }
+        //qDebug() << paisList.values();
+
         object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("pais");
         QQmlProperty::write(object, "model", paisList.values());
         QQmlProperty::write(object, "currentIndex", -1);
@@ -335,6 +342,9 @@ void AddSupplier::fillRelatedComboCheckBoxFromDb(QString)
 
     PRINT_FUNCTION_NAME
 
+    QQmlApplicationEngine *engine = qobject_cast<QQmlApplicationEngine*>(qmlEngine(uniqueInstance));
+
+
     //Aleación
     aleacionList.clear();
     serieIndexList.clear();
@@ -373,6 +383,7 @@ void AddSupplier::fillRelatedComboBoxFromDb(QString comboBox)
     QObject *object;
     QSqlQuery result;
     QString sqlQuery;
+    QQmlApplicationEngine *engine = qobject_cast<QQmlApplicationEngine*>(qmlEngine(uniqueInstance));
 
     try
     {
@@ -762,6 +773,7 @@ void AddSupplier::resetFields(QString tab)
         this->resetComboBox("material");
         //Quitar el filtro x serie
         aleacionList.clear();
+        QQmlApplicationEngine *engine = qobject_cast<QQmlApplicationEngine*>(qmlEngine(uniqueInstance));
         QObject* object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("aleacion");
         QQmlProperty::write(object, "model", aleacionList.values());
         QQmlProperty::write(object, "currentIndex", -1);
@@ -784,6 +796,7 @@ void AddSupplier::resetFields(QString tab)
 }
 void AddSupplier::resetComboBox(QString fieldName)
 {
+    QQmlApplicationEngine *engine = qobject_cast<QQmlApplicationEngine*>(qmlEngine(uniqueInstance));
     QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> (fieldName);
     QQmlProperty::write(object, "currentIndex", -1);
 }
@@ -1064,7 +1077,10 @@ void AddSupplier::onCancelarButton(void)
 {
     PRINT_FUNCTION_NAME
 
-    emit this->closingQmlInstance(); //trow in C++, catcher in QML
+    //emit this->closingQmlInstance(); //trowing in C++, catching in QML
+    QQmlApplicationEngine *engine = qobject_cast<QQmlApplicationEngine*>(qmlEngine(uniqueInstance));
+    qDebug() << "Root Object List: " << engine->rootObjects();
+    engine->deleteLater();
 }
 void AddSupplier::onGuardarButton(QString tab)
 {
@@ -1075,7 +1091,7 @@ void AddSupplier::deleteUniqueInstance(void)
 {
     PRINT_FUNCTION_NAME
 
-    delete uniqueInstance;
+            delete uniqueInstance;
 }
 void AddSupplier::onRelatedFieldUpdated(QString fieldName)
 {
@@ -1121,6 +1137,7 @@ void AddSupplier::onRelatedFieldUpdated(QString fieldName)
             {
                 aleacionList.insert(result.value(0).toInt(), result.value(1));
             }
+            QQmlApplicationEngine *engine = qobject_cast<QQmlApplicationEngine*>(qmlEngine(uniqueInstance));
             QObject *object = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("aleacion");
             QQmlProperty::write(object, "model", aleacionList.values());
             QQmlProperty::write(object, "currentIndex", -1);

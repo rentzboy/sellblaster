@@ -35,6 +35,11 @@ Window {
         buttonCancelar.onClicked: LoginType.onCancelarClicked()
         buttonAceptar.onClicked: LoginType.onAceptarClicked()
 
+        Connections {
+            target: LoginType
+            onCloseQmlInstance: close()
+        }
+
         Keys.onPressed: {
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return)
                 LoginType.onAceptarClicked()

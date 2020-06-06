@@ -23,7 +23,7 @@ public:
     AddSupplier(const AddSupplier &other) = delete;
     AddSupplier operator=(const AddSupplier &other) = delete;
     ~AddSupplier();
-    static AddSupplier* createComponent(void);
+    static AddSupplier *createComponent(void);
 
     Q_INVOKABLE void textValueToBackEnd(QString tab, QString fieldName, QString text);
     Q_INVOKABLE void textListToBackEnd(QString fieldName, QString text, bool value);
@@ -53,8 +53,8 @@ private:
     void setProductoTabField(const QString key, const QString value);
     void setServicioTabField(const QString key, const QString value);
     //Attributes
-    inline static QQmlApplicationEngine *engine = Q_NULLPTR; //inline permite inicializarlas dentro de la clase, como si fueran const
-    inline static AddSupplier *uniqueInstance = Q_NULLPTR;  //--> no se como utilizar Qt SmartPointers para statick members
+    //inline permite inicializarlas dentro de la clase, como si fueran const
+    inline static AddSupplier *uniqueInstance = Q_NULLPTR;  //--> no se como utilizar Qt SmartPointers para static members
     inline static int typeId = 0;
 
     QVariantMap empresaTabField = {{"empresa", ""}, {"holding", ""}, {"web", ""}, {"panjiba", ""},

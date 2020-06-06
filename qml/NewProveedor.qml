@@ -14,34 +14,42 @@ Window {
     minimumWidth: 1400 //menor que MainWindow
     minimumHeight: 550 //menor que MainWindow
     title: qsTr("Nuevo proveedor")
+    //flags: Qt.Window | Qt.Popup --> no se muestra  (en cambio desde Gammaray si funciona)
 
     BackgroundZ1 {
     }
-
-    //Cuando se cierra la ventana desde el X button
-    onClosing: SupplierType.deleteUniqueInstance() //lo marca como error pero funciona OK
-
     //Calling QML method from C++ signal using standard syntax (onSignalName)
     //No se puede conectar directamente un signal de C++ a un handler en QML para los C++ Singleton (Bug)
     Connections {
         target: SupplierType
-        onClosingQmlInstance: close()
+        onClosingQmlInstance: function () {
+            console.log("onClosingQmlInstance ..........")
+            close () //call destroy() ???
+        }
     }
 
-    Component.onCompleted: function setWindowPosition() {
+    /* Component.onCompleted: function setWindowPosition() {
+      >>> NO SE PUEDE ACTIVAR pues utiliza el qml-singleton MainWindowType,
+      por lo que destruiría nuestra instancia de MainWindowType, al delete el engine
+      que ha cargado este archivo (NewProveedor.qml), y nos hace falta en MainWindow.qml !!!
+
         //set window position
         //console.log("Call to ---> setWindowPosition()")
-        if (MainWindowType.windowSize.width > minimumWidth)
+        if (MainWindowType.windowSize.width > minimumWidth) {
             x = ((MainWindowType.windowSize.width - minimumWidth) / 2)
                     + MainWindowType.windowPosition.x
-        else
+        }
+        else {
             x = 0
-        if (MainWindowType.windowSize.height > minimumHeight)
+        }
+        if (MainWindowType.windowSize.height > minimumHeight) {
             y = ((MainWindowType.windowSize.height - minimumHeight) / 2)
                     + MainWindowType.windowPosition.y
-        else
+        }
+        else {
             y = 0
-    }
+        }
+    } */
 
     //JS
 

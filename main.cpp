@@ -13,8 +13,10 @@ int main(int argc, char *argv[])
         //QGuiApplication app(argc, argv); //Cambiar x la linea superior cuando ya no utilicemos QWidgets
         app.setAttribute(Qt::AA_EnableHighDpiScaling);
 
+
         //Load first QML page
-        LoginDialog::createComponent();
+        QQmlApplicationEngine engine; //Same for all the qml we load
+        LoginDialog::createComponent(&engine);
 
         /* ========== SOLO PARA PROBAR COMPONENTES (Load QML component) ==========
         auto *engine = new QQmlApplicationEngine;
