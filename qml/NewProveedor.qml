@@ -14,19 +14,23 @@ Window {
     minimumWidth: 1400 //menor que MainWindow
     minimumHeight: 550 //menor que MainWindow
     title: qsTr("Nuevo proveedor")
-    //flags: Qt.Window | Qt.Popup --> no se muestra  (en cambio desde Gammaray si funciona)
+    //flags: Qt.FramelessWindowHint //--> no permite mover la ventana .....grrrrrr
 
     BackgroundZ1 {
     }
-    //Calling QML method from C++ signal using standard syntax (onSignalName)
-    //No se puede conectar directamente un signal de C++ a un handler en QML para los C++ Singleton (Bug)
+
+    onClosing: SupplierType.onCancelarButton()
+
+    /* Calling QML method from C++ signal using standard syntax (onSignalName)
+   No se puede conectar directamente un signal de C++ a un handler en QML para los C++ Singleton (Bug),
+   hay que utilizar Connections
     Connections {
         target: SupplierType
         onClosingQmlInstance: function () {
             console.log("onClosingQmlInstance ..........")
             close () //call destroy() ???
         }
-    }
+    } */
 
     /* Component.onCompleted: function setWindowPosition() {
       >>> NO SE PUEDE ACTIVAR pues utiliza el qml-singleton MainWindowType,
