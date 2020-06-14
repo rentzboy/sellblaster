@@ -19,8 +19,6 @@ Window {
     BackgroundZ1 {
     }
 
-    onClosing: SupplierType.onCancelarButton()
-
     /* Calling QML method from C++ signal using standard syntax (onSignalName)
    No se puede conectar directamente un signal de C++ a un handler en QML para los C++ Singleton (Bug),
    hay que utilizar Connections

@@ -23,6 +23,8 @@ AddSupplier* AddSupplier::createComponent(void)
         //Esto es para hacernos el guay, podriamos llamar directamente al metodo
         //SLOT-SIGNAL se utiliza normalmente entre diferentes objetos, no para llamarse a si mismo...
         connect(uniqueInstance, &AddSupplier::relatedFieldUpdated, uniqueInstance, &AddSupplier::onRelatedFieldUpdated);
+        connect(engine->rootObjects().value(AddSupplier::typeId), SIGNAL(closing(QQuickCloseEvent*)),
+                      uniqueInstance, SLOT(onCancelarButton(void)));
 
         /* DEPRECATED:
          * Hemos encontrado otras maneras + sencillas, pero lo dejo pues explica como conectar los signals/slots
@@ -30,11 +32,7 @@ AddSupplier* AddSupplier::createComponent(void)
         engine->rootObjects() solo recupera los objetos instanciados con load (si utilizamos component.create() no funciona)
         Solo funciona para SLOTS definidos en archivo .qml que cargamos mediante engine->load
         QObject *contactosTabObject = engine->rootObjects().value(AddSupplier::typeId)->findChild<QObject*> ("ContactosTabForm");
-        connect(uniqueInstance, SIGNAL(clearFormFields(QVariant)), contactosTabObject, SLOT(onClearContactosFields(QVariant)));
-
-        2- Connect QML to C++ Signals/Slots
-        connect(engine->rootObjects().value(AddSupplier::typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(closeEvent(QCloseEvent*)));
-        connect(engine->rootObjects().value(AddSupplier::typeId), SIGNAL(closing(CloseEvent)), uniqueInstance, SLOT(onCloseEventCaller())); */
+        connect(uniqueInstance, SIGNAL(clearFormFields(QVariant)), contactosTabObject, SLOT(onClearContactosFields(QVariant))); */
 
         qDebug() << "***** FINAL CREATE_COMPONENT ADDSUPPLIER *****";
     }
@@ -1079,7 +1077,6 @@ void AddSupplier::onCancelarButton(void)
 
     //emit this->closingQmlInstance(); //trowing in C++, catching in QML
     QQmlApplicationEngine *engine = qobject_cast<QQmlApplicationEngine*>(qmlEngine(uniqueInstance));
-    qDebug() << "Root Object List: " << engine->rootObjects();
     engine->deleteLater();
 }
 void AddSupplier::onGuardarButton(QString tab)
